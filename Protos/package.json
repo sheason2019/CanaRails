@@ -1,0 +1,20 @@
+{
+  "name": "@cana-rails/idl",
+  "version": "0.1.0",
+  "description": "IDL directory for cana rails",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "generate": "buf generate"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@bufbuild/buf": "^1.31.0",
+    "grpc_tools_node_protoc_ts": "^5.3.3",
+    "grpc-tools": "^1.12.4"
+  },
+  "dependencies": {
+    "@bufbuild/protobuf": "^1.9.0",
+    "@bufbuild/protoc-gen-es": "^1.9.0"
+  }
+}

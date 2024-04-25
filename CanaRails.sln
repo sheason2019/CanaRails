@@ -13,6 +13,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DockerAdapter", "Adapters\D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DockerAdapter.Test", "Adapters\DockerAdapter.Test\DockerAdapter.Test.csproj", "{EAEA3A2C-E57B-4F52-A595-FA49A0B95719}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Applications", "Applications", "{62F3E625-76E7-4B64-929F-64AD1A271880}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CanaRailsServer", "Applications\CanaRailsServer\CanaRailsServer.csproj", "{050174B8-D4A2-48BB-A272-0B41AF13791A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -38,9 +42,14 @@ Global
 		{EAEA3A2C-E57B-4F52-A595-FA49A0B95719}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EAEA3A2C-E57B-4F52-A595-FA49A0B95719}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EAEA3A2C-E57B-4F52-A595-FA49A0B95719}.Release|Any CPU.Build.0 = Release|Any CPU
+		{050174B8-D4A2-48BB-A272-0B41AF13791A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{050174B8-D4A2-48BB-A272-0B41AF13791A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{050174B8-D4A2-48BB-A272-0B41AF13791A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{050174B8-D4A2-48BB-A272-0B41AF13791A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{B9914698-9327-4940-AE81-63C788330F5B} = {E1A039CB-4679-4DE0-9E26-81C3FA1C28FA}
 		{EAEA3A2C-E57B-4F52-A595-FA49A0B95719} = {E1A039CB-4679-4DE0-9E26-81C3FA1C28FA}
+		{050174B8-D4A2-48BB-A272-0B41AF13791A} = {62F3E625-76E7-4B64-929F-64AD1A271880}
 	EndGlobalSection
 EndGlobal
