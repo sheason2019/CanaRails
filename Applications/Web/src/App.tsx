@@ -1,16 +1,17 @@
-import { appApi } from "./api";
+import { Route, Router } from "@solidjs/router";
+import HomePage from "./pages";
+import DashboardPage from "./pages/dashboard";
+import AppPage from "./pages/app";
+import NewAppPage from "./pages/app/new";
 
 function App() {
-  const handleClick = async () => {
-    const resp = await appApi.createApp({});
-    console.log("resp", resp);
-  };
-
   return (
-    <>
-      <p>Hello world</p>
-      <button onClick={handleClick}>Create App</button>
-    </>
+    <Router base="/web">
+      <Route path="/" component={HomePage} />
+      <Route path="/dashboard" component={DashboardPage} />
+      <Route path="/app" component={AppPage} />
+      <Route path="/app/new" component={NewAppPage} />
+    </Router>
   );
 }
 
