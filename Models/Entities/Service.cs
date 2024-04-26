@@ -1,6 +1,6 @@
 namespace CanaRails.Models.Entities;
 
-public class Instance
+public class Service
 {
   public required int ID { get; set; }
   public required string ImageName { get; set; }

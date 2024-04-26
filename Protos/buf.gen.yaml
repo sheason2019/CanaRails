@@ -1,6 +1,0 @@
-version: v1
-plugins:
-  - plugin: buf.build/connectrpc/es:v1.4.0
-    out: ../Applications/Web/proto
-  - plugin: buf.build/bufbuild/es
-    out: ../Applications/Web/proto
