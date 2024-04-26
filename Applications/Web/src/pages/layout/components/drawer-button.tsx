@@ -30,10 +30,10 @@ export default function DrawerButton() {
         <ul class="menu p-4 w-80 min-h-full bg-base-200 text-base-content">
           <li class="menu-title">导航</li>
           <li>
-            <a href="/web/dashboard">仪表盘</a>
+            <a href="/dashboard">仪表盘</a>
           </li>
           <li>
-            <a href="/web/app">应用</a>
+            <a href="/app">应用</a>
           </li>
         </ul>
       </div>

@@ -7,7 +7,8 @@ Get-ChildItem "./tsp-output/@typespec/openapi3" | ForEach-Object -Process {
     $serverName = $Matches[1]
     nswag openapi2tsclient `
       /input:"./tsp-output/@typespec/openapi3/openapi.$serverName.yaml" `
-      /output:"../Applications/Web/api/${serverName}.client.ts" `
-      /ClassName:"${serverName}Client"
+      /output:"../Applications/Web/api-client/${serverName}.client.ts" `
+      /ClassName:"${serverName}Client" `
+      /TypeStyle:Interface
   }
 }

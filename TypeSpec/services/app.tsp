@@ -12,8 +12,12 @@ using TypeSpec.Rest;
 namespace App {
   model AppDTO {
     id: int32;
+    name: string;
+    host: string;
+    port: int32;
+    description: string;
   }
 
-  @post op create(): void;
+  @post op create(dto: AppDTO): AppDTO;
   @get op list(): AppDTO[];
 }

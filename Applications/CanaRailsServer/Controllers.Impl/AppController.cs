@@ -2,9 +2,10 @@ namespace CanaRails.Controllers.Impl;
 
 public class AppControllerImpl : IAppController
 {
-  public Task CreateAsync()
+  public Task<AppDTO> CreateAsync(Body body)
   {
-    throw new NotImplementedException();
+    var dto = body.Dto;
+    return Task.FromResult(dto);
   }
 
   public Task<ICollection<AppDTO>> ListAsync()

@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "compile": "tsp compile ."
+    "compile": "tsp compile .",
+    "gen": "pwsh ./script/gen-web.ps1 && pwsh ./script/gen-dotnet.ps1"
   },
   "dependencies": {
     "@typespec/compiler": "latest",

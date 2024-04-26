@@ -6,7 +6,7 @@ import NewAppPage from "./pages/app/new";
 
 function App() {
   return (
-    <Router base="/web">
+    <Router>
       <Route path="/" component={HomePage} />
       <Route path="/dashboard" component={DashboardPage} />
       <Route path="/app" component={AppPage} />

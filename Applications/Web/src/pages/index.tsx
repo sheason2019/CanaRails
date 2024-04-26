@@ -5,7 +5,7 @@ export default function HomePage() {
         <div class="max-w-md">
           <h1 class="text-5xl font-bold">CanaRails</h1>
           <p class="py-6">Canary DEV environments on the Rails.</p>
-          <a href="/web/dashboard">
+          <a href="/dashboard">
             <button class="btn btn-primary">Get Started</button>
           </a>
         </div>

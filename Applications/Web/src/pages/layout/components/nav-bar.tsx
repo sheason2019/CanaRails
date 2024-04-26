@@ -7,7 +7,7 @@ export default function NavBar() {
         <DrawerButton />
       </div>
       <div class="flex-1">
-        <a class="btn btn-ghost text-xl" href="/web/dashboard">
+        <a class="btn btn-ghost text-xl" href="/dashboard">
           CanaRails
         </a>
       </div>

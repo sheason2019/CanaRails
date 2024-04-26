@@ -6,14 +6,14 @@ using TypeSpec.Http;
 using TypeSpec.Rest;
 
 @service({
-  title: "Service Service",
+  title: "Instance Service",
 })
-@server("/api/service", "Service Server endpoint")
-namespace Service {
-  model ServiceDTO {
+@server("/api/instance", "Instance Server endpoint")
+namespace Instance {
+  model InstanceDTO {
     id: int32;
   }
 
   @post op create(): void;
-  @get op list(): ServiceDTO[];
+  @get op list(): InstanceDTO[];
 }

@@ -1,62 +1,37 @@
-import { JSX, createSignal } from "solid-js";
 import Layout from "../../layout";
-import handleParseFormData, { FormError } from "./methods/handle-validate";
 import ErrorLabel from "../../../components/form/error-label";
+import FormInput from "./components/form-input";
+import useCreateApp from "./hooks/use-create-app";
 
 export default function NewAppPage() {
-  const [formError, setFormError] = createSignal<FormError>();
-  const handleSubmit: JSX.EventHandlerUnion<HTMLFormElement, Event> = async (
-    e
-  ) => {
-    e.preventDefault();
-
-    const formData = new FormData(e.currentTarget);
-    const zodBundle = handleParseFormData(formData);
-    if (!zodBundle.success) {
-      return setFormError(zodBundle.error.format());
-    }
-
-    console.log("handle submit", zodBundle.data);
-  };
+  const { handleSubmit, formError } = useCreateApp();
 
   return (
     <Layout>
       <h1 class="text-3xl font-bold mb-4">创建应用</h1>
       <form onSubmit={handleSubmit}>
+        <FormInput
+          name="name"
+          label="应用名称"
+          type="text"
+          errors={formError()?.name?._errors}
+        />
         <label class="form-control w-full max-w-xs">
           <div class="label">
-            <span class="label-text">应用名称</span>
+            <span class="label-text">访问地址</span>
           </div>
-          <input
-            name="name"
-            type="text"
-            class="input input-bordered w-full max-w-xs text-sm"
-          />
-          <ErrorLabel errors={formError()?.name?._errors} />
-        </label>
-        <label class="form-control w-full max-w-xs">
-          <div class="label">
-            <span class="label-text">Host</span>
-          </div>
-
           <div class="input input-bordered w-full max-w-xs text-sm flex items-center">
             <input type="text" name="host" class="grow" />
             <p>.{location.host}</p>
           </div>
           <ErrorLabel errors={formError()?.host?._errors} />
         </label>
-        <label class="form-control w-full max-w-xs">
-          <div class="label">
-            <span class="label-text">镜像源</span>
-          </div>
-          <input
-            type="text"
-            name="registry"
-            placeholder="默认使用官方源"
-            class="input input-bordered w-full max-w-xs text-sm"
-          />
-          <ErrorLabel errors={formError()?.registry?._errors} />
-        </label>
+        <FormInput
+          name="port"
+          label="映射端口"
+          type="number"
+          errors={formError()?.port?._errors}
+        />
         <label class="form-control w-full">
           <div class="label">
             <span class="label-text">应用简介</span>
