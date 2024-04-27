@@ -22,7 +22,7 @@ export default function DataTable() {
             <td>hello-world</td>
             <td>80</td>
             <td>
-              {/** TODO: dropdown 详情、编辑、关闭 */}
+              {/** TODO: dropdown 详情、编辑、关闭、重启 */}
               <button>操作</button>
             </td>
           </tr>
@@ -34,7 +34,7 @@ export default function DataTable() {
             <td>hello-world</td>
             <td>80</td>
             <td>
-              <button>详情</button>
+              <button>操作</button>
             </td>
           </tr>
         </tbody>

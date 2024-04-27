@@ -12,8 +12,20 @@ using TypeSpec.Rest;
 namespace Instance {
   model InstanceDTO {
     id: int32;
+    name: string;
+    registry: string;
+    imageName: string;
+    port: string;
+    env: EnvDTO[];
+
+    appID: int32;
   }
 
-  @post op create(): void;
+  model EnvDTO {
+    key: string;
+    value: string;
+  }
+
+  @post op create(dto: InstanceDTO): InstanceDTO;
   @get op list(): InstanceDTO[];
 }

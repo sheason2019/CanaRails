@@ -8,7 +8,7 @@ Get-ChildItem "./tsp-output/@typespec/openapi3" | ForEach-Object -Process {
     nswag openapi2cscontroller `
       /input:"./tsp-output/@typespec/openapi3/openapi.$serverName.yaml" `
       /classname:${serverName} `
-      /namespace:CanaRails.Controllers `
+      /namespace:CanaRails.Controllers.$serverName `
       /output:"../Applications/CanaRailsServer/Controllers/${serverName}Controller.cs" `
       /ControllerBaseClass:"Microsoft.AspNetCore.Mvc.Controller"
   }

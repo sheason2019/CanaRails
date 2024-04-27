@@ -1,3 +1,4 @@
+using CanaRails.Controllers.App;
 using CanaRails.Services;
 using CanaRails.Transformer;
 

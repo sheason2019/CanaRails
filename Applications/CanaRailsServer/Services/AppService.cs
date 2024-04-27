@@ -1,4 +1,4 @@
-using CanaRails.Controllers;
+using CanaRails.Controllers.App;
 using CanaRails.Database;
 using CanaRails.Exceptions;
 using Microsoft.EntityFrameworkCore;

@@ -1,10 +1,10 @@
 using CanaRails.Database;
 using CanaRails.Adapters.DockerAdapter;
-using CanaRails.Controllers;
 using CanaRails.Controllers.Impl;
 using CanaRails.Interfaces;
 using CanaRails.Services;
 using CanaRails.Exceptions;
+using CanaRails.Controllers.App;
 
 var builder = WebApplication.CreateBuilder(args);
 
