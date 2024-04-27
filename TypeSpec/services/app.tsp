@@ -14,7 +14,6 @@ namespace App {
     id: int32;
     name: string;
     host: string;
-    port: int32;
     description: string;
   }
 

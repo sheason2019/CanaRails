@@ -1,15 +1,20 @@
+using CanaRails.Services;
+using CanaRails.Transformer;
+
 namespace CanaRails.Controllers.Impl;
 
-public class AppControllerImpl : IAppController
+public class AppControllerImpl(AppService service) : IAppController
 {
-  public Task<AppDTO> CreateAsync(Body body)
+  public async Task<AppDTO> CreateAsync(Body body)
   {
     var dto = body.Dto;
-    return Task.FromResult(dto);
+    var record = await service.CreateAppAsync(dto);
+    return record.ToDTO();
   }
 
-  public Task<ICollection<AppDTO>> ListAsync()
+  public async Task<ICollection<AppDTO>> ListAsync()
   {
-    throw new NotImplementedException();
+    var records = await service.ListAsync();
+    return records.Select(record => record.ToDTO()).ToArray();
   }
 }

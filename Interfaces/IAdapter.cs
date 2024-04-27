@@ -1,5 +1,5 @@
-﻿using CanaRails.Models.Entities;
-using CanaRails.Models.Utils;
+﻿using CanaRails.Database.Entities;
+
 namespace CanaRails.Interfaces;
 
 public interface IAdapter
@@ -9,7 +9,7 @@ public interface IAdapter
   Task UpdateApp(App app);
   Task DeleteApp(App app);
   Task<App> FindAppByID(int id);
-  Task<PaginationMeta<App>> ListApp(int offset, int size);
+  Task<App> ListApp(int offset, int size);
 
 
   Task<Instance> CreateInstance(Instance instance);

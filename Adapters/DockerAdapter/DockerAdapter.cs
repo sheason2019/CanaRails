@@ -1,9 +1,9 @@
-﻿using CanaRails.Models.Entities;
-using CanaRails.Models.Utils;
+﻿using CanaRails.Database.Entities;
+using CanaRails.Interfaces;
 
 namespace CanaRails.Adapters.DockerAdapter;
 
-public class DockerAdapter : Interfaces.IAdapter
+public class DockerAdapter : IAdapter
 {
   public Task<App> CreateApp(App app)
   {
@@ -30,11 +30,6 @@ public class DockerAdapter : Interfaces.IAdapter
     throw new NotImplementedException();
   }
 
-  public Task<PaginationMeta<App>> ListApp(int offset, int size)
-  {
-    throw new NotImplementedException();
-  }
-
   public Task<Instance[]> ListInstanceByAppID(int appID)
   {
     throw new NotImplementedException();
@@ -46,6 +41,11 @@ public class DockerAdapter : Interfaces.IAdapter
   }
 
   public Task UpdateApp(App app)
+  {
+    throw new NotImplementedException();
+  }
+
+  Task<App> IAdapter.ListApp(int offset, int size)
   {
     throw new NotImplementedException();
   }

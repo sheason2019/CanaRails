@@ -5,8 +5,6 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Interfaces", "Interfaces\Interfaces.csproj", "{5B6A8C5A-2B0C-461F-B7AE-8B43E001291E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Models", "Models\Models.csproj", "{46A1A163-2CBF-4D9A-AB75-99E3D32AA5B4}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Adapters", "Adapters", "{E1A039CB-4679-4DE0-9E26-81C3FA1C28FA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DockerAdapter", "Adapters\DockerAdapter\DockerAdapter.csproj", "{B9914698-9327-4940-AE81-63C788330F5B}"
@@ -16,6 +14,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Applications", "Applications", "{62F3E625-76E7-4B64-929F-64AD1A271880}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CanaRailsServer", "Applications\CanaRailsServer\CanaRailsServer.csproj", "{050174B8-D4A2-48BB-A272-0B41AF13791A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Database", "Database\Database.csproj", "{8BAD9D2D-61F0-413B-B4DA-754AD8C80870}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -30,10 +30,6 @@ Global
 		{5B6A8C5A-2B0C-461F-B7AE-8B43E001291E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5B6A8C5A-2B0C-461F-B7AE-8B43E001291E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5B6A8C5A-2B0C-461F-B7AE-8B43E001291E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{46A1A163-2CBF-4D9A-AB75-99E3D32AA5B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{46A1A163-2CBF-4D9A-AB75-99E3D32AA5B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{46A1A163-2CBF-4D9A-AB75-99E3D32AA5B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{46A1A163-2CBF-4D9A-AB75-99E3D32AA5B4}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B9914698-9327-4940-AE81-63C788330F5B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B9914698-9327-4940-AE81-63C788330F5B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B9914698-9327-4940-AE81-63C788330F5B}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -46,6 +42,10 @@ Global
 		{050174B8-D4A2-48BB-A272-0B41AF13791A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{050174B8-D4A2-48BB-A272-0B41AF13791A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{050174B8-D4A2-48BB-A272-0B41AF13791A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8BAD9D2D-61F0-413B-B4DA-754AD8C80870}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8BAD9D2D-61F0-413B-B4DA-754AD8C80870}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8BAD9D2D-61F0-413B-B4DA-754AD8C80870}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8BAD9D2D-61F0-413B-B4DA-754AD8C80870}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{B9914698-9327-4940-AE81-63C788330F5B} = {E1A039CB-4679-4DE0-9E26-81C3FA1C28FA}
