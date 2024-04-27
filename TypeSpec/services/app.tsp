@@ -17,6 +17,13 @@ namespace App {
     description: string;
   }
 
-  @post op create(dto: AppDTO): AppDTO;
-  @get op list(): AppDTO[];
+  @post
+  op create(dto: AppDTO): AppDTO;
+
+  @get
+  op list(): AppDTO[];
+
+  @get
+  @route("{id}")
+  op findByID(@path id: int32): AppDTO;
 }

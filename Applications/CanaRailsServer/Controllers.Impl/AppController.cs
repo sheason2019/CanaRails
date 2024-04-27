@@ -17,4 +17,10 @@ public class AppControllerImpl(AppService service) : IAppController
     var records = await service.ListAsync();
     return records.Select(record => record.ToDTO()).ToArray();
   }
+
+  public async Task<AppDTO> FindByIDAsync(int id)
+  {
+    var record = await service.FindByIDAsync(id);
+    return record.ToDTO();
+  }
 }

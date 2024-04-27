@@ -1,7 +1,6 @@
 using CanaRails.Controllers;
 using CanaRails.Database;
 using CanaRails.Exceptions;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace CanaRails.Services;
@@ -48,5 +47,12 @@ public class AppService(CanaRailsContext context)
   public async Task<Database.Entities.App[]> ListAsync()
   {
     return await context.Apps.ToArrayAsync();
+  }
+
+  public async Task<Database.Entities.App> FindByIDAsync(int id)
+  {
+    return await context.Apps.
+      Where(record => record.ID.Equals(id)).
+      FirstAsync();
   }
 }

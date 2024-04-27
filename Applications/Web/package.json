@@ -12,6 +12,7 @@
     "@connectrpc/connect": "^1.4.0",
     "@connectrpc/connect-web": "^1.4.0",
     "@solidjs/router": "^0.13.2",
+    "@tanstack/solid-query": "^5.32.0",
     "solid-js": "^1.8.15",
     "zod": "^3.23.4"
   },
