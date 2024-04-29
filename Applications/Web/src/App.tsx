@@ -4,7 +4,8 @@ import DashboardPage from "./pages/dashboard";
 import AppPage from "./pages/app";
 import NewAppPage from "./pages/app/new";
 import AppDetailPage from "./pages/app/detail";
-import AppInstancePage from "./pages/app/detail/instance";
+import AppEntryPage from "./pages/app/detail/entry";
+import NewAppEntryPage from "./pages/app/detail/entry/new";
 
 function App() {
   return (
@@ -14,7 +15,8 @@ function App() {
       <Route path="/app" component={AppPage} />
       <Route path="/app/new" component={NewAppPage} />
       <Route path="/app/:id" component={AppDetailPage} />
-      <Route path="/app/:id/instance" component={AppInstancePage} />
+      <Route path="/app/:id/entry" component={AppEntryPage} />
+      <Route path="/app/:id/entry/new" component={NewAppEntryPage} />
     </Router>
   );
 }

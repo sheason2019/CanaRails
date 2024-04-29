@@ -1,12 +1,12 @@
-import { JSX, createResource, createSignal } from "solid-js";
+import { createSignal } from "solid-js";
 import { ZodFormattedError, z } from "zod";
 import { appClient } from "../../../../clients";
-import { createMutation, createQuery } from "@tanstack/solid-query";
-import { useLocation, useNavigate } from "@solidjs/router";
+import { createMutation } from "@tanstack/solid-query";
+import { useNavigate } from "@solidjs/router";
 
 const schema = z.object({
   name: z.string().min(1, "App 名称不能为空").max(24, "App 名称最多 24 位"),
-  host: z.string().min(1, "访问地址不能为空"),
+  appID: z.string().min(1, "App ID 不能为空"),
   description: z.string(),
 });
 
@@ -15,7 +15,7 @@ export type FormError = ZodFormattedError<z.infer<typeof schema>>;
 function handleParseFormData(formData: FormData) {
   const data = {
     name: formData.get("name")?.toString(),
-    host: formData.get("host")?.toString(),
+    appID: formData.get("app-id")?.toString(),
     description: formData.get("description")?.toString(),
   };
 

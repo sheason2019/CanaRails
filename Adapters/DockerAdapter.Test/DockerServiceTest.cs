@@ -1,4 +1,5 @@
 using CanaRails.Adapters.DockerAdapter.Services;
+using CanaRails.Database.Entities;
 
 namespace DockerAdapter.Test;
 
@@ -7,9 +8,21 @@ public class DockerServiceTest
     [Fact]
     public async Task CreateHelloWorldContainer()
     {
-        var imageName = "hello-world";
+        var image = new Image
+        {
+            ImageName = "hello-world",
+            TagName = "latest",
+            Registry = "",
+            App = new App
+            {
+                Name = "hello-world",
+                AppID = "hello-world",
+            },
+        };
         var service = new DockerService();
-        await service.CreateImageAsync(imageName);
-        await service.CreateContainerAsync(imageName);
+        await service.CreateImageAsync(image);
+        var containerId = await service.CreateContainerAsync(image);
+        await service.StopContainerAsync(containerId);
+        await service.RemoveContainerAsync(containerId);
     }
 }

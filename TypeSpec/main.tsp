@@ -1,3 +1,3 @@
 import "./services/app.tsp";
-import "./services/instance.tsp";
-import "./services/image-options.tsp";
+import "./services/entry.tsp";
+import "./services/image.tsp";

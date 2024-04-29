@@ -28,18 +28,16 @@ export default function NewAppPage() {
         </label>
         <label class="form-control w-full max-w-xs">
           <div class="label">
-            <span class="label-text">访问地址</span>
+            <span class="label-text">App ID</span>
           </div>
-          <div class="input input-bordered w-full max-w-xs text-sm flex items-center">
-            <input
-              type="text"
-              readOnly={mutation.isPending}
-              name="host"
-              class="grow"
-            />
-            <p>.{location.host}</p>
-          </div>
-          <ErrorLabel errors={formError()?.host?._errors} />
+          <input
+            type="text"
+            readOnly={mutation.isPending}
+            name="app-id"
+            placeholder="应用的全局唯一标识"
+            class="input input-bordered w-full max-w-xs text-sm"
+          />
+          <ErrorLabel errors={formError()?.appID?._errors} />
         </label>
         <label class="form-control w-full">
           <div class="label">

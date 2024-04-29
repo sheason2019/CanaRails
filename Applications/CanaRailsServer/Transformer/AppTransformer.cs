@@ -11,7 +11,7 @@ public static class AppTransformer
     {
       Id = app.ID,
       Name = app.Name,
-      Host = app.Host,
+      AppID = app.AppID,
       Description = app.Description,
     };
   }
@@ -22,7 +22,7 @@ public static class AppTransformer
     {
       ID = dto.Id,
       Name = dto.Name,
-      Host = dto.Host,
+      AppID = dto.AppID,
       Description = dto.Description,
     };
   }

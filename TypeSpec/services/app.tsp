@@ -13,7 +13,7 @@ namespace App {
   model AppDTO {
     id: int32;
     name: string;
-    host: string;
+    appID: string;
     description: string;
   }
 
