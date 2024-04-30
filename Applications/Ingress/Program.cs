@@ -3,7 +3,7 @@ using System.Net;
 using CanaRails.Database;
 using Yarp.ReverseProxy.Forwarder;
 
-namespace CanaRails.Server;
+namespace CanaRails.Ingress;
 
 public class Program
 {
@@ -40,7 +40,11 @@ public class Program
 
     app.UseRouting();
 
-    app.Map("/{**catch-all}", async (HttpContext context, IHttpForwarder forwarder) =>
+    app.Map("/{**url}", async (
+      string? url,
+      HttpContext context,
+      IHttpForwarder forwarder
+    ) =>
     {
       var error = await forwarder.SendAsync(
         context,
@@ -53,9 +57,9 @@ public class Program
 
     return app;
   }
-  public static void Main(string[] args)
+  public static Task Main()
   {
-    CreateApplication().Run();
+    return CreateApplication().RunAsync("http://localhost:80");
   }
 
   public class CanaRailsTransformer : HttpTransformer { }

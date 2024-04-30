@@ -7,7 +7,7 @@ using CanaRails.Exceptions;
 using CanaRails.Controllers.App;
 using CanaRails.Adapters.DockerAdapter.Services;
 
-namespace CanaRails.Server;
+namespace CanaRails.Manage;
 
 public class Program
 {
@@ -24,7 +24,8 @@ public class Program
     builder.Services.AddControllers(options =>
     {
       options.Filters.Add<HttpStandardExceptionFilter>();
-    });
+    })
+    .AddApplicationPart(typeof(AppController).Assembly);
 
     var app = builder.Build();
 
@@ -32,9 +33,9 @@ public class Program
 
     return app;
   }
-  public static void Main(string[] args)
+  public static Task Main()
   {
-    CreateApplication().Run();
+    return CreateApplication().RunAsync("http://localhost:8080");
   }
 }
 
