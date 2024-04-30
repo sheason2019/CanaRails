@@ -7,21 +7,34 @@ using CanaRails.Exceptions;
 using CanaRails.Controllers.App;
 using CanaRails.Adapters.DockerAdapter.Services;
 
-var builder = WebApplication.CreateBuilder(args);
+namespace CanaRails.Server;
 
-builder.Services.AddDbContext<CanaRailsContext>();
-builder.Services.AddSingleton<CanaRailsContext>();
-builder.Services.AddSingleton<AppService>();
-builder.Services.AddSingleton<DockerService>();
-builder.Services.AddSingleton<IAdapter, DockerAdapter>();
-builder.Services.AddSingleton<IAppController, AppControllerImpl>();
-builder.Services.AddControllers(options =>
+public class Program
 {
-  options.Filters.Add<HttpStandardExceptionFilter>();
-});
+  public static WebApplication CreateApplication()
+  {
+    var builder = WebApplication.CreateBuilder();
 
-var app = builder.Build();
+    builder.Services.AddDbContext<CanaRailsContext>();
+    builder.Services.AddSingleton<CanaRailsContext>();
+    builder.Services.AddSingleton<AppService>();
+    builder.Services.AddSingleton<DockerService>();
+    builder.Services.AddSingleton<IAdapter, DockerAdapter>();
+    builder.Services.AddSingleton<IAppController, AppControllerImpl>();
+    builder.Services.AddControllers(options =>
+    {
+      options.Filters.Add<HttpStandardExceptionFilter>();
+    });
 
-app.MapControllers();
+    var app = builder.Build();
 
-app.Run();
+    app.MapControllers();
+
+    return app;
+  }
+  public static void Main(string[] args)
+  {
+    CreateApplication().Run();
+  }
+}
+
