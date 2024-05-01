@@ -12,18 +12,13 @@ public class AppService(CanaRailsContext context)
     using var transaction = context.Database.BeginTransaction();
     // 校验 Host 和 name 是否被占用
     var existRecords = await context.Apps.
-      Where(record => record.AppID.Equals(dto.AppID)).
       ToListAsync();
     var duplicateSet = new HashSet<string>();
     foreach (var record in existRecords)
     {
-      if (record.AppID == dto.AppID)
-      {
-        duplicateSet.Add("AppID 已存在");
-      }
       if (record.Name == dto.Name)
       {
-        duplicateSet.Add("Name 已存在");
+        duplicateSet.Add("App 名称已被使用");
       }
     }
     if (duplicateSet.Count > 0)
@@ -35,7 +30,6 @@ public class AppService(CanaRailsContext context)
     var app = new Database.Entities.App
     {
       Name = dto.Name,
-      AppID = dto.AppID,
     };
     await context.Apps.AddAsync(app);
     await context.SaveChangesAsync();

@@ -9,7 +9,7 @@ Get-ChildItem "./tsp-output/@typespec/openapi3" | ForEach-Object -Process {
       /input:"./tsp-output/@typespec/openapi3/openapi.$serverName.yaml" `
       /classname:${serverName} `
       /namespace:CanaRails.Controllers.$serverName `
-      /output:"../Applications/CanaRailsServer/Controllers/${serverName}Controller.cs" `
+      /output:"../Applications/Manage/Controllers/${serverName}Controller.cs" `
       /ControllerBaseClass:"Microsoft.AspNetCore.Mvc.Controller"
   }
 }

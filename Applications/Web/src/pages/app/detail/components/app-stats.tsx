@@ -40,7 +40,7 @@ function StatComp(props: {
 }) {
   return (
     <a
-      class="stats shadow-lg hover:shadow-xl transition-shadow mt-4"
+      class="stats shadow hover:shadow-xl transition-shadow mt-4"
       href={props.href}
     >
       <div class="stat">

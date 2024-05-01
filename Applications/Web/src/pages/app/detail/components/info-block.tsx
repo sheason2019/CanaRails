@@ -17,7 +17,6 @@ export default function InfoBlock() {
       <div class="grid grid-cols-1 gap-4 lg:grid-cols-3 mb-4">
         <InfoItem label="ID" value={app.data?.id} />
         <InfoItem label="名称" value={app.data?.name} />
-        <InfoItem label="App ID" value={app.data?.appID} />
       </div>
       <InfoItem label="简介" value={desc()} />
     </>
