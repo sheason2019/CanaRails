@@ -2,7 +2,7 @@ import DrawerButton from "./drawer-button";
 
 export default function NavBar() {
   return (
-    <div class="navbar bg-base-100 border-b sticky top-0">
+    <div class="navbar bg-base-100 border-b sticky top-0 z-10">
       <div class="flex-none">
         <DrawerButton />
       </div>

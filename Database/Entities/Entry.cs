@@ -7,7 +7,6 @@ public class Entry
   public string Description { get; set; } = "";
   public required int Port { get; set; }
   public required App App { get; set; }
-  public EntryMatch[] EntryMatches { get; set; } = [];
-  public Image? CurrentImage { get; set; }
-  public string? CurrentContainerID { get; set; }
+  public ICollection<EntryMatch> EntryMatches { get; set; } = [];
+  public required Image Image { get; set; }
 }

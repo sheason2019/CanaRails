@@ -1,4 +1,4 @@
-import { Match, Switch } from "solid-js";
+import { For, Match, Switch } from "solid-js";
 import { FormItemOption } from "./typings";
 import useSimpleForm from "./use-simple-form";
 
@@ -24,8 +24,9 @@ export default function SimpleFormItem(props: Props) {
       <Switch
         fallback={
           <input
-            name="name"
-            type="text"
+            name={props.name}
+            type={props.option?.type}
+            placeholder={props.option?.placeholder}
             readOnly={props.readOnly}
             onBlur={(e) =>
               props.validateFieldAsync(
@@ -39,10 +40,37 @@ export default function SimpleFormItem(props: Props) {
       >
         <Match when={props.option?.type === "textarea"}>
           <textarea
-            name="description"
+            name={props.name}
+            placeholder={props.option?.placeholder}
             readOnly={props.readOnly}
+            onBlur={(e) =>
+              props.validateFieldAsync(
+                new FormData(e.currentTarget.form!),
+                props.name
+              )
+            }
             class="textarea textarea-bordered w-full"
           />
+        </Match>
+        <Match when={props.option?.type === "select"}>
+          <select
+            name={props.name}
+            disabled={props.readOnly}
+            class="select select-bordered w-full max-w-xs"
+          >
+            <option disabled selected hidden value="">
+              {props.option?.placeholder}
+            </option>
+            {props.option?.type === "select" && (
+              <For each={props.option.options}>
+                {(option) => (
+                  <option value={option.value}>
+                    {option.label ?? option.value}
+                  </option>
+                )}
+              </For>
+            )}
+          </select>
         </Match>
       </Switch>
       <div class="label">

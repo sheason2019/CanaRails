@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -45,7 +46,7 @@ namespace Database.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Image",
+                name: "Images",
                 columns: table => new
                 {
                     ID = table.Column<int>(type: "INTEGER", nullable: false)
@@ -53,13 +54,14 @@ namespace Database.Migrations
                     Registry = table.Column<string>(type: "TEXT", nullable: false),
                     ImageName = table.Column<string>(type: "TEXT", nullable: false),
                     TagName = table.Column<string>(type: "TEXT", nullable: false),
-                    AppID = table.Column<int>(type: "INTEGER", nullable: false)
+                    AppID = table.Column<int>(type: "INTEGER", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Image", x => x.ID);
+                    table.PrimaryKey("PK_Images", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_Image_Apps_AppID",
+                        name: "FK_Images_Apps_AppID",
                         column: x => x.AppID,
                         principalTable: "Apps",
                         principalColumn: "ID",
@@ -67,7 +69,7 @@ namespace Database.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Instances",
+                name: "Entries",
                 columns: table => new
                 {
                     ID = table.Column<int>(type: "INTEGER", nullable: false)
@@ -81,17 +83,17 @@ namespace Database.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Instances", x => x.ID);
+                    table.PrimaryKey("PK_Entries", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_Instances_Apps_AppID",
+                        name: "FK_Entries_Apps_AppID",
                         column: x => x.AppID,
                         principalTable: "Apps",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Instances_Image_CurrentImageID",
+                        name: "FK_Entries_Images_CurrentImageID",
                         column: x => x.CurrentImageID,
-                        principalTable: "Image",
+                        principalTable: "Images",
                         principalColumn: "ID");
                 });
 
@@ -109,9 +111,9 @@ namespace Database.Migrations
                 {
                     table.PrimaryKey("PK_EntryMatch", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_EntryMatch_Instances_EntryID",
+                        name: "FK_EntryMatch_Entries_EntryID",
                         column: x => x.EntryID,
-                        principalTable: "Instances",
+                        principalTable: "Entries",
                         principalColumn: "ID");
                 });
 
@@ -121,24 +123,24 @@ namespace Database.Migrations
                 column: "AppID");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Entries_AppID",
+                table: "Entries",
+                column: "AppID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Entries_CurrentImageID",
+                table: "Entries",
+                column: "CurrentImageID");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_EntryMatch_EntryID",
                 table: "EntryMatch",
                 column: "EntryID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Image_AppID",
-                table: "Image",
+                name: "IX_Images_AppID",
+                table: "Images",
                 column: "AppID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Instances_AppID",
-                table: "Instances",
-                column: "AppID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Instances_CurrentImageID",
-                table: "Instances",
-                column: "CurrentImageID");
         }
 
         /// <inheritdoc />
@@ -151,10 +153,10 @@ namespace Database.Migrations
                 name: "EntryMatch");
 
             migrationBuilder.DropTable(
-                name: "Instances");
+                name: "Entries");
 
             migrationBuilder.DropTable(
-                name: "Image");
+                name: "Images");
 
             migrationBuilder.DropTable(
                 name: "Apps");

@@ -15,10 +15,9 @@ namespace Entry {
   model EntryDTO {
     id: int32;
     name: string;
-    appID: string;
     port: int32;
     description: string;
-    image?: Image.ImageDTO;
+    appID: int32;
     imageID: int32;
   }
 

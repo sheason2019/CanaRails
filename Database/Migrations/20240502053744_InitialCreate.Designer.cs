@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Database.Migrations
 {
     [DbContext(typeof(CanaRailsContext))]
-    [Migration("20240501115105_ImageAddCreatedAt")]
-    partial class ImageAddCreatedAt
+    [Migration("20240502053744_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -91,7 +91,7 @@ namespace Database.Migrations
 
                     b.HasIndex("CurrentImageID");
 
-                    b.ToTable("Instances");
+                    b.ToTable("Entries");
                 });
 
             modelBuilder.Entity("CanaRails.Database.Entities.EntryMatch", b =>
@@ -146,7 +146,7 @@ namespace Database.Migrations
 
                     b.HasIndex("AppID");
 
-                    b.ToTable("Image");
+                    b.ToTable("Images");
                 });
 
             modelBuilder.Entity("CanaRails.Database.Entities.AppMatch", b =>

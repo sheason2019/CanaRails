@@ -5,7 +5,8 @@ namespace CanaRails.Database;
 public class CanaRailsContext : DbContext
 {
   public DbSet<Entities.App> Apps { get; set; }
-  public DbSet<Entities.Entry> Instances { get; set; }
+  public DbSet<Entities.Entry> Entries { get; set; }
+  public DbSet<Entities.Image> Images { get; set; }
 
   public string DbPath { get; }
 

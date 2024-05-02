@@ -16,7 +16,6 @@ public class DockerServiceTest
             App = new App
             {
                 Name = "hello-world",
-                AppID = "hello-world",
             },
         };
         var service = new DockerService();

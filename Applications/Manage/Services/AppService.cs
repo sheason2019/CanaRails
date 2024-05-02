@@ -10,7 +10,7 @@ public class AppService(CanaRailsContext context)
   public async Task<Database.Entities.App> CreateAppAsync(AppDTO dto)
   {
     using var transaction = context.Database.BeginTransaction();
-    // 校验 Host 和 name 是否被占用
+    // 校验 name 是否被占用
     var existRecords = await context.Apps.
       ToListAsync();
     var duplicateSet = new HashSet<string>();

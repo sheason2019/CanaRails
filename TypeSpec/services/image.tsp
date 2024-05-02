@@ -22,7 +22,7 @@ namespace Image {
   op create(dto: ImageDTO): ImageDTO;
 
   @get
-  op list(): ImageDTO[];
+  op list(@query appID: int32): ImageDTO[];
 
   @get
   @route("{id}")

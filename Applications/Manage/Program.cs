@@ -6,6 +6,8 @@ using CanaRails.Services;
 using CanaRails.Exceptions;
 using CanaRails.Controllers.App;
 using CanaRails.Adapters.DockerAdapter.Services;
+using CanaRails.Controllers.Image;
+using CanaRails.Controllers.Entry;
 
 namespace CanaRails.Manage;
 
@@ -17,15 +19,31 @@ public class Program
 
     builder.Services.AddDbContext<CanaRailsContext>();
     builder.Services.AddSingleton<CanaRailsContext>();
+
+    // Add Services
     builder.Services.AddSingleton<AppService>();
     builder.Services.AddSingleton<DockerService>();
+    builder.Services.AddSingleton<ImageService>();
+    builder.Services.AddSingleton<EntryService>();
+
+    // Add Controller
     builder.Services.AddSingleton<IAdapter, DockerAdapter>();
     builder.Services.AddSingleton<IAppController, AppControllerImpl>();
+    builder.Services.AddSingleton<IImageController, ImageControllerImpl>();
+    builder.Services.AddSingleton<IEntryController, EntryControllerImpl>();
+
+    /**
+    * 由于应用需要集成到 Integration App 中发布
+    * 这里需要使用 AddApplicationPart 将 Controller 扫描到 builder 中
+    */
     builder.Services.AddControllers(options =>
     {
       options.Filters.Add<HttpStandardExceptionFilter>();
     })
-    .AddApplicationPart(typeof(AppController).Assembly);
+    .AddApplicationPart(typeof(AppController).Assembly)
+    .AddApplicationPart(typeof(ImageController).Assembly)
+    .AddApplicationPart(typeof(EntryController).Assembly)
+    ;
 
     var app = builder.Build();
 

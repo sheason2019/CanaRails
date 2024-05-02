@@ -65,15 +65,12 @@ namespace Database.Migrations
                     b.Property<int>("AppID")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("CurrentContainerID")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int?>("CurrentImageID")
-                        .HasColumnType("INTEGER");
-
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("TEXT");
+
+                    b.Property<int>("ImageID")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -86,9 +83,9 @@ namespace Database.Migrations
 
                     b.HasIndex("AppID");
 
-                    b.HasIndex("CurrentImageID");
+                    b.HasIndex("ImageID");
 
-                    b.ToTable("Instances");
+                    b.ToTable("Entries");
                 });
 
             modelBuilder.Entity("CanaRails.Database.Entities.EntryMatch", b =>
@@ -143,7 +140,7 @@ namespace Database.Migrations
 
                     b.HasIndex("AppID");
 
-                    b.ToTable("Image");
+                    b.ToTable("Images");
                 });
 
             modelBuilder.Entity("CanaRails.Database.Entities.AppMatch", b =>
@@ -165,13 +162,15 @@ namespace Database.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("CanaRails.Database.Entities.Image", "CurrentImage")
+                    b.HasOne("CanaRails.Database.Entities.Image", "Image")
                         .WithMany("Entries")
-                        .HasForeignKey("CurrentImageID");
+                        .HasForeignKey("ImageID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("App");
 
-                    b.Navigation("CurrentImage");
+                    b.Navigation("Image");
                 });
 
             modelBuilder.Entity("CanaRails.Database.Entities.EntryMatch", b =>

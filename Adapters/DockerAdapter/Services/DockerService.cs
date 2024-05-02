@@ -25,6 +25,14 @@ public class DockerService
     );
   }
 
+  public async Task DeleteImageAsync(Image image)
+  {
+    await client.Images.DeleteImageAsync(
+      $"{image.ImageName}:{image.TagName}",
+      new ImageDeleteParameters { }
+    );
+  }
+
   public async Task<string> CreateContainerAsync(Image image)
   {
     var container = await client.Containers.CreateContainerAsync(
