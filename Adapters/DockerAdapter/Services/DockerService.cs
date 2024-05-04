@@ -84,4 +84,9 @@ public class DockerService
     }
     return containerIds.Select(id => dict[id]?.State ?? "").ToArray();
   }
+
+  public async Task<string> GetContainerIPAsync(string containerId) {
+    var container = await client.Containers.InspectContainerAsync(containerId);
+    return container.NetworkSettings.IPAddress;
+  }
 }

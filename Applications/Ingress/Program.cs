@@ -1,6 +1,9 @@
 using System.Diagnostics;
 using System.Net;
 using CanaRails.Database;
+using CanaRails.Adapters.DockerAdapter;
+using CanaRails.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using Yarp.ReverseProxy.Forwarder;
 
 namespace CanaRails.Ingress;
@@ -43,9 +46,29 @@ public class Program
     app.Map("/{**url}", async (
       string? url,
       HttpContext context,
-      IHttpForwarder forwarder
+      CanaRailsContext dbContext,
+      IHttpForwarder forwarder,
+      IAdapter adapter
     ) =>
     {
+      // 解析 Host
+      var host = context.Request.Host.Host;
+      // 根据匹配器寻找命中的 APP
+      var match = await dbContext.AppMatchers.
+        Include(a => a.App).
+        Where(a => a.Host.Equals(host)).
+        FirstAsync();
+      // TODO: 根据 Header 和 Cookie 匹配 Entry
+      var entry = await dbContext.Entries.
+        Where(e => e.App.ID.Equals(match.App.ID)).
+        FirstAsync();
+      // 寻找最新的 Container
+      var container = await dbContext.Containers.
+        Where(c => c.Entry.ID.Equals(entry.ID)).
+        OrderBy(c => c.CreatedAt).
+        FirstAsync();
+      // 调用 Adapter 寻找容器 IP
+
       var error = await forwarder.SendAsync(
         context,
         "http://localhost:8080",

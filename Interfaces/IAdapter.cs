@@ -11,4 +11,5 @@ public interface IAdapter
   public Task RestartContainer(string containerId);
   public Task RemoveContainer(string containerId);
   public Task<string[]> GetContainerState(string[] containerIds);
+  public Task<string> GetContainerIP(string containerId);
 }

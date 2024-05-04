@@ -39,4 +39,9 @@ public class DockerAdapter(DockerService service) : IAdapter
   {
     return service.GetContainerStateAsync(containerIds);
   }
+
+  public Task<string> GetContainerIP(string containerId)
+  {
+    return service.GetContainerIPAsync(containerId);
+  }
 }
