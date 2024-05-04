@@ -9,6 +9,7 @@ import NewAppEntryPage from "./pages/app/detail/entry/new";
 import AppImagePage from "./pages/app/detail/image";
 import NewAppImagePage from "./pages/app/detail/image/new";
 import AppEntryDetailPage from "./pages/app/detail/entry/detail";
+import AppMatcherPage from "./pages/app/detail/matcher";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
       <Route path="/app/:id/entry/:entryID" component={AppEntryDetailPage} />
       <Route path="/app/:id/image" component={AppImagePage} />
       <Route path="/app/:id/image/new" component={NewAppImagePage} />
+      <Route path="/app/:id/matcher" component={AppMatcherPage} />
     </Router>
   );
 }

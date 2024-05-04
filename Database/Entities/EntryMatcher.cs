@@ -1,6 +1,6 @@
 namespace CanaRails.Database.Entities;
 
-public class EntryMatch
+public class EntryMatcher
 {
   public int ID { get; set; }
   public required string Key { get; set; }

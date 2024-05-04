@@ -8,6 +8,7 @@ using CanaRails.Controllers.App;
 using CanaRails.Adapters.DockerAdapter.Services;
 using CanaRails.Controllers.Image;
 using CanaRails.Controllers.Entry;
+using CanaRails.Controllers.AppMatcher;
 
 namespace CanaRails.Manage;
 
@@ -25,6 +26,7 @@ public class Program
 
     // Add Services
     builder.Services.AddSingleton<AppService>();
+    builder.Services.AddSingleton<AppMatcherService>();
     builder.Services.AddSingleton<DockerService>();
     builder.Services.AddSingleton<ImageService>();
     builder.Services.AddSingleton<EntryService>();
@@ -32,6 +34,7 @@ public class Program
 
     // Add Controller
     builder.Services.AddSingleton<IAppController, AppControllerImpl>();
+    builder.Services.AddSingleton<IAppMatcherController, AppMatcherControllerImpl>();
     builder.Services.AddSingleton<IImageController, ImageControllerImpl>();
     builder.Services.AddSingleton<IEntryController, EntryControllerImpl>();
 
@@ -44,6 +47,7 @@ public class Program
       options.Filters.Add<HttpStandardExceptionFilter>();
     })
     .AddApplicationPart(typeof(AppController).Assembly)
+    .AddApplicationPart(typeof(AppMatcherController).Assembly)
     .AddApplicationPart(typeof(ImageController).Assembly)
     .AddApplicationPart(typeof(EntryController).Assembly)
     ;

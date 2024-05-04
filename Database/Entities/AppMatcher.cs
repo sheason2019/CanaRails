@@ -1,6 +1,6 @@
 namespace CanaRails.Database.Entities;
 
-public class AppMatch
+public class AppMatcher
 {
   public int ID { get; set; }
   public required string Host { get; set; }
