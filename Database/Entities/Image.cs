@@ -8,5 +8,5 @@ public class Image
   public required string TagName { get; set; }
   public required App App { get; set; }
   public DateTime CreatedAt { get; set; } = DateTime.Now;
-  public ICollection<Entry> Entries { get; set; } = [];
+  public ICollection<Container> Containers { get; set; } = [];
 }

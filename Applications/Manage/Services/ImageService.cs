@@ -40,4 +40,11 @@ public class ImageService(
   {
     return context.Images.Where(i => i.ID.Equals(id)).FirstAsync();
   }
+
+  public Task<int> CountAsync(int appID)
+  {
+    return context.Images.
+      Where(i => i.App.ID.Equals(appID)).
+      CountAsync();
+  }
 }

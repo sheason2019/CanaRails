@@ -2,8 +2,6 @@ import "@typespec/http";
 import "@typespec/rest";
 import "@typespec/openapi3";
 
-import "./image.tsp";
-
 using TypeSpec.Http;
 using TypeSpec.Rest;
 
@@ -11,23 +9,42 @@ using TypeSpec.Rest;
   title: "App Service",
 })
 @server("/api/entry", "App Entry Server endpoint")
-namespace Entry {
-  model EntryDTO {
-    id: int32;
-    name: string;
-    port: int32;
-    description: string;
-    appID: int32;
-    imageID: int32;
-  }
+namespace Entry;
 
-  @post
-  op create(dto: EntryDTO): EntryDTO;
-
-  @get
-  op list(@query appID: int32): EntryDTO[];
-
-  @get
-  @route("{id}")
-  op findByID(@path id: int32): EntryDTO;
+model EntryDTO {
+  id: int32;
+  name: string;
+  description: string;
+  appID: int32;
 }
+
+@post
+op create(dto: EntryDTO): EntryDTO;
+
+@get
+op list(@query appID: int32): EntryDTO[];
+
+@get
+@route("count")
+op count(@query appID: int32): int32;
+
+@get
+@route("{id}")
+op findByID(@path id: int32): EntryDTO;
+
+model ContainerDTO {
+  id: int32;
+  imageID: int32;
+  entryID: int32;
+  port: int32;
+  containerID: string;
+  state?: string;
+}
+
+@put
+@route("{id}/container")
+op putContainer(@path id: int32, dto: ContainerDTO): ContainerDTO;
+
+@get
+@route("{id}/container")
+op listContainer(@path id: int32): ContainerDTO[];

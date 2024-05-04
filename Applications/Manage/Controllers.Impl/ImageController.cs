@@ -6,6 +6,11 @@ namespace CanaRails.Controllers.Impl;
 
 public class ImageControllerImpl(ImageService service) : IImageController
 {
+  public Task<int> CountAsync(int appID)
+  {
+    return service.CountAsync(appID);
+  }
+
   public async Task<ImageDTO> CreateAsync(Body body)
   {
     var image = await service.CreateImageAsync(body.Dto);

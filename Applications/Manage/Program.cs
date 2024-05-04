@@ -20,14 +20,17 @@ public class Program
     builder.Services.AddDbContext<CanaRailsContext>();
     builder.Services.AddSingleton<CanaRailsContext>();
 
+    // Add Container adapter
+    builder.Services.AddSingleton<IAdapter, DockerAdapter>();
+
     // Add Services
     builder.Services.AddSingleton<AppService>();
     builder.Services.AddSingleton<DockerService>();
     builder.Services.AddSingleton<ImageService>();
     builder.Services.AddSingleton<EntryService>();
+    builder.Services.AddSingleton<ContainerService>();
 
     // Add Controller
-    builder.Services.AddSingleton<IAdapter, DockerAdapter>();
     builder.Services.AddSingleton<IAppController, AppControllerImpl>();
     builder.Services.AddSingleton<IImageController, ImageControllerImpl>();
     builder.Services.AddSingleton<IEntryController, EntryControllerImpl>();

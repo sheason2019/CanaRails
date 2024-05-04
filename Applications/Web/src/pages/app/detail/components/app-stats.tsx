@@ -1,8 +1,23 @@
 import { useParams } from "@solidjs/router";
+import { createQuery } from "@tanstack/solid-query";
 import { JSX } from "solid-js";
+import { entryClient, imageClient } from "../../../../clients";
 
 export default function AppStats() {
   const params = useParams();
+
+  const countQuery = createQuery(() => ({
+    queryKey: ["query-stats"],
+    queryFn: async () => {
+      const entryCount = await entryClient.count(Number(params.id));
+      const imageCount = await imageClient.count(Number(params.id));
+
+      return {
+        entry: entryCount,
+        iamge: imageCount,
+      };
+    },
+  }));
 
   return (
     <>
@@ -12,13 +27,13 @@ export default function AppStats() {
         <StatComp
           href={`/app/${params.id}/entry`}
           label="入口"
-          value="0"
+          value={countQuery.data?.entry ?? "0"}
           desc="配置应用入口"
         />
         <StatComp
           href={`/app/${params.id}/image`}
           label="可用镜像"
-          value="0"
+          value={countQuery.data?.iamge ?? "0"}
           desc="查看和管理可用镜像"
         />
         <StatComp

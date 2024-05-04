@@ -11,23 +11,19 @@ public static class EntryTransformer
     {
       Id = entry.ID,
       Name = entry.Name,
-      Port = entry.Port,
       Description = entry.Description,
       AppID = entry.App.ID,
-      ImageID = entry.Image.ID,
     };
   }
 
-  public static Entry ToEntity(this EntryDTO dto, App app, Image image)
+  public static Entry ToEntity(this EntryDTO dto, App app)
   {
     return new Entry
     {
       ID = dto.Id,
       Name = dto.Name,
-      Port = dto.Port,
       Description = dto.Description,
       App = app,
-      Image = image,
     };
   }
 }

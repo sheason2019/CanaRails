@@ -68,4 +68,20 @@ public class DockerService
       new ContainerRemoveParameters()
     );
   }
+
+  public async Task<string[]> GetContainerStateAsync(string[] containerIds)
+  {
+    var list = await client.Containers.ListContainersAsync(
+      new ContainersListParameters
+      {
+        All = true
+      }
+    );
+    var dict = new Dictionary<string, ContainerListResponse?>();
+    foreach (var container in list)
+    {
+      dict.Add(container.ID, container);
+    }
+    return containerIds.Select(id => dict[id]?.State ?? "").ToArray();
+  }
 }
