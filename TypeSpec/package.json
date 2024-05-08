@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "compile": "tsp compile .",
-    "gen": "pwsh ./script/gen-web.ps1 && pwsh ./script/gen-dotnet.ps1"
+    "gen": "node ./script/gen-web.mjs && node ./script/gen-dotnet.mjs"
   },
   "dependencies": {
     "@typespec/compiler": "latest",
