@@ -20,12 +20,28 @@ export default function EntryList() {
             class="card shadow hover:shadow-lg transition-shadow"
             href={`/app/${params.id}/entry/${entry.id}`}
           >
-            <div class="card-body">
-              <div class="flex items-center">
-                <div class="grow font-bold text-lg">{entry.name}</div>
-                <div>ID {entry.id}</div>
+            <div class="card-body pb-4">
+              <div class="flex items-center font-bold">
+                <div class="grow text-lg">{entry.name}</div>
+                <div class="text-gray-400">ID {entry.id}</div>
               </div>
               <div>{entry.description}</div>
+            </div>
+            <div class="card-body py-3 bg-base-200">
+              <div class="grid grid-cols-3 items-center">
+                <div class="text-left">
+                  上次部署 {new Date().toLocaleString()}
+                </div>
+                <div class="text-center">运行中</div>
+                <div class="text-right">
+                  <button
+                    class="btn btn-sm btn-primary"
+                    onclick={(e) => e.preventDefault()}
+                  >
+                    操作
+                  </button>
+                </div>
+              </div>
             </div>
           </a>
         )}

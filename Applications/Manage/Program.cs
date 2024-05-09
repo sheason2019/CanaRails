@@ -1,7 +1,6 @@
 using CanaRails.Database;
 using CanaRails.Adapters.DockerAdapter;
 using CanaRails.Controllers.Impl;
-using CanaRails.Interfaces;
 using CanaRails.Services;
 using CanaRails.Exceptions;
 using CanaRails.Controllers.App;
@@ -9,6 +8,7 @@ using CanaRails.Adapters.DockerAdapter.Services;
 using CanaRails.Controllers.Image;
 using CanaRails.Controllers.Entry;
 using CanaRails.Controllers.AppMatcher;
+using CanaRails.Adapters.IAdapter;
 
 namespace CanaRails.Manage;
 

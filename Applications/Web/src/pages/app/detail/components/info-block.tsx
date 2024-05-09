@@ -1,9 +1,17 @@
 import { createMemo } from "solid-js";
-import useApp from "../hooks/use-app";
 import InfoItem from "../../../../components/info/info-item";
+import { useParams } from "@solidjs/router";
+import { createQuery } from "@tanstack/solid-query";
+import { appClient } from "../../../../clients";
 
 export default function InfoBlock() {
-  const app = useApp();
+  const params = useParams();
+
+  const app = createQuery(() => ({
+    queryKey: ["query-app", params.id],
+    queryFn: async () => appClient.findByID(Number(params.id)),
+    suspense: true,
+  }));
 
   const desc = createMemo(() => {
     const d = app.data?.description;

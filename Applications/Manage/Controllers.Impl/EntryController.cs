@@ -1,5 +1,5 @@
 
-using CanaRails.Interfaces;
+using CanaRails.Adapters.IAdapter;
 using CanaRails.Services;
 using CanaRails.Transformer;
 

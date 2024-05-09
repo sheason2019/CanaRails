@@ -2,10 +2,10 @@ using System.Diagnostics;
 using System.Net;
 using CanaRails.Database;
 using CanaRails.Adapters.DockerAdapter;
-using CanaRails.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Yarp.ReverseProxy.Forwarder;
 using CanaRails.Adapters.DockerAdapter.Services;
+using CanaRails.Adapters.IAdapter;
 
 namespace CanaRails.Ingress;
 

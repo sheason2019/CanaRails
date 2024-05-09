@@ -1,7 +1,7 @@
+using CanaRails.Adapters.IAdapter;
 using CanaRails.Controllers.Entry;
 using CanaRails.Database;
 using CanaRails.Database.Entities;
-using CanaRails.Interfaces;
 using CanaRails.Transformer;
 using Microsoft.EntityFrameworkCore;
 
