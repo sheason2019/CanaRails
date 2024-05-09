@@ -5,6 +5,7 @@ using CanaRails.Adapters.DockerAdapter;
 using CanaRails.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Yarp.ReverseProxy.Forwarder;
+using CanaRails.Adapters.DockerAdapter.Services;
 
 namespace CanaRails.Ingress;
 
@@ -35,8 +36,13 @@ public class Program
 
     var builder = WebApplication.CreateBuilder();
 
+    builder.Logging.ClearProviders();
+    builder.Logging.AddConsole();
+
     builder.Services.AddDbContext<CanaRailsContext>();
     builder.Services.AddSingleton<CanaRailsContext>();
+    builder.Services.AddSingleton<DockerService>();
+    builder.Services.AddSingleton<IAdapter, DockerAdapter>();
     builder.Services.AddHttpForwarder();
 
     var app = builder.Build();
@@ -45,6 +51,7 @@ public class Program
 
     app.Map("/{**url}", async (
       string? url,
+      ILogger<Program> logger,
       HttpContext context,
       CanaRailsContext dbContext,
       IHttpForwarder forwarder,
@@ -65,13 +72,14 @@ public class Program
       // 寻找最新的 Container
       var container = await dbContext.Containers.
         Where(c => c.Entry.ID.Equals(entry.ID)).
-        OrderBy(c => c.CreatedAt).
+        OrderByDescending(c => c.CreatedAt).
         FirstAsync();
       // 调用 Adapter 寻找容器 IP
+      var ip = await adapter.GetContainerIP(container.ContainerID);
 
       var error = await forwarder.SendAsync(
         context,
-        "http://localhost:8080",
+        $"http://{ip}:{container.Port}",
         httpClient,
         requestConfig,
         transformer
