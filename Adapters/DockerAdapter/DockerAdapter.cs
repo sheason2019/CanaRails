@@ -6,25 +6,42 @@ namespace CanaRails.Adapters.DockerAdapter;
 
 public class DockerAdapter(DockerService service) : IAdapter
 {
-  public async Task ApplyEntry(Entry entry)
+  public Task PullImage(Image image)
   {
-    await DeleteEntry(entry);
-    // 创建新的容器
-    if (entry.CurrentImage != null)
-    {
-      await service.CreateImageAsync(entry.CurrentImage);
-      entry.CurrentContainerID = await service.CreateContainerAsync(
-        entry.CurrentImage
-      );
-    }
+    return service.CreateImageAsync(image);
   }
-  public async Task DeleteEntry(Entry entry)
+  public Task DeleteImage(Image image)
   {
-    // 清理入口指向的容器
-    if (entry.CurrentContainerID != null) {
-      await service.StopContainerAsync(entry.CurrentContainerID);
-      await service.RemoveContainerAsync(entry.CurrentContainerID);
-      entry.CurrentContainerID = null;
-    }
+    return service.DeleteImageAsync(image);
+  }
+
+  public Task<string> CreateContainer(Image image)
+  {
+    return service.CreateContainerAsync(image);
+  }
+
+  public Task StopContainer(string containerId)
+  {
+    return service.StopContainerAsync(containerId);
+  }
+
+  public Task RestartContainer(string containerId)
+  {
+    return service.RestartContainerAsync(containerId);
+  }
+
+  public Task RemoveContainer(string containerId)
+  {
+    return service.RemoveContainerAsync(containerId);
+  }
+
+  public Task<string[]> GetContainerState(string[] containerIds)
+  {
+    return service.GetContainerStateAsync(containerIds);
+  }
+
+  public Task<string> GetContainerIP(string containerId)
+  {
+    return service.GetContainerIPAsync(containerId);
   }
 }

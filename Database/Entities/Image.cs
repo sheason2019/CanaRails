@@ -7,5 +7,6 @@ public class Image
   public required string ImageName { get; set; }
   public required string TagName { get; set; }
   public required App App { get; set; }
-  public Entry[] Entries { get; set; } = [];
+  public DateTime CreatedAt { get; set; } = DateTime.Now;
+  public ICollection<Container> Containers { get; set; } = [];
 }

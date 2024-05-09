@@ -25,6 +25,14 @@ public class DockerService
     );
   }
 
+  public async Task DeleteImageAsync(Image image)
+  {
+    await client.Images.DeleteImageAsync(
+      $"{image.ImageName}:{image.TagName}",
+      new ImageDeleteParameters { }
+    );
+  }
+
   public async Task<string> CreateContainerAsync(Image image)
   {
     var container = await client.Containers.CreateContainerAsync(
@@ -59,5 +67,26 @@ public class DockerService
       containerId,
       new ContainerRemoveParameters()
     );
+  }
+
+  public async Task<string[]> GetContainerStateAsync(string[] containerIds)
+  {
+    var list = await client.Containers.ListContainersAsync(
+      new ContainersListParameters
+      {
+        All = true
+      }
+    );
+    var dict = new Dictionary<string, ContainerListResponse?>();
+    foreach (var container in list)
+    {
+      dict.Add(container.ID, container);
+    }
+    return containerIds.Select(id => dict[id]?.State ?? "").ToArray();
+  }
+
+  public async Task<string> GetContainerIPAsync(string containerId) {
+    var container = await client.Containers.InspectContainerAsync(containerId);
+    return container.NetworkSettings.IPAddress;
   }
 }

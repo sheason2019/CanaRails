@@ -1,5 +1,6 @@
-import { JSX, createMemo } from "solid-js";
+import { createMemo } from "solid-js";
 import useApp from "../hooks/use-app";
+import InfoItem from "../../../../components/info/info-item";
 
 export default function InfoBlock() {
   const app = useApp();
@@ -17,18 +18,8 @@ export default function InfoBlock() {
       <div class="grid grid-cols-1 gap-4 lg:grid-cols-3 mb-4">
         <InfoItem label="ID" value={app.data?.id} />
         <InfoItem label="名称" value={app.data?.name} />
-        <InfoItem label="App ID" value={app.data?.appID} />
       </div>
       <InfoItem label="简介" value={desc()} />
     </>
-  );
-}
-
-function InfoItem(props: { label: string; value: JSX.Element }) {
-  return (
-    <div>
-      <div class="font-bold mb-1">{props.label}</div>
-      <div class="text-gray-500 text-sm">{props.value}</div>
-    </div>
   );
 }

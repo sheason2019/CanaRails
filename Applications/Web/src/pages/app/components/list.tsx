@@ -14,7 +14,7 @@ export default function AppList() {
       <For each={appListQuery.data ?? []}>
         {(app) => (
           <a href={`/app/${app.id}`}>
-            <div class="card bg-base-100 shadow-md">
+            <div class="card bg-base-100 shadow hover:shadow-lg transition-shadow">
               <div class="card-body">
                 <h2 class="card-title">{app.name}</h2>
                 <p class="text-sm text-gray-500">ID: {app.id}</p>

@@ -6,7 +6,6 @@ import { useNavigate } from "@solidjs/router";
 
 const schema = z.object({
   name: z.string().min(1, "App 名称不能为空").max(24, "App 名称最多 24 位"),
-  appID: z.string().min(1, "App ID 不能为空"),
   description: z.string(),
 });
 
@@ -14,8 +13,7 @@ export type FormError = ZodFormattedError<z.infer<typeof schema>>;
 
 function handleParseFormData(formData: FormData) {
   const data = {
-    name: formData.get("name")?.toString(),
-    appID: formData.get("app-id")?.toString(),
+    name: formData.get("name")?.toString(),    
     description: formData.get("description")?.toString(),
   };
 

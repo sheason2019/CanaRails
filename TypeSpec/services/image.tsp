@@ -22,7 +22,11 @@ namespace Image {
   op create(dto: ImageDTO): ImageDTO;
 
   @get
-  op list(): ImageDTO[];
+  op list(@query appID: int32): ImageDTO[];
+
+  @get
+  @route("count")
+  op count(@query appID: int32): int32;
 
   @get
   @route("{id}")

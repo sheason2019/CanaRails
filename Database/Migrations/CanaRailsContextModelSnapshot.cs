@@ -23,10 +23,6 @@ namespace Database.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("AppID")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -40,7 +36,7 @@ namespace Database.Migrations
                     b.ToTable("Apps");
                 });
 
-            modelBuilder.Entity("CanaRails.Database.Entities.AppMatch", b =>
+            modelBuilder.Entity("CanaRails.Database.Entities.AppMatcher", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
@@ -57,7 +53,38 @@ namespace Database.Migrations
 
                     b.HasIndex("AppID");
 
-                    b.ToTable("AppMatch");
+                    b.ToTable("AppMatchers");
+                });
+
+            modelBuilder.Entity("CanaRails.Database.Entities.Container", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("ContainerID")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("EntryID")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("ImageID")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Port")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("EntryID");
+
+                    b.HasIndex("ImageID");
+
+                    b.ToTable("Containers");
                 });
 
             modelBuilder.Entity("CanaRails.Database.Entities.Entry", b =>
@@ -69,12 +96,6 @@ namespace Database.Migrations
                     b.Property<int>("AppID")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("CurrentContainerID")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int?>("CurrentImageID")
-                        .HasColumnType("INTEGER");
-
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -83,25 +104,20 @@ namespace Database.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("Port")
-                        .HasColumnType("INTEGER");
-
                     b.HasKey("ID");
 
                     b.HasIndex("AppID");
 
-                    b.HasIndex("CurrentImageID");
-
-                    b.ToTable("Instances");
+                    b.ToTable("Entries");
                 });
 
-            modelBuilder.Entity("CanaRails.Database.Entities.EntryMatch", b =>
+            modelBuilder.Entity("CanaRails.Database.Entities.EntryMatcher", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("EntryID")
+                    b.Property<int>("EntryID")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Key")
@@ -116,7 +132,7 @@ namespace Database.Migrations
 
                     b.HasIndex("EntryID");
 
-                    b.ToTable("EntryMatch");
+                    b.ToTable("EntryMatchers");
                 });
 
             modelBuilder.Entity("CanaRails.Database.Entities.Image", b =>
@@ -127,6 +143,9 @@ namespace Database.Migrations
 
                     b.Property<int>("AppID")
                         .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("ImageName")
                         .IsRequired()
@@ -144,18 +163,37 @@ namespace Database.Migrations
 
                     b.HasIndex("AppID");
 
-                    b.ToTable("Image");
+                    b.ToTable("Images");
                 });
 
-            modelBuilder.Entity("CanaRails.Database.Entities.AppMatch", b =>
+            modelBuilder.Entity("CanaRails.Database.Entities.AppMatcher", b =>
                 {
                     b.HasOne("CanaRails.Database.Entities.App", "App")
-                        .WithMany("AppMatches")
+                        .WithMany("AppMatchers")
                         .HasForeignKey("AppID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("App");
+                });
+
+            modelBuilder.Entity("CanaRails.Database.Entities.Container", b =>
+                {
+                    b.HasOne("CanaRails.Database.Entities.Entry", "Entry")
+                        .WithMany("Containers")
+                        .HasForeignKey("EntryID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CanaRails.Database.Entities.Image", "Image")
+                        .WithMany("Containers")
+                        .HasForeignKey("ImageID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Entry");
+
+                    b.Navigation("Image");
                 });
 
             modelBuilder.Entity("CanaRails.Database.Entities.Entry", b =>
@@ -166,20 +204,18 @@ namespace Database.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("CanaRails.Database.Entities.Image", "CurrentImage")
-                        .WithMany("Entries")
-                        .HasForeignKey("CurrentImageID");
-
                     b.Navigation("App");
-
-                    b.Navigation("CurrentImage");
                 });
 
-            modelBuilder.Entity("CanaRails.Database.Entities.EntryMatch", b =>
+            modelBuilder.Entity("CanaRails.Database.Entities.EntryMatcher", b =>
                 {
-                    b.HasOne("CanaRails.Database.Entities.Entry", null)
-                        .WithMany("EntryMatches")
-                        .HasForeignKey("EntryID");
+                    b.HasOne("CanaRails.Database.Entities.Entry", "Entry")
+                        .WithMany("EntryMatchers")
+                        .HasForeignKey("EntryID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Entry");
                 });
 
             modelBuilder.Entity("CanaRails.Database.Entities.Image", b =>
@@ -195,7 +231,7 @@ namespace Database.Migrations
 
             modelBuilder.Entity("CanaRails.Database.Entities.App", b =>
                 {
-                    b.Navigation("AppMatches");
+                    b.Navigation("AppMatchers");
 
                     b.Navigation("Entries");
 
@@ -204,12 +240,14 @@ namespace Database.Migrations
 
             modelBuilder.Entity("CanaRails.Database.Entities.Entry", b =>
                 {
-                    b.Navigation("EntryMatches");
+                    b.Navigation("Containers");
+
+                    b.Navigation("EntryMatchers");
                 });
 
             modelBuilder.Entity("CanaRails.Database.Entities.Image", b =>
                 {
-                    b.Navigation("Entries");
+                    b.Navigation("Containers");
                 });
 #pragma warning restore 612, 618
         }
