@@ -1,7 +1,7 @@
 import { useParams } from "@solidjs/router";
 import { createQuery } from "@tanstack/solid-query";
-import { entryClient } from "../../../../../../../clients";
-import InfoItem from "../../../../../../../components/info/info-item";
+import { entryClient } from "../../../../../../clients";
+import InfoItem from "../../../../../../components/info/info-item";
 
 export default function AppEntryInfo() {
   const params = useParams();

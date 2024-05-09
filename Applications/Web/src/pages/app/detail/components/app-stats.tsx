@@ -1,7 +1,11 @@
 import { useParams } from "@solidjs/router";
 import { createQuery } from "@tanstack/solid-query";
 import { JSX } from "solid-js";
-import { entryClient, imageClient } from "../../../../clients";
+import {
+  appMatcherClient,
+  entryClient,
+  imageClient,
+} from "../../../../clients";
 
 export default function AppStats() {
   const params = useParams();
@@ -11,10 +15,12 @@ export default function AppStats() {
     queryFn: async () => {
       const entryCount = await entryClient.count(Number(params.id));
       const imageCount = await imageClient.count(Number(params.id));
+      const matcherCount = await appMatcherClient.count(Number(params.id));
 
       return {
         entry: entryCount,
-        iamge: imageCount,
+        image: imageCount,
+        matcher: matcherCount,
       };
     },
   }));
@@ -33,13 +39,13 @@ export default function AppStats() {
         <StatComp
           href={`/app/${params.id}/image`}
           label="可用镜像"
-          value={countQuery.data?.iamge ?? "0"}
+          value={countQuery.data?.image ?? "0"}
           desc="查看和管理可用镜像"
         />
         <StatComp
           href={`/app/${params.id}/matcher`}
           label="匹配器"
-          value="0"
+          value={countQuery.data?.matcher ?? "0"}
           desc="查看和管理可匹配到当前应用的访问地址"
         />
       </div>

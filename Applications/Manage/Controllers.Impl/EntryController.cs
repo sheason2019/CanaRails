@@ -29,9 +29,10 @@ public class EntryControllerImpl(
     return entry.ToDTO();
   }
 
-  public Task<ICollection<EntryDTO>> ListAsync(int appID)
+  public async Task<ICollection<EntryDTO>> ListAsync(int appID)
   {
-    throw new NotImplementedException();
+    var entryList = await entryService.ListAsync(appID);
+    return entryList.Select(e => e.ToDTO()).ToArray();
   }
 
   public async Task<ICollection<ContainerDTO>> ListContainerAsync(int id)

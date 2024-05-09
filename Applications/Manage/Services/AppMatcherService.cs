@@ -15,11 +15,18 @@ public class AppMatcherService(CanaRailsContext context)
       Where(r => r.App.ID.Equals(appID)).
       ToListAsync();
   }
-  public async Task<AppMatcher> Create(AppMatcherDTO dto, App app)
+  public async Task<AppMatcher> CreateAsync(AppMatcherDTO dto, App app)
   {
     var appMatcher = dto.ToEntity(app);
     context.AppMatchers.Add(appMatcher);
     await context.SaveChangesAsync();
     return appMatcher;
+  }
+
+  public async Task<int> CountAsync(int appID)
+  {
+    return await context.AppMatchers.
+      Where(r => r.App.ID.Equals(appID)).
+      CountAsync();
   }
 }

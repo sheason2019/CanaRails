@@ -44,4 +44,12 @@ public class EntryService(
       Where(e => e.App.ID.Equals(appID)).
       CountAsync();
   }
+
+  public async Task<Database.Entities.Entry[]> ListAsync(int appID)
+  {
+    return await context.Entries.
+      Where(e => e.App.ID.Equals(appID)).
+      Include(e => e.App).
+      ToArrayAsync();
+  }
 }

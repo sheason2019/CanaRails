@@ -24,3 +24,7 @@ op list(@path appID: int32): AppMatcherDTO[];
 @post
 @route("{appID}/matcher")
 op create(@path appID: int32, dto: AppMatcherDTO): AppMatcherDTO;
+
+@get
+@route("{appID}/matcher/count")
+op count(@path appID: int32): int32;

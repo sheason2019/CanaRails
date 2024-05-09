@@ -12,7 +12,7 @@ public class AppMatcherControllerImpl(
   public async Task<AppMatcherDTO> CreateAsync(int appID, Body body)
   {
     var app = await appService.FindByIDAsync(appID);
-    var appMatcher = await appMatcherService.Create(body.Dto, app);
+    var appMatcher = await appMatcherService.CreateAsync(body.Dto, app);
     return appMatcher.ToDTO();
   }
 
@@ -20,5 +20,10 @@ public class AppMatcherControllerImpl(
   {
     var records = await appMatcherService.ListAsync(appID);
     return records.Select(r => r.ToDTO()).ToList();
+  }
+
+  public Task<int> CountAsync(int appID)
+  {
+    return appMatcherService.CountAsync(appID);
   }
 }

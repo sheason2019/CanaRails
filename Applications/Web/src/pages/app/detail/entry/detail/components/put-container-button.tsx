@@ -2,8 +2,8 @@ import { createMemo } from "solid-js";
 import { z } from "zod";
 import { useParams } from "@solidjs/router";
 import { createQuery } from "@tanstack/solid-query";
-import createSimpleForm from "../../../../../../../components/form/create-simple-form";
-import { entryClient, imageClient } from "../../../../../../../clients";
+import createSimpleForm from "../../../../../../components/form/create-simple-form";
+import { entryClient, imageClient } from "../../../../../../clients";
 
 export default function PutContainerButton() {
   const params = useParams();
