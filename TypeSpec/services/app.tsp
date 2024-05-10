@@ -2,6 +2,8 @@ import "@typespec/http";
 import "@typespec/rest";
 import "@typespec/openapi3";
 
+import "./entry.tsp";
+
 using TypeSpec.Http;
 using TypeSpec.Rest;
 
@@ -9,20 +11,20 @@ using TypeSpec.Rest;
   title: "App Service",
 })
 @server("/api/app", "App Server endpoint")
-namespace App {
-  model AppDTO {
-    id: int32;
-    name: string;
-    description: string;
-  }
+namespace App;
 
-  @post
-  op create(dto: AppDTO): AppDTO;
-
-  @get
-  op list(): AppDTO[];
-
-  @get
-  @route("{id}")
-  op findByID(@path id: int32): AppDTO;
+model AppDTO {
+  id: int32;
+  name: string;
+  description: string;
 }
+
+@post
+op create(dto: AppDTO): AppDTO;
+
+@get
+op list(): AppDTO[];
+
+@get
+@route("{id}")
+op findByID(@path id: int32): AppDTO;

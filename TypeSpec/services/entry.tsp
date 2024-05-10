@@ -16,6 +16,9 @@ model EntryDTO {
   name: string;
   description: string;
   appID: int32;
+
+  deployedAt: int64;
+  state: string;
 }
 
 @post
@@ -48,3 +51,12 @@ op putContainer(@path id: int32, dto: ContainerDTO): ContainerDTO;
 @get
 @route("{id}/container")
 op listContainer(@path id: int32): ContainerDTO[];
+
+@get
+@route("default")
+op findDefaultEntry(@query appID: int32): Entry.EntryDTO | null;
+
+@put
+@route("default")
+op putDefaultEntry(@query appID: int32, @body entryID: int32): void;
+

@@ -6,6 +6,7 @@ using CanaRails.Transformer;
 namespace CanaRails.Controllers.Entry;
 
 public class EntryControllerImpl(
+  AppService appService,
   EntryService entryService,
   ImageService imageService,
   ContainerService containerService,
@@ -20,19 +21,21 @@ public class EntryControllerImpl(
   public async Task<EntryDTO> CreateAsync(Body body)
   {
     var entry = await entryService.CreateEntry(body.Dto);
-    return entry.ToDTO();
+    return await entry.ToDTO().AddDeployInfo(entry, adapter);
   }
 
   public async Task<EntryDTO> FindByIDAsync(int id)
   {
     var entry = await entryService.FindByIDAsync(id);
-    return entry.ToDTO();
+    return await entry.ToDTO().AddDeployInfo(entry, adapter);
   }
 
   public async Task<ICollection<EntryDTO>> ListAsync(int appID)
   {
-    var entryList = await entryService.ListAsync(appID);
-    return entryList.Select(e => e.ToDTO()).ToArray();
+    var records = await entryService.ListAsync(appID);
+    return await Task.WhenAll(records.Select(
+      e => e.ToDTO().AddDeployInfo(e, adapter)
+    ));
   }
 
   public async Task<ICollection<ContainerDTO>> ListContainerAsync(int id)
@@ -61,5 +64,24 @@ public class EntryControllerImpl(
       entry
     );
     return container.ToDTO();
+  }
+
+  public async Task<EntryDTO?> FindDefaultEntryAsync(int appID)
+  {
+    var record = await appService.FindDefaultEntry(appID);
+    if (record == null)
+    {
+      return null;
+    }
+
+    return await record.ToDTO().AddDeployInfo(record, adapter);
+  }
+
+  public Task PutDefaultEntryAsync(int appID, int entryID)
+  {
+    return Task.Run(() =>
+    {
+      appService.PutDefaultEntry(entryID);
+    });
   }
 }
