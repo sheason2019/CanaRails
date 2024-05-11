@@ -45,7 +45,7 @@ export default function SimpleForm<T extends z.ZodRawShape>(props: Props<T>) {
           />
         )}
       </For>
-      <button class="btn btn-primary mt-8">
+      <button class="btn btn-primary mt-4">
         {props.options?.submitText ?? "Submit"}
       </button>
     </form>

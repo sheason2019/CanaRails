@@ -7,5 +7,7 @@ export default function createSimpleForm<T extends z.ZodRawShape>(
   schema: z.ZodObject<T>,
   options?: CreateSimpleFormOptions<T>
 ) {
-  return <SimpleForm schema={schema} options={options} />;
+  return {
+    renderer: <SimpleForm schema={schema} options={options} />,
+  };
 }

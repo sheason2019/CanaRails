@@ -9,31 +9,38 @@ export default function NewAppEntryPage() {
   const navigate = useNavigate();
   const params = useParams();
 
-  const formRenderer = createMemo(() =>
-    createSimpleForm(
-      z.object({
-        name: z.string().min(1, "入口名称不能为空"),
-        description: z.string().default(""),
-      }),
-      {
-        formOptions: {
-          name: {
-            label: "入口名称",
+  const formRenderer = createMemo(
+    () =>
+      createSimpleForm(
+        z.object({
+          name: z.string().min(1, "入口名称不能为空"),
+          description: z.string().default(""),
+        }),
+        {
+          formOptions: {
+            name: {
+              label: "入口名称",
+            },
+            description: {
+              label: "简介",
+              type: "textarea",
+            },
           },
-          description: {
-            label: "简介",
-            type: "textarea",
+          submitText: "创建入口",
+          async onSubmit(data) {
+            const response = await entryClient.create({
+              dto: {
+                id: 0,
+                appID: Number(params.id),
+                deployedAt: 0,
+                state: "",
+                ...data,
+              },
+            });
+            navigate(`/app/${params.id}/entry/${response.id}`);
           },
-        },
-        submitText: "创建入口",
-        async onSubmit(data) {
-          const response = await entryClient.create({
-            dto: { id: 0, appID: Number(params.id), ...data },
-          });
-          navigate(`/app/${params.id}/entry/${response.id}`);
-        },
-      }
-    )
+        }
+      ).renderer
   );
 
   return (

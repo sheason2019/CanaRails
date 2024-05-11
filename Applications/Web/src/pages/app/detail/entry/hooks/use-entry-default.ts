@@ -9,6 +9,6 @@ export default function useEntryDefault() {
     queryKey: ["entry-default", params.id],
     queryFn: () => entryClient.findDefaultEntry(Number(params.id)),
     suspense: true,
-    staleTime: 180_000,
+    staleTime: 30_000,
   }));
 }

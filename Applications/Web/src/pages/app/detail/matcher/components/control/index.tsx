@@ -9,7 +9,7 @@ export default function AppMatcherControl() {
   const query = useAppMatcherListQuery();
   let dialogEl: HTMLDialogElement | undefined;
 
-  const formRenderer = createSimpleForm(
+  const { renderer } = createSimpleForm(
     z.object({
       host: z.string().min(1, "Host 不能为空"),
     }),
@@ -38,7 +38,7 @@ export default function AppMatcherControl() {
       <dialog ref={dialogEl} class="modal">
         <div class="modal-box">
           <h3 class="font-bold text-lg">新建匹配器</h3>
-          {formRenderer}
+          {renderer}
         </div>
         <form method="dialog" class="modal-backdrop">
           <button>close</button>

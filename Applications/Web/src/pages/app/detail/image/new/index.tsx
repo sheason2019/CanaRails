@@ -8,7 +8,7 @@ export default function NewAppImagePage() {
   const params = useParams();
   const navigate = useNavigate();
 
-  const formRenderer = createSimpleForm(
+  const { renderer } = createSimpleForm(
     z.object({
       registry: z.string().default(""),
       imageName: z.string().min(1, "镜像名称不能为空").default(""),
@@ -44,7 +44,7 @@ export default function NewAppImagePage() {
   return (
     <Layout>
       <h1 class="text-3xl font-bold mb-4">创建应用镜像</h1>
-      {formRenderer}
+      {renderer}
     </Layout>
   );
 }

@@ -1,7 +1,10 @@
 
 using CanaRails.Adapters.IAdapter;
+using CanaRails.Database;
+using CanaRails.Exceptions;
 using CanaRails.Services;
 using CanaRails.Transformer;
+using Microsoft.EntityFrameworkCore;
 
 namespace CanaRails.Controllers.Entry;
 
@@ -10,7 +13,8 @@ public class EntryControllerImpl(
   EntryService entryService,
   ImageService imageService,
   ContainerService containerService,
-  IAdapter adapter
+  IAdapter adapter,
+  CanaRailsContext context
 ) : IEntryController
 {
   public Task<int> CountAsync(int appID)
@@ -83,5 +87,50 @@ public class EntryControllerImpl(
     {
       appService.PutDefaultEntry(entryID);
     });
+  }
+
+  public async Task<ICollection<EntryMatcherDTO>> ListMatcherAsync(int id)
+  {
+    var query = from matchers in context.EntryMatchers
+                where matchers.Entry.ID.Equals(id)
+                select matchers;
+    var records = await query.ToArrayAsync();
+    return records.Select(e => e.ToDTO()).ToArray();
+  }
+
+  public async Task<EntryMatcherDTO> PutMatcherAsync(int id, EntryMatcherDTO dto)
+  {
+    // query entry
+    dto.EntryID = id;
+    var query = from entry in context.Entries
+      where entry.ID.Equals(id)
+      select entry;
+    var entryRecord = await query.FirstAsync();
+    var record = dto.ToEntity(entryRecord);
+
+    var transcation = context.Database.BeginTransaction();
+    // check current key exist
+    var checkQuery = from matcher in context.EntryMatchers
+      where matcher.Entry.ID.Equals(id) && matcher.Key.Equals(dto.Key)
+      select matcher;
+    if (checkQuery.Any()) {
+      throw new HttpStandardException(
+        StatusCodes.Status400BadRequest,
+        "current key already exist"
+      );
+    }
+
+    context.EntryMatchers.Add(record);
+    context.SaveChanges();
+    transcation.Commit();
+
+    return record.ToDTO();
+  }
+
+  public async Task DeleteMatcherAsync(int id, int matcherID)
+  {
+    await context.EntryMatchers.
+      Where(e => e.ID.Equals(matcherID)).
+      ExecuteDeleteAsync();
   }
 }
