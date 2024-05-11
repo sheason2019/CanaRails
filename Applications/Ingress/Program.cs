@@ -2,10 +2,10 @@ using System.Diagnostics;
 using System.Net;
 using CanaRails.Database;
 using CanaRails.Adapters.DockerAdapter;
-using CanaRails.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Yarp.ReverseProxy.Forwarder;
 using CanaRails.Adapters.DockerAdapter.Services;
+using CanaRails.Adapters.IAdapter;
 
 namespace CanaRails.Ingress;
 
@@ -42,6 +42,7 @@ public class Program
     builder.Services.AddDbContext<CanaRailsContext>();
     builder.Services.AddSingleton<CanaRailsContext>();
     builder.Services.AddSingleton<DockerService>();
+    builder.Services.AddSingleton<MatchService>();
     builder.Services.AddSingleton<IAdapter, DockerAdapter>();
     builder.Services.AddHttpForwarder();
 
@@ -51,24 +52,31 @@ public class Program
 
     app.Map("/{**url}", async (
       string? url,
-      ILogger<Program> logger,
       HttpContext context,
       CanaRailsContext dbContext,
+      MatchService matchService,
       IHttpForwarder forwarder,
       IAdapter adapter
     ) =>
     {
-      // 解析 Host
-      var host = context.Request.Host.Host;
-      // 根据匹配器寻找命中的 APP
-      var match = await dbContext.AppMatchers.
-        Include(a => a.App).
-        Where(a => a.Host.Equals(host)).
-        FirstAsync();
-      // TODO: 根据 Header 和 Cookie 匹配 Entry
-      var entry = await dbContext.Entries.
-        Where(e => e.App.ID.Equals(match.App.ID)).
-        FirstAsync();
+      var app = await matchService.MatchApp(context);
+      if (app == null)
+      {
+        return Results.NotFound("App not found");
+      }
+
+      context.Response.Headers["X-Canarails-App-Name"] = app.Name;
+      context.Response.Headers["X-Canarails-App-ID"] = app.ID.ToString();
+
+      var entry = await matchService.MatchEntry(context, app);
+      if (entry == null)
+      {
+        return Results.NotFound("Entry not found");
+      }
+
+      context.Response.Headers["X-Canarails-Entry-Name"] = entry.Name;
+      context.Response.Headers["X-Canarails-Entry-ID"] = entry.ID.ToString();
+
       // 寻找最新的 Container
       var container = await dbContext.Containers.
         Where(c => c.Entry.ID.Equals(entry.ID)).
@@ -84,6 +92,8 @@ public class Program
         requestConfig,
         transformer
       );
+
+      return Results.Empty;
     });
 
     return app;

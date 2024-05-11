@@ -8,4 +8,5 @@ public class Entry
   public required App App { get; set; }
   public ICollection<EntryMatcher> EntryMatchers { get; set; } = [];
   public ICollection<Container> Containers { get; set; } = [];
+  public bool Default { get; set;}
 }

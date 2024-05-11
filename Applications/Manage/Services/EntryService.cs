@@ -50,6 +50,7 @@ public class EntryService(
     return await context.Entries.
       Where(e => e.App.ID.Equals(appID)).
       Include(e => e.App).
+      Include(e => e.Containers).
       ToArrayAsync();
   }
 }

@@ -4,7 +4,9 @@ using CanaRails.Transformer;
 
 namespace CanaRails.Controllers.Impl;
 
-public class AppControllerImpl(AppService service) : IAppController
+public class AppControllerImpl(
+  AppService service
+) : IAppController
 {
   public async Task<AppDTO> CreateAsync(Body body)
   {

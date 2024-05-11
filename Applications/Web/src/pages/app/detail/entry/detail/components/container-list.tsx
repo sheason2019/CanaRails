@@ -3,6 +3,7 @@ import { createQuery } from "@tanstack/solid-query";
 import PutContainerButton from "./put-container-button";
 import { useParams } from "@solidjs/router";
 import { entryClient } from "../../../../../../clients";
+import ContainerStateText from "../../../../../../components/container-state-text";
 
 export default function ContainerList() {
   const params = useParams();
@@ -25,16 +26,11 @@ export default function ContainerList() {
               <div class="card-body">
                 <div class="flex">
                   <div class="grow">ID: {container.id}</div>
-                  <div
-                    classList={{
-                      "text-gray-400": container.state === "exited",
-                      "text-green-500": container.state === "running",
-                    }}
-                  >
-                    {mapStateName(container.state)}
-                  </div>
+                  <ContainerStateText state={container.state} />
                 </div>
-                <div class="text-sm text-gray-500">容器ID {container.containerID}</div>
+                <div class="text-sm text-gray-500">
+                  容器ID {container.containerID}
+                </div>
               </div>
             </div>
           )}
@@ -42,15 +38,4 @@ export default function ContainerList() {
       </div>
     </>
   );
-}
-
-function mapStateName(state: string | undefined) {
-  switch (state) {
-    case "exited":
-      return "已退出";
-    case "running":
-      return "运行中";
-    default:
-      return state;
-  }
 }

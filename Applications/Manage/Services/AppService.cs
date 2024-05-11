@@ -49,4 +49,28 @@ public class AppService(CanaRailsContext context)
       Where(record => record.ID.Equals(id)).
       FirstAsync();
   }
+
+  public async Task<Database.Entities.Entry?> FindDefaultEntry(int id)
+  {
+    return await context.Entries.
+      Where(entry => entry.App.ID.Equals(id) && entry.Default.Equals(true)).
+      Include(entry => entry.Containers).
+      FirstOrDefaultAsync();
+  }
+
+  public void PutDefaultEntry(int entryID)
+  {
+    using var transcation = context.Database.BeginTransaction();
+    var query = from app in context.Apps
+                join entry in context.Entries
+                on app.ID equals entry.App.ID
+                where entry.ID.Equals(entryID)
+                select entry;
+    foreach (var entry in query.ToArray())
+    {
+      entry.Default = entry.ID == entryID;
+    }
+    context.SaveChanges();
+    transcation.Commit();
+  }
 }

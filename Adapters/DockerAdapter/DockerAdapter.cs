@@ -1,10 +1,10 @@
 ﻿using CanaRails.Adapters.DockerAdapter.Services;
 using CanaRails.Database.Entities;
-using CanaRails.Interfaces;
+
 
 namespace CanaRails.Adapters.DockerAdapter;
 
-public class DockerAdapter(DockerService service) : IAdapter
+public class DockerAdapter(DockerService service) : IAdapter.IAdapter
 {
   public Task PullImage(Image image)
   {

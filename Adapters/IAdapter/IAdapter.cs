@@ -1,6 +1,6 @@
 ﻿using CanaRails.Database.Entities;
 
-namespace CanaRails.Interfaces;
+namespace CanaRails.Adapters.IAdapter;
 
 public interface IAdapter
 {

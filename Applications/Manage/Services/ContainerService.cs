@@ -1,7 +1,7 @@
+using CanaRails.Adapters.IAdapter;
 using CanaRails.Controllers.Entry;
 using CanaRails.Database;
 using CanaRails.Database.Entities;
-using CanaRails.Interfaces;
 using CanaRails.Transformer;
 using Microsoft.EntityFrameworkCore;
 
@@ -23,6 +23,7 @@ public class ContainerService(
     var container = dto.ToEntity(image, entry);
 
     // 将 Container 添加到数据库
+    container.CreatedAt = DateTime.Now;
     container.ContainerID = cid;
     context.Containers.Add(container);
     await context.SaveChangesAsync();
