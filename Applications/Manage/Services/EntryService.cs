@@ -35,7 +35,9 @@ public class EntryService(
   {
     return await context.Entries.
       Include(e => e.App).
-      Where(e => e.ID.Equals(id)).FirstAsync();
+      Include(e => e.Containers).
+      Where(e => e.ID.Equals(id)).
+      FirstAsync();
   }
 
   public async Task<int> CountAsync(int appID)

@@ -11,7 +11,7 @@ function build() {
   }
 
   mkdirSync(distPath);
-  mkdirSync(path.join(distPath, "static"));
+  mkdirSync(path.join(distPath, "wwwroot"));
 
   console.info("正在为项目生成模板代码");
   execSync("npm i", {
@@ -37,8 +37,8 @@ function build() {
     stdio: "inherit",
   });
 
-  console.log("将 Web 静态资源拷贝至 Dist 目录");
-  cpSync("../Applications/Web/dist", "./dist/static", { recursive: true });
+  console.log("将 Web 静态资源拷贝至 wwwroot 目录");
+  cpSync("../Applications/Web/dist", "./dist/wwwroot", { recursive: true });
 
   console.info("正在构建 .NET 服务端");
   execSync("dotnet build --configuration Release -o ../../Output/dist", {

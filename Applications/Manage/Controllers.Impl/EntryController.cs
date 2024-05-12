@@ -94,7 +94,7 @@ public class EntryControllerImpl(
     var query = from matchers in context.EntryMatchers
                 where matchers.Entry.ID.Equals(id)
                 select matchers;
-    var records = await query.ToArrayAsync();
+    var records = await query.Include(e => e.Entry).ToArrayAsync();
     return records.Select(e => e.ToDTO()).ToArray();
   }
 
