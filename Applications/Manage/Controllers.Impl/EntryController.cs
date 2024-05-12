@@ -108,7 +108,7 @@ public class EntryControllerImpl(
     var entryRecord = await query.FirstAsync();
     var record = dto.ToEntity(entryRecord);
 
-    var transcation = context.Database.BeginTransaction();
+    using var transcation = context.Database.BeginTransaction();
     // check current key exist
     var checkQuery = from matcher in context.EntryMatchers
       where matcher.Entry.ID.Equals(id) && matcher.Key.Equals(dto.Key)

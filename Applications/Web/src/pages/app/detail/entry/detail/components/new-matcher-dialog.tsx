@@ -1,11 +1,19 @@
 import { z } from "zod";
 import createSimpleForm from "../../../../../../components/form/create-simple-form";
+import { entryClient } from "../../../../../../clients";
+import { useParams } from "@solidjs/router";
+import useEntryMatcherList from "../../hooks/use-entry-matcher-list";
 
 interface Props {
   ref?: HTMLDialogElement;
 }
 
 export default function NewMatcherDialog(props: Props) {
+  const params = useParams();
+  let closeBtn: HTMLButtonElement | undefined;
+
+  const query = useEntryMatcherList();
+
   const { renderer } = createSimpleForm(
     z.object({
       key: z.string().min(1, "key 不能为空"),
@@ -14,9 +22,15 @@ export default function NewMatcherDialog(props: Props) {
     {
       formIndex: ["key", "value"],
       submitText: "提交",
-      onSubmit(data) {
-        console.log(data);
-        props.ref?.close();
+      async onSubmit(data) {
+        await entryClient.putMatcher(Number(params.entryID), {
+          id: 0,
+          key: data.key,
+          value: data.value,
+          entryID: Number(params.entryID),
+        });
+        await query.refetch();
+        closeBtn?.click();
       },
     }
   );
@@ -28,7 +42,7 @@ export default function NewMatcherDialog(props: Props) {
         <div class="py-4">{renderer}</div>
       </div>
       <form method="dialog" class="modal-backdrop">
-        <button>close</button>
+        <button ref={closeBtn}>close</button>
       </form>
     </dialog>
   );

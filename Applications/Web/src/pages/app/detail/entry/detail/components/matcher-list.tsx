@@ -1,18 +1,12 @@
-import { useParams } from "@solidjs/router";
-import { createQuery } from "@tanstack/solid-query";
-import { entryClient } from "../../../../../../clients";
 import { For } from "solid-js";
 import NewMatcherDialog from "./new-matcher-dialog";
+import useEntryMatcherList from "../../hooks/use-entry-matcher-list";
+import EntryMatcherControl from "./entry-matcher-control";
 
 export default function EntryMatcherList() {
-  const params = useParams();
   let dialog: HTMLDialogElement | undefined;
 
-  const query = createQuery(() => ({
-    queryKey: ["entry-matcher-list", params.entryID],
-    queryFn: () => entryClient.listMatcher(Number(params.entryID)),
-    suspense: true,
-  }));
+  const query = useEntryMatcherList();
 
   return (
     <div class="mt-4">
@@ -22,15 +16,25 @@ export default function EntryMatcherList() {
           新增
         </button>
       </div>
-      <For each={query.data}>
-        {(matcher) => (
-          <div>
-            <div>ID {matcher.id}</div>
-            <div>KEY {matcher.key}</div>
-            <div>VALUE {matcher.value}</div>
-          </div>
-        )}
-      </For>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
+        <For each={query.data}>
+          {(matcher) => (
+            <div class="card shadow">
+              <div class="card-body">
+                <div class="flex items-center">
+                  <div class="text-lg font-bold grow overflow-hidden text-ellipsis whitespace-nowrap">
+                    {matcher.key}
+                  </div>
+                  <EntryMatcherControl entryMatcher={matcher} />
+                </div>
+                <div class="overflow-hidden text-ellipsis">
+                  {matcher.value}
+                </div>
+              </div>
+            </div>
+          )}
+        </For>
+      </div>
       <NewMatcherDialog ref={dialog} />
     </div>
   );

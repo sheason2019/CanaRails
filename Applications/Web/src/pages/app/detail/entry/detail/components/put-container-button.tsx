@@ -4,10 +4,12 @@ import { useParams } from "@solidjs/router";
 import { createQuery } from "@tanstack/solid-query";
 import createSimpleForm from "../../../../../../components/form/create-simple-form";
 import { entryClient, imageClient } from "../../../../../../clients";
+import useEntryContainerList from "../hooks/use-entry-container-list";
 
 export default function PutContainerButton() {
   const params = useParams();
   let dialogEl: HTMLDialogElement | undefined;
+  const queryContainers = useEntryContainerList();
 
   const query = createQuery(() => ({
     queryKey: ["image-option", params.id],
@@ -50,6 +52,7 @@ export default function PutContainerButton() {
                 containerID: "",
               },
             });
+            await queryContainers.refetch();
             dialogEl?.close();
           },
         }
