@@ -1,7 +1,8 @@
 //@ts-check
 
 import { execSync } from "node:child_process";
-import { existsSync, mkdirSync, rmSync } from "node:fs";
+import { existsSync, mkdirSync, rmSync, cpSync } from "node:fs";
+import path from "node:path";
 
 function build() {
   const distPath = "./dist";
@@ -10,29 +11,40 @@ function build() {
   }
 
   mkdirSync(distPath);
+  mkdirSync(path.join(distPath, "static"));
+
+  console.info("正在为项目生成模板代码");
+  execSync("npm i", {
+    cwd: "../TypeSpec",
+    stdio: "inherit",
+  });
+  execSync("npm run compile", {
+    cwd: "../TypeSpec",
+    stdio: "inherit",
+  });
+  execSync("npm run gen", {
+    cwd: "../TypeSpec",
+    stdio: "inherit",
+  });
 
   console.info("正在构建 Web 静态资源");
-  execSync(
-    `
-    cd ../Applications/Web
-    npm run build
-    mv dist ../../Output/dist/static
-    `,
-    {
-      stdio: "inherit",
-    }
-  );
+  execSync("npm i", {
+    cwd: "../Applications/Web",
+    stdio: "inherit",
+  });
+  execSync("npm run build", {
+    cwd: "../Applications/Web",
+    stdio: "inherit",
+  });
+
+  console.log("将 Web 静态资源拷贝至 Dist 目录");
+  cpSync("../Applications/Web/dist", "./dist/static", { recursive: true });
 
   console.info("正在构建 .NET 服务端");
-  execSync(
-    `
-    cd ../Applications/Integration
-    dotnet build --configuration Release -o ../../Output/dist
-    `,
-    {
-      stdio: "inherit",
-    }
-  );
+  execSync("dotnet build --configuration Release -o ../../Output/dist", {
+    cwd: "../Applications/Integration",
+    stdio: "inherit",
+  });
 }
 
 build();
