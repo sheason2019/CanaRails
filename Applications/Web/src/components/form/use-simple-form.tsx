@@ -6,6 +6,7 @@ export default function useSimpleForm<T extends z.ZodRawShape>(
   schema: z.ZodObject<T>,
   options?: CreateSimpleFormOptions<T>
 ) {
+  options;
   const [errors, setErrors] = createSignal<Partial<z.ZodFormattedError<T>>>({});
 
   /**

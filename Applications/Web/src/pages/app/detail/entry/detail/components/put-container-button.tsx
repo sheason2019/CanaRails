@@ -4,10 +4,12 @@ import { useParams } from "@solidjs/router";
 import { createQuery } from "@tanstack/solid-query";
 import createSimpleForm from "../../../../../../components/form/create-simple-form";
 import { entryClient, imageClient } from "../../../../../../clients";
+import useEntryContainerList from "../hooks/use-entry-container-list";
 
 export default function PutContainerButton() {
   const params = useParams();
   let dialogEl: HTMLDialogElement | undefined;
+  const queryContainers = useEntryContainerList();
 
   const query = createQuery(() => ({
     queryKey: ["image-option", params.id],
@@ -21,38 +23,40 @@ export default function PutContainerButton() {
     suspense: true,
   }));
 
-  const formRenderer = createMemo(() =>
-    createSimpleForm(
-      z.object({
-        imageID: z.string().regex(/^\d+$/).transform(Number),
-        port: z.string().regex(/^\d+$/).transform(Number),
-      }),
-      {
-        formOptions: {
-          imageID: {
-            label: "镜像",
-            type: "select",
-            options: query.data ?? [],
-          },
-          port: {
-            label: "映射端口",
-          },
-        },
-        submitText: "变更",
-        async onSubmit(data) {
-          await entryClient.putContainer(Number(params.entryID), {
-            dto: {
-              id: 0,
-              imageID: data.imageID,
-              entryID: Number(params.entryID),
-              port: data.port,
-              containerID: "",
+  const formRenderer = createMemo(
+    () =>
+      createSimpleForm(
+        z.object({
+          imageID: z.string().regex(/^\d+$/).transform(Number),
+          port: z.string().regex(/^\d+$/).transform(Number),
+        }),
+        {
+          formOptions: {
+            imageID: {
+              label: "镜像",
+              type: "select",
+              options: query.data ?? [],
             },
-          });
-          dialogEl?.close();
-        },
-      }
-    )
+            port: {
+              label: "映射端口",
+            },
+          },
+          submitText: "变更",
+          async onSubmit(data) {
+            await entryClient.putContainer(Number(params.entryID), {
+              dto: {
+                id: 0,
+                imageID: data.imageID,
+                entryID: Number(params.entryID),
+                port: data.port,
+                containerID: "",
+              },
+            });
+            await queryContainers.refetch();
+            dialogEl?.close();
+          },
+        }
+      ).renderer
   );
 
   return (

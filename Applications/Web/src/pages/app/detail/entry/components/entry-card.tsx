@@ -1,4 +1,4 @@
-import { EntryDTO } from "../../../../../../api-client/App.client";
+import { EntryDTO } from "../../../../../../api-client/Entry.client";
 import ContainerStateText from "../../../../../components/container-state-text";
 import EntryCardControlButton from "./entry-card-control-button";
 

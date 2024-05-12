@@ -21,6 +21,22 @@ model EntryDTO {
   state: string;
 }
 
+model EntryMatcherDTO {
+  id: int32;
+  key: string;
+  value: string;
+  entryID: int32;
+}
+
+model ContainerDTO {
+  id: int32;
+  imageID: int32;
+  entryID: int32;
+  port: int32;
+  containerID: string;
+  state?: string;
+}
+
 @post
 op create(dto: EntryDTO): EntryDTO;
 
@@ -35,15 +51,6 @@ op count(@query appID: int32): int32;
 @route("{id}")
 op findByID(@path id: int32): EntryDTO;
 
-model ContainerDTO {
-  id: int32;
-  imageID: int32;
-  entryID: int32;
-  port: int32;
-  containerID: string;
-  state?: string;
-}
-
 @put
 @route("{id}/container")
 op putContainer(@path id: int32, dto: ContainerDTO): ContainerDTO;
@@ -51,6 +58,18 @@ op putContainer(@path id: int32, dto: ContainerDTO): ContainerDTO;
 @get
 @route("{id}/container")
 op listContainer(@path id: int32): ContainerDTO[];
+
+@get
+@route("{id}/matcher")
+op listMatcher(@path id: int32): EntryMatcherDTO[];
+
+@put
+@route("{id}/matcher")
+op putMatcher(@path id: int32, @body matcher: EntryMatcherDTO): EntryMatcherDTO;
+
+@delete
+@route("{id}/matcher/{matcherID}")
+op deleteMatcher(@path id: int32, @path matcherID: int32): void;
 
 @get
 @route("default")

@@ -7,7 +7,7 @@ import { useNavigate } from "@solidjs/router";
 
 export default function NewAppPage() {
   const navigate = useNavigate();
-  const formRenderer = createSimpleForm(
+  const { renderer } = createSimpleForm(
     z.object({
       name: z.string().min(1, "App 名称不能为空").max(24, "App 名称最多 24 位"),
       description: z.string(),
@@ -34,7 +34,7 @@ export default function NewAppPage() {
   return (
     <Layout>
       <h1 class="text-3xl font-bold mb-4">创建应用</h1>
-      {formRenderer}
+      {renderer}
     </Layout>
   );
 }

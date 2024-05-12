@@ -1,17 +1,10 @@
 import { For } from "solid-js";
-import { createQuery } from "@tanstack/solid-query";
 import PutContainerButton from "./put-container-button";
-import { useParams } from "@solidjs/router";
-import { entryClient } from "../../../../../../clients";
 import ContainerStateText from "../../../../../../components/container-state-text";
+import useEntryContainerList from "../hooks/use-entry-container-list";
 
 export default function ContainerList() {
-  const params = useParams();
-  const query = createQuery(() => ({
-    queryKey: ["container-list", params.entryID],
-    queryFn: () => entryClient.listContainer(Number(params.entryID)),
-    suspense: true,
-  }));
+  const query = useEntryContainerList();
 
   return (
     <>
@@ -22,7 +15,7 @@ export default function ContainerList() {
       <div class="grid grid-cols-1 gap-4 mt-4">
         <For each={query.data}>
           {(container) => (
-            <div class="card shadow hover:shadow-lg transition-shadow">
+            <div class="card shadow">
               <div class="card-body">
                 <div class="flex">
                   <div class="grow">ID: {container.id}</div>
