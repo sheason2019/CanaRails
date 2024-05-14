@@ -19,6 +19,8 @@ public class Program
   {
     var builder = WebApplication.CreateBuilder();
 
+    builder.Services.AddEndpointsApiExplorer();
+    
     builder.Services.AddDbContext<CanaRailsContext>();
 
     // Add Container adapter
@@ -45,12 +47,7 @@ public class Program
     builder.Services.AddControllers(options =>
     {
       options.Filters.Add<HttpStandardExceptionFilter>();
-    })
-    .AddApplicationPart(typeof(AppController).Assembly)
-    .AddApplicationPart(typeof(AppMatcherController).Assembly)
-    .AddApplicationPart(typeof(ImageController).Assembly)
-    .AddApplicationPart(typeof(EntryController).Assembly)
-    ;
+    });
 
     var app = builder.Build();
 

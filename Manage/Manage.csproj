@@ -7,8 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Adapters\DockerAdapter\DockerAdapter.csproj" />
-    <ProjectReference Include="..\..\Database\Database.csproj" />
+    <ProjectReference Include="..\Adapters\DockerAdapter\DockerAdapter.csproj" />
+    <ProjectReference Include="..\Database\Database.csproj" />
   </ItemGroup>
 
 </Project>
