@@ -41,9 +41,9 @@ public class ContainerService(
     await Task.WhenAll(stopTasks);
   }
 
-  public Task<Container[]> ListContainerAsync(int entryID)
+  public async Task<Container[]> ListContainerAsync(int entryID)
   {
-    return context.Containers.
+    return await context.Containers.
       Include(c => c.Image).
       Include(c => c.Entry).
       Where(c => c.Entry.ID.Equals(entryID)).

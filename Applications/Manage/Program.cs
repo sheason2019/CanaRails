@@ -9,6 +9,7 @@ using CanaRails.Controllers.Image;
 using CanaRails.Controllers.Entry;
 using CanaRails.Controllers.AppMatcher;
 using CanaRails.Adapters.IAdapter;
+using Microsoft.EntityFrameworkCore;
 
 namespace CanaRails.Manage;
 
@@ -19,7 +20,6 @@ public class Program
     var builder = WebApplication.CreateBuilder();
 
     builder.Services.AddDbContext<CanaRailsContext>();
-    builder.Services.AddSingleton<CanaRailsContext>();
 
     // Add Container adapter
     builder.Services.AddSingleton<IAdapter, DockerAdapter>();
@@ -54,7 +54,24 @@ public class Program
 
     var app = builder.Build();
 
+    // Database auto migrate
+    using (var scope = app.Services.CreateScope())
+    {
+      var db = scope.ServiceProvider.GetRequiredService<CanaRailsContext>();
+      db.Database.Migrate();
+    }
+
     app.MapControllers();
+
+    // 添加对内置 SPA 页面的支持
+    app.UseFileServer();
+    app.MapFallback(async (context) =>
+    {
+      context.Response.StatusCode = 200;
+      await context.Response.SendFileAsync(
+        Path.Join(app.Environment.WebRootPath, "index.html")
+      );
+    });
 
     return app;
   }

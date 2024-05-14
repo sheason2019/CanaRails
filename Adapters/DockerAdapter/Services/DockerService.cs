@@ -82,10 +82,13 @@ public class DockerService
     {
       dict.Add(container.ID, container);
     }
-    return containerIds.Select(id => dict[id]?.State ?? "").ToArray();
+    return containerIds.
+      Select(id => dict.GetValueOrDefault(id)?.State ?? "").
+      ToArray();
   }
 
-  public async Task<string> GetContainerIPAsync(string containerId) {
+  public async Task<string> GetContainerIPAsync(string containerId)
+  {
     var container = await client.Containers.InspectContainerAsync(containerId);
     return container.NetworkSettings.IPAddress;
   }
