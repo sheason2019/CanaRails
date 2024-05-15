@@ -15,7 +15,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IAdapter", "Adapters\IAdapt
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ingress", "Ingress\Ingress.csproj", "{D67ECCDE-8424-4856-828D-9AE677341A42}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Manage", "Manage\Manage.csproj", "{0408D183-39D1-42F6-9E6D-EA1B64CF25FC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dashboard", "Dashboard\Dashboard.csproj", "{C33A6D34-64E4-47F1-B9A7-4D4496B9F1C3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -46,10 +46,10 @@ Global
 		{D67ECCDE-8424-4856-828D-9AE677341A42}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D67ECCDE-8424-4856-828D-9AE677341A42}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D67ECCDE-8424-4856-828D-9AE677341A42}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0408D183-39D1-42F6-9E6D-EA1B64CF25FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0408D183-39D1-42F6-9E6D-EA1B64CF25FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0408D183-39D1-42F6-9E6D-EA1B64CF25FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0408D183-39D1-42F6-9E6D-EA1B64CF25FC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C33A6D34-64E4-47F1-B9A7-4D4496B9F1C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C33A6D34-64E4-47F1-B9A7-4D4496B9F1C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C33A6D34-64E4-47F1-B9A7-4D4496B9F1C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C33A6D34-64E4-47F1-B9A7-4D4496B9F1C3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{B9914698-9327-4940-AE81-63C788330F5B} = {E1A039CB-4679-4DE0-9E26-81C3FA1C28FA}
