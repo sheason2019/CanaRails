@@ -7,8 +7,7 @@ using Microsoft.EntityFrameworkCore;
 namespace CanaRails.Services;
 
 public class EntryService(
-  CanaRailsContext context,
-  AppService appService
+  CanaRailsContext context
 )
 {
   public async Task<Database.Entities.Entry> CreateEntry(EntryDTO dto)
@@ -22,7 +21,10 @@ public class EntryService(
       throw new HttpStandardException(400, "该应用下已存在同名应用入口");
     }
 
-    var app = await appService.FindByIDAsync(dto.AppID);
+    var query = from apps in context.Apps
+                where apps.ID.Equals(dto.AppID)
+                select apps;
+    var app = query.First();
 
     var entry = dto.ToEntity(app);
     context.Entries.Add(entry);

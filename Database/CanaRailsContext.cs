@@ -11,21 +11,12 @@ public class CanaRailsContext : DbContext
     public DbSet<Entities.Image> Images { get; set; }
     public DbSet<Entities.Container> Containers { get; set; }
 
-    public string DbPath { get; }
-
-    public CanaRailsContext()
-    {
-        var folder = Environment.SpecialFolder.LocalApplicationData;
-        var path = Environment.GetFolderPath(folder);
-        DbPath = Path.Join(path, "cana-rails.db");
-    }
-
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         var host = Environment.GetEnvironmentVariable("Host");
         var dbname = Environment.GetEnvironmentVariable("Database");
-        var username = Environment.GetEnvironmentVariable("postgres");
-        var password = Environment.GetEnvironmentVariable("password");
+        var username = Environment.GetEnvironmentVariable("Username");
+        var password = Environment.GetEnvironmentVariable("Password");
 
         optionsBuilder.UseNpgsql(
             $"Host={host};" +

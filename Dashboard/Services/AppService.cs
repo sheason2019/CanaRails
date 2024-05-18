@@ -1,5 +1,6 @@
 using CanaRails.Controllers.App;
 using CanaRails.Database;
+using CanaRails.Database.Entities;
 using CanaRails.Exceptions;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,50 +8,39 @@ namespace CanaRails.Services;
 
 public class AppService(CanaRailsContext context)
 {
-  public async Task<Database.Entities.App> CreateAppAsync(AppDTO dto)
+  public async Task<App> CreateAppAsync(AppDTO dto)
   {
     using var transaction = context.Database.BeginTransaction();
-    // 校验 name 是否被占用
-    var existRecords = await context.Apps.
-      ToListAsync();
-    var duplicateSet = new HashSet<string>();
-    foreach (var record in existRecords)
+    // 校验 App 名称是否已被占用
+    var query = from apps in context.Apps
+                where apps.Name.Equals(dto.Name)
+                select apps;
+    var count = await query.CountAsync();
+    if (count > 0)
     {
-      if (record.Name == dto.Name)
-      {
-        duplicateSet.Add("App 名称已被使用");
-      }
-    }
-    if (duplicateSet.Count > 0)
-    {
-      var errMsg = string.Join(",", duplicateSet);
-      throw new HttpStandardException(StatusCodes.Status400BadRequest, errMsg);
+      throw new HttpStandardException(
+        StatusCodes.Status400BadRequest,
+        "App 名称已被使用"
+      );
     }
 
-    var app = new Database.Entities.App
+    var value = await context.Apps.AddAsync(new App
     {
       Name = dto.Name,
-    };
-    await context.Apps.AddAsync(app);
+      Description = dto.Description,
+    });
     await context.SaveChangesAsync();
 
-    transaction.Commit();
-    return app;
+    await transaction.CommitAsync();
+    return value.Entity;
   }
 
-  public async Task<Database.Entities.App[]> ListAsync()
+  public async Task<App[]> ListAsync()
   {
     return await context.Apps.ToArrayAsync();
   }
 
-  public async Task<Database.Entities.App> FindByIDAsync(int id)
-  {
-    return await context.Apps.
-      Where(record => record.ID.Equals(id)).
-      FirstAsync();
-  }
-
-  public async Task<Database.Entities.Entry?> FindDefaultEntry(int id)
+  public async Task<Entry?> FindDefaultEntry(int id)
   {
     return await context.Entries.
       Where(entry => entry.App.ID.Equals(id) && entry.Default.Equals(true)).

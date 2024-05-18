@@ -27,6 +27,7 @@ public static class ContainerTransformer
     {
       ID = dto.Id,
       ContainerID = dto.ContainerID,
+      Version = dto.Version,
       Image = image,
       Entry = entry,
       Port = dto.Port,

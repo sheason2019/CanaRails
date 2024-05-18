@@ -18,13 +18,17 @@ model AppMatcherDTO {
 }
 
 @get
-@route("{appID}/matcher")
-op list(@path appID: int32): AppMatcherDTO[];
+@route("{appId}/matcher")
+op list(@path appId: int32): AppMatcherDTO[];
 
 @post
-@route("{appID}/matcher")
-op create(@path appID: int32, dto: AppMatcherDTO): AppMatcherDTO;
+@route("{appId}/matcher")
+op create(@path appId: int32, @body dto: AppMatcherDTO): AppMatcherDTO;
 
 @get
-@route("{appID}/matcher/count")
-op count(@path appID: int32): int32;
+@route("{appId}/matcher/count")
+op count(@path appId: int32): int32;
+
+@delete
+@route("{appId}/matcher/{matcherId}")
+op delete(@path appId: int32, matcherId: int32): int32;

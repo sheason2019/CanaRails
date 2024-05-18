@@ -9,14 +9,17 @@ namespace CanaRails.Services;
 
 public class ImageService(
   CanaRailsContext context,
-  AppService appService,
   IAdapter adapter
 )
 {
   public async Task<Image> CreateImageAsync(ImageDTO dto)
   {
     // 创建实体
-    var app = await appService.FindByIDAsync(dto.AppID);
+    var query = from apps in context.Apps
+                where apps.ID.Equals(dto.AppID)
+                select apps;
+    var app = query.First();
+
     var image = dto.ToEntity(app);
     // 尝试拉取镜像
     await adapter.PullImage(image);

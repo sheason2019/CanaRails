@@ -10,7 +10,7 @@ function main() {
       const child = exec(
         `npx nswag openapi2tsclient ` +
         `/input:"./tsp-output/@typespec/openapi3/openapi.${ns}.yaml" ` +
-        `/output:"../Web/api-client/${ns}.client.ts" ` +
+        `/output:"../Dashboard.Web/api-client/${ns}.client.ts" ` +
         `/ClassName:"${ns}Client" ` +
         `/TypeStyle:Interface`,
         (err) => {

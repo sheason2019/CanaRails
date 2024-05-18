@@ -1,7 +1,10 @@
-﻿namespace CanaRails.Database.Entities;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace CanaRails.Database.Entities;
 
 public class App
 {
+  [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
   public int ID { get; set; }
   public required string Name { get; set; }
   public string Description { get; set; } = "";

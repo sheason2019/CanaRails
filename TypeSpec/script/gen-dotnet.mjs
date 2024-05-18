@@ -12,7 +12,7 @@ function main() {
         `/input:"./tsp-output/@typespec/openapi3/openapi.${ns}.yaml" ` +
         `/classname:${ns} ` +
         `/namespace:CanaRails.Controllers.${ns} ` +
-        `/output:"../Manage/Controllers/${ns}Controller.cs" ` +
+        `/output:"../Dashboard/Controllers/${ns}Controller.cs" ` +
         `/ControllerBaseClass:"Microsoft.AspNetCore.Mvc.Controller"`,
         (err) => {
           if (err) {

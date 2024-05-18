@@ -1,29 +1,33 @@
 using CanaRails.Controllers.App;
+using CanaRails.Database;
 using CanaRails.Services;
 using CanaRails.Transformer;
 
 namespace CanaRails.Controllers.Impl;
 
 public class AppControllerImpl(
-  AppService service
+  AppService service,
+  CanaRailsContext context
 ) : IAppController
 {
-  public async Task<AppDTO> CreateAsync(Body body)
-  {
-    var dto = body.Dto;
-    var record = await service.CreateAppAsync(dto);
-    return record.ToDTO();
-  }
-
   public async Task<ICollection<AppDTO>> ListAsync()
   {
     var records = await service.ListAsync();
     return records.Select(record => record.ToDTO()).ToArray();
   }
 
-  public async Task<AppDTO> FindByIDAsync(int id)
+  public Task<AppDTO> FindByIDAsync(int id)
   {
-    var record = await service.FindByIDAsync(id);
+    var query = from app in context.Apps
+                where app.ID.Equals(id)
+                select app;
+    var dto = query.First().ToDTO();
+    return Task.FromResult(dto);
+  }
+
+  public async Task<AppDTO> CreateAsync(AppDTO body)
+  {
+    var record = await service.CreateAppAsync(body);
     return record.ToDTO();
   }
 }

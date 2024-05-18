@@ -20,7 +20,7 @@ model AppDTO {
 }
 
 @post
-op create(dto: AppDTO): AppDTO;
+op create(@body dto: AppDTO): AppDTO;
 
 @get
 op list(): AppDTO[];

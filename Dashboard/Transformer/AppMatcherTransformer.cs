@@ -1,4 +1,3 @@
-using CanaRails.Controllers.App;
 using CanaRails.Controllers.AppMatcher;
 using CanaRails.Database.Entities;
 

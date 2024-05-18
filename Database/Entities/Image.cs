@@ -1,7 +1,10 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace CanaRails.Database.Entities;
 
 public class Image
 {
+  [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
   public int ID { get; set; }
   public required string Registry { get; set; }
   public required string ImageName { get; set; }

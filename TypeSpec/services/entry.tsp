@@ -32,6 +32,7 @@ model ContainerDTO {
   id: int32;
   imageID: int32;
   entryID: int32;
+  version: int32;
   port: int32;
   containerID: string;
   state?: string;

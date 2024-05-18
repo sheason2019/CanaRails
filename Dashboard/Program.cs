@@ -26,18 +26,18 @@ public class Program
         builder.Services.AddSingleton<IAdapter, DockerAdapter>();
 
         // Add Services
-        builder.Services.AddSingleton<AppService>();
-        builder.Services.AddSingleton<AppMatcherService>();
-        builder.Services.AddSingleton<DockerService>();
-        builder.Services.AddSingleton<ImageService>();
-        builder.Services.AddSingleton<EntryService>();
-        builder.Services.AddSingleton<ContainerService>();
+        builder.Services.AddScoped<AppService>();
+        builder.Services.AddScoped<AppMatcherService>();
+        builder.Services.AddScoped<DockerService>();
+        builder.Services.AddScoped<ImageService>();
+        builder.Services.AddScoped<EntryService>();
+        builder.Services.AddScoped<ContainerService>();
 
         // Add Controller
-        builder.Services.AddSingleton<IAppController, AppControllerImpl>();
-        builder.Services.AddSingleton<IAppMatcherController, AppMatcherControllerImpl>();
-        builder.Services.AddSingleton<IImageController, ImageControllerImpl>();
-        builder.Services.AddSingleton<IEntryController, EntryControllerImpl>();
+        builder.Services.AddScoped<IAppController, AppControllerImpl>();
+        builder.Services.AddScoped<IAppMatcherController, AppMatcherControllerImpl>();
+        builder.Services.AddScoped<IImageController, ImageControllerImpl>();
+        builder.Services.AddScoped<IEntryController, EntryControllerImpl>();
 
         builder.Services.AddControllers(options => { options.Filters.Add<HttpStandardExceptionFilter>(); });
 
