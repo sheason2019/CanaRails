@@ -39,10 +39,8 @@ public static class EntryTransformer
       FirstOrDefault();
     if (container == null) return dto;
 
-    var state = await adapter.GetContainerState([container.ContainerID]);
     dto.DeployedAt = ((DateTimeOffset)container.CreatedAt).
       ToUnixTimeMilliseconds();
-    dto.State = (await adapter.GetContainerState([container.ContainerID]))[0];
     return dto;
   }
 }

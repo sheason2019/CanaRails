@@ -11,7 +11,7 @@ export default function AppListLoading() {
   return (
     <>
       {[...new Array(6)].map((_, index) => (
-        <AppListItem app={EMPTY_APP} key={index} />
+        <AppListItem app={EMPTY_APP} key={index} isLoaded={false} />
       ))}
     </>
   );

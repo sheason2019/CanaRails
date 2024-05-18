@@ -5,6 +5,9 @@ import AdminLayout from "./components/admin-layout";
 import AppPage from "./pages/app";
 import NewAppPage from "./pages/app/new";
 import AppDetailPage from "./pages/app/[appId]";
+import AppEntryPage from "./pages/app/[appId]/entry";
+import NewEntryPage from "./pages/app/[appId]/entry/new";
+import EntryDetailPage from "./pages/app/[appId]/entry/[entryId]";
 
 export const router = createBrowserRouter([
   {
@@ -35,6 +38,18 @@ export const router = createBrowserRouter([
           {
             path: "/app/:appId",
             element: <AppDetailPage />,
+          },
+          {
+            path: "/app/:appId/entry",
+            element: <AppEntryPage />,
+          },
+          {
+            path: "/app/:appId/entry/new",
+            element: <NewEntryPage />,
+          },
+          {
+            path: "/app/:appId/entry/:entryId",
+            element: <EntryDetailPage />,
           },
         ],
       },

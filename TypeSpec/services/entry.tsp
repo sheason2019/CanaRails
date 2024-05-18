@@ -16,9 +16,7 @@ model EntryDTO {
   name: string;
   description: string;
   appID: int32;
-
   deployedAt: int64;
-  state: string;
 }
 
 model EntryMatcherDTO {
@@ -39,7 +37,7 @@ model ContainerDTO {
 }
 
 @post
-op create(dto: EntryDTO): EntryDTO;
+op create(@body dto: EntryDTO): EntryDTO;
 
 @get
 op list(@query appID: int32): EntryDTO[];
@@ -54,7 +52,7 @@ op findByID(@path id: int32): EntryDTO;
 
 @put
 @route("{id}/container")
-op putContainer(@path id: int32, dto: ContainerDTO): ContainerDTO;
+op putContainer(@path id: int32, @body dto: ContainerDTO): ContainerDTO;
 
 @get
 @route("{id}/container")
@@ -79,4 +77,3 @@ op findDefaultEntry(@query appID: int32): Entry.EntryDTO | null;
 @put
 @route("default")
 op putDefaultEntry(@query appID: int32, @body entryID: int32): void;
-

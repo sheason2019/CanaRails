@@ -23,7 +23,7 @@ export default function AppList() {
     return (
       <>
         {data?.map((item) => (
-          <AppListItem app={item} />
+          <AppListItem key={item.id} app={item} isLoaded />
         ))}
       </>
     );

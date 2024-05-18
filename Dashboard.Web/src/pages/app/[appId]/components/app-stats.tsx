@@ -7,7 +7,7 @@ export default function AppStats() {
 
   return (
     <>
-      <Heading size="lg" className="mt-6 mb-3">
+      <Heading size="md" className="mt-6 mb-3">
         应用数据
       </Heading>
       <p className="mb-3 text-sm text-gray-500">点击卡片查看数据详情</p>

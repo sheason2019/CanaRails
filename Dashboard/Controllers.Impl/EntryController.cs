@@ -22,9 +22,9 @@ public class EntryControllerImpl(
     return entryService.CountAsync(appID);
   }
 
-  public async Task<EntryDTO> CreateAsync(Body body)
+  public async Task<EntryDTO> CreateAsync(EntryDTO body)
   {
-    var entry = await entryService.CreateEntry(body.Dto);
+    var entry = await entryService.CreateEntry(body);
     return await entry.ToDTO().AddDeployInfo(entry, adapter);
   }
 
@@ -58,12 +58,12 @@ public class EntryControllerImpl(
     return dtos;
   }
 
-  public async Task<ContainerDTO> PutContainerAsync(int id, Body2 body)
+  public async Task<ContainerDTO> PutContainerAsync(int id, ContainerDTO body)
   {
-    var entry = await entryService.FindByIDAsync(body.Dto.EntryID);
-    var image = await imageService.FindByIDAsync(body.Dto.ImageID);
+    var entry = await entryService.FindByIDAsync(body.EntryID);
+    var image = await imageService.FindByIDAsync(body.ImageID);
     var container = await containerService.PutContainerAsync(
-      body.Dto,
+      body,
       image,
       entry
     );
@@ -103,17 +103,18 @@ public class EntryControllerImpl(
     // query entry
     dto.EntryID = id;
     var query = from entry in context.Entries
-      where entry.ID.Equals(id)
-      select entry;
+                where entry.ID.Equals(id)
+                select entry;
     var entryRecord = await query.FirstAsync();
     var record = dto.ToEntity(entryRecord);
 
     using var transcation = context.Database.BeginTransaction();
     // check current key exist
     var checkQuery = from matcher in context.EntryMatchers
-      where matcher.Entry.ID.Equals(id) && matcher.Key.Equals(dto.Key)
-      select matcher;
-    if (checkQuery.Any()) {
+                     where matcher.Entry.ID.Equals(id) && matcher.Key.Equals(dto.Key)
+                     select matcher;
+    if (checkQuery.Any())
+    {
       throw new HttpStandardException(
         StatusCodes.Status400BadRequest,
         "current key already exist"
