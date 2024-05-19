@@ -1,4 +1,5 @@
-import { Button, Flex, Heading } from "@chakra-ui/react";
+import { Flex, Heading } from "@chakra-ui/react";
+import EntryContainerUpdateButton from "./entry-container-update-button";
 
 export default function EntryContainerList() {
   return (
@@ -7,7 +8,7 @@ export default function EntryContainerList() {
         <Heading size="md" className="grow">
           容器一览
         </Heading>
-        <Button>配置变更</Button>
+        <EntryContainerUpdateButton />
       </Flex>
     </>
   );

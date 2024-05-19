@@ -13,13 +13,16 @@ namespace Container;
 
 model ContainerDTO {
   id: int32;
-  imageID: int32;
-  entryID: int32;
+  imageId: int32;
+  entryId: int32;
   version: int32;
   port: int32;
-  containerID: string;
+  containerId?: string;
   state?: string;
 }
 
 @get
 op list(@query entryId: int32): ContainerDTO[];
+
+@put
+op putContainers(container: ContainerDTO, replica: int32): void;
