@@ -11,18 +11,18 @@ public class ImageControllerImpl(ImageService service) : IImageController
     return service.CountAsync(appID);
   }
 
-  public async Task<ImageDTO> CreateAsync(Body body)
+  public async Task<ImageDTO> CreateAsync(ImageDTO body)
   {
-    var image = await service.CreateImageAsync(body.Dto);
+    var image = await service.CreateImageAsync(body);
     return image.ToDTO();
   }
 
-  public Task<ImageDTO> FindByIDAsync(int id)
+  public Task<ImageDTO> FindByIdAsync(int id)
   {
     throw new NotImplementedException();
   }
 
-  public async Task<ICollection<ImageDTO>> ListAsync(int appID)
+    public async Task<ICollection<ImageDTO>> ListAsync(int appID)
   {
     var images = await service.ListImageByAppIDAsync(appID);
     return images.Select(x => x.ToDTO()).ToArray();

@@ -1,47 +1,23 @@
-﻿using CanaRails.Adapters.DockerAdapter.Services;
-using CanaRails.Database.Entities;
+﻿using CanaRails.Adapters.IAdapter;
+using Docker.DotNet;
 
 
 namespace CanaRails.Adapters.DockerAdapter;
 
-public class DockerAdapter(DockerService service) : IAdapter.IAdapter
+public class DockerAdapter : IAdapter.IAdapter
 {
-  public Task PullImage(Image image)
+  private readonly DockerClient client;
+  private readonly IImageAdapter image;
+  private readonly IContainerAdapter container;
+
+  public DockerAdapter()
   {
-    return service.CreateImageAsync(image);
-  }
-  public Task DeleteImage(Image image)
-  {
-    return service.DeleteImageAsync(image);
+    client = new DockerClientConfiguration().CreateClient();
+    image = new ImageAdapter(client);
+    container = new ContainerAdapter(client);
   }
 
-  public Task<string> CreateContainer(Image image)
-  {
-    return service.CreateContainerAsync(image);
-  }
+  public IImageAdapter Image => image;
 
-  public Task StopContainer(string containerId)
-  {
-    return service.StopContainerAsync(containerId);
-  }
-
-  public Task RestartContainer(string containerId)
-  {
-    return service.RestartContainerAsync(containerId);
-  }
-
-  public Task RemoveContainer(string containerId)
-  {
-    return service.RemoveContainerAsync(containerId);
-  }
-
-  public Task<string[]> GetContainerState(string[] containerIds)
-  {
-    return service.GetContainerStateAsync(containerIds);
-  }
-
-  public Task<string> GetContainerIP(string containerId)
-  {
-    return service.GetContainerIPAsync(containerId);
-  }
+  public IContainerAdapter Container => container;
 }

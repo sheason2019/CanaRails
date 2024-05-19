@@ -1,4 +1,4 @@
-using CanaRails.Controllers.Entry;
+using CanaRails.Controllers.EntryMatcher;
 using CanaRails.Database.Entities;
 
 namespace CanaRails.Transformer;
@@ -12,7 +12,7 @@ public static class EntryMatcherTransformer
       Id = em.ID,
       Key = em.Key,
       Value = em.Value,
-      EntryID = em.Entry.ID,
+      EntryId = em.Entry.ID,
     };
   }
 

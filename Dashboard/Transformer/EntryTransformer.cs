@@ -1,4 +1,3 @@
-using CanaRails.Adapters.IAdapter;
 using CanaRails.Controllers.Entry;
 using CanaRails.Database.Entities;
 
@@ -28,10 +27,9 @@ public static class EntryTransformer
     };
   }
 
-  public static async Task<EntryDTO> AddDeployInfo(
+  public static EntryDTO AddDeployInfo(
     this EntryDTO dto,
-    Entry record,
-    IAdapter adapter
+    Entry record
   )
   {
     var container = record.Containers.

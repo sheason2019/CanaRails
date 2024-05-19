@@ -8,8 +8,8 @@ public class Image
   public int ID { get; set; }
   public required string Registry { get; set; }
   public required string ImageName { get; set; }
-  public required string TagName { get; set; }
+  public bool Ready { get; set; } = false;
   public required App App { get; set; }
-  public DateTime CreatedAt { get; set; } = DateTime.Now;
+  public DateTime CreatedAt { get; set; } = DateTime.Now.ToUniversalTime();
   public ICollection<Container> Containers { get; set; } = [];
 }

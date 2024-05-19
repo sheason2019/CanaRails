@@ -16,17 +16,30 @@ public class ImageService(
   {
     // 创建实体
     var query = from apps in context.Apps
-                where apps.ID.Equals(dto.AppID)
+                where apps.ID.Equals(dto.AppId)
                 select apps;
     var app = query.First();
 
-    var image = dto.ToEntity(app);
-    // 尝试拉取镜像
-    await adapter.PullImage(image);
+    Image image = dto.ToEntity(app);
+    image.CreatedAt = DateTime.UtcNow;
+
     // 成功后将实体写入数据库
     await context.Images.AddAsync(image);
     await context.SaveChangesAsync();
+
+    // 尝试拉取镜像
+    _ = PullImageAsync(image.ID);
+
     return image;
+  }
+
+  public async Task PullImageAsync(int id)
+  {
+    var ctx = new CanaRailsContext();
+    var img = ctx.Images.Where(e => e.ID.Equals(id)).First();
+    await adapter.Image.Pull(img);
+    img.Ready = true;
+    ctx.SaveChanges();
   }
 
   public Task<List<Image>> ListImageByAppIDAsync(int appID)
@@ -34,7 +47,8 @@ public class ImageService(
     return Task.FromResult<List<Image>>(
       [.. context.Images.
         Include(record => record.App).
-        Where(record => record.App.ID.Equals(appID))
+        Where(record => record.App.ID.Equals(appID)).
+        OrderByDescending(e => e.CreatedAt)
       ]
     );
   }

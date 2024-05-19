@@ -8,6 +8,7 @@ import AppDetailPage from "./pages/app/[appId]";
 import AppEntryPage from "./pages/app/[appId]/entry";
 import NewEntryPage from "./pages/app/[appId]/entry/new";
 import EntryDetailPage from "./pages/app/[appId]/entry/[entryId]";
+import AppImagePage from "./pages/app/[appId]/image";
 
 export const router = createBrowserRouter([
   {
@@ -50,6 +51,10 @@ export const router = createBrowserRouter([
           {
             path: "/app/:appId/entry/:entryId",
             element: <EntryDetailPage />,
+          },
+          {
+            path: "/app/:appId/image",
+            element: <AppImagePage />,
           },
         ],
       },

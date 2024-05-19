@@ -9,6 +9,8 @@ using CanaRails.Controllers.Image;
 using CanaRails.Controllers.Entry;
 using CanaRails.Controllers.AppMatcher;
 using CanaRails.Adapters.IAdapter;
+using CanaRails.Controllers.Container;
+using CanaRails.Controllers.EntryMatcher;
 
 namespace CanaRails.Manage;
 
@@ -38,6 +40,8 @@ public class Program
         builder.Services.AddScoped<IAppMatcherController, AppMatcherControllerImpl>();
         builder.Services.AddScoped<IImageController, ImageControllerImpl>();
         builder.Services.AddScoped<IEntryController, EntryControllerImpl>();
+        builder.Services.AddScoped<IEntryMatcherController, EntryMatcherControllerImpl>();
+        builder.Services.AddScoped<IContainerController, ContainerControllerImpl>();
 
         builder.Services.AddControllers(options => { options.Filters.Add<HttpStandardExceptionFilter>(); });
 

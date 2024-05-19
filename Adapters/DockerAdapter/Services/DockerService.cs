@@ -18,7 +18,6 @@ public class DockerService
       new ImagesCreateParameters
       {
         FromImage = image.ImageName,
-        Tag = image.TagName,
       },
       new AuthConfig { },
       new Progress<JSONMessage>()
@@ -28,7 +27,7 @@ public class DockerService
   public async Task DeleteImageAsync(Image image)
   {
     await client.Images.DeleteImageAsync(
-      $"{image.ImageName}:{image.TagName}",
+      image.ImageName,
       new ImageDeleteParameters { }
     );
   }
@@ -38,7 +37,7 @@ public class DockerService
     var container = await client.Containers.CreateContainerAsync(
       new CreateContainerParameters()
       {
-        Image = $"{image.ImageName}:{image.TagName}",
+        Image = image.ImageName,
       }
     );
     await RestartContainerAsync(container.ID);

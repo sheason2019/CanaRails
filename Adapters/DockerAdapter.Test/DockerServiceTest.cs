@@ -10,8 +10,7 @@ public class DockerServiceTest
     {
         var image = new Image
         {
-            ImageName = "hello-world",
-            TagName = "latest",
+            ImageName = "hello-world:linux",
             Registry = "",
             App = new App
             {

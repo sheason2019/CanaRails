@@ -10,10 +10,11 @@ public static class ImageTransformer
     return new ImageDTO
     {
       Id = image.ID,
-      AppID = image.App.ID,
+      AppId = image.App.ID,
       Registry = image.Registry,
       ImageName = image.ImageName,
-      TagName = image.TagName,
+      Ready = image.Ready,
+      CreatedAt = ((DateTimeOffset)image.CreatedAt).ToUnixTimeMilliseconds(),
     };
   }
 
@@ -24,8 +25,9 @@ public static class ImageTransformer
       ID = dto.Id,
       Registry = dto.Registry,
       ImageName = dto.ImageName,
-      TagName = dto.TagName,
       App = app,
+      Ready = dto.Ready,
+      CreatedAt = DateTimeOffset.FromUnixTimeMilliseconds(dto.CreatedAt).DateTime,
     };
   }
 }
