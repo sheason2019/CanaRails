@@ -8,9 +8,29 @@ namespace CanaRails.Adapters.DockerAdapter;
 
 public class ImageAdapter(DockerClient client) : IImageAdapter
 {
-  public Task<ContainerInfo[]> Apply(Image image)
+  public async Task<ContainerInfo[]> Apply(Image image, int replica)
   {
-    throw new NotImplementedException();
+    var infoArray = new ContainerInfo[replica];
+    for (var i = 0; i < replica; i++)
+    {
+      var container = await client.Containers.CreateContainerAsync(
+        new CreateContainerParameters
+        {
+          Image = image.ImageName,
+        },
+        CancellationToken.None
+      );
+      await client.Containers.StartContainerAsync(
+        container.ID,
+        new ContainerStartParameters { },
+        CancellationToken.None
+      );
+      infoArray[i] = new ContainerInfo
+      {
+        ContainerId = container.ID,
+      };
+    }
+    return infoArray;
   }
 
   public Task Delete(Image image)

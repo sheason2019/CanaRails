@@ -9,7 +9,7 @@ export default function EntryDetailInfo() {
       <Heading size="md" className="mb-3">
         详情信息
       </Heading>
-      <div className="grid grid-cols-1 md:grid-cols-3">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <FormControl>
           <FormLabel>ID</FormLabel>
           <Text>{data?.id}</Text>
@@ -17,6 +17,10 @@ export default function EntryDetailInfo() {
         <FormControl>
           <FormLabel>流量入口名称</FormLabel>
           <Text>{data?.name}</Text>
+        </FormControl>
+        <FormControl>
+          <FormLabel>流量入口版本</FormLabel>
+          <Text>{data?.version}</Text>
         </FormControl>
       </div>
       <FormControl className="mt-2">

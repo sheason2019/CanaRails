@@ -2,6 +2,7 @@ using CanaRails.Adapters.IAdapter;
 using CanaRails.Adapters.IAdapter.Models;
 using CanaRails.Database.Entities;
 using Docker.DotNet;
+using Docker.DotNet.Models;
 
 namespace CanaRails.Adapters.DockerAdapter;
 
@@ -12,13 +13,27 @@ public class ContainerAdapter(DockerClient client) : IContainerAdapter
     throw new NotImplementedException();
   }
 
-  public Task Remove(Container[] containers)
+  public async Task Remove(Container[] containers)
   {
-    throw new NotImplementedException();
+    foreach (var container in containers)
+    {
+      await client.Containers.RemoveContainerAsync(
+        container.ContainerID,
+        new ContainerRemoveParameters { },
+        CancellationToken.None
+      );
+    }
   }
 
-  public Task Stop(Container[] containers)
+  public async Task Stop(Container[] containers)
   {
-    throw new NotImplementedException();
+    foreach (var container in containers)
+    {
+      await client.Containers.StopContainerAsync(
+        container.ContainerID,
+        new ContainerStopParameters { },
+        CancellationToken.None
+      );
+    }
   }
 }

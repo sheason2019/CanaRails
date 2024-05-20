@@ -14,6 +14,7 @@ namespace Entry;
 model EntryDTO {
   id: int32;
   name: string;
+  version: int32;
   description: string;
   appID: int32;
   deployedAt: int64;
