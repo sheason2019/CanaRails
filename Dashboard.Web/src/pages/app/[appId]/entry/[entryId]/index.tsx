@@ -9,6 +9,7 @@ import {
 import useEntryDetail from "./hook/use-entry-detail";
 import EntryDetailInfo from "./components/entry-detail-info";
 import EntryContainerList from "./components/entry-container-list";
+import EntryMatcherList from "./components/entry-matcher-list";
 
 export default function EntryDetailPage() {
   const { appId } = useParams();
@@ -35,6 +36,7 @@ export default function EntryDetailPage() {
         </BreadcrumbItem>
       </Breadcrumb>
       <EntryDetailInfo />
+      <EntryMatcherList />
       <EntryContainerList />
     </PageContainer>
   );
