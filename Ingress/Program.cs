@@ -2,9 +2,7 @@ using System.Diagnostics;
 using System.Net;
 using CanaRails.Database;
 using CanaRails.Adapters.DockerAdapter;
-using Microsoft.EntityFrameworkCore;
 using Yarp.ReverseProxy.Forwarder;
-using CanaRails.Adapters.DockerAdapter.Services;
 using CanaRails.Adapters.IAdapter;
 
 namespace CanaRails.Ingress;
@@ -40,10 +38,9 @@ public class Program
     builder.Logging.AddConsole();
 
     builder.Services.AddDbContext<CanaRailsContext>();
-    builder.Services.AddSingleton<CanaRailsContext>();
-    builder.Services.AddSingleton<DockerService>();
-    builder.Services.AddSingleton<MatchService>();
-    builder.Services.AddSingleton<IAdapter, DockerAdapter>();
+    builder.Services.AddScoped<MatchService>();
+    builder.Services.AddScoped<ContainerService>();
+    builder.Services.AddScoped<IAdapter, DockerAdapter>();
     builder.Services.AddHttpForwarder();
 
     var app = builder.Build();
@@ -55,6 +52,7 @@ public class Program
       HttpContext context,
       CanaRailsContext dbContext,
       MatchService matchService,
+      ContainerService containerService,
       IHttpForwarder forwarder,
       IAdapter adapter
     ) =>
@@ -77,17 +75,15 @@ public class Program
       context.Response.Headers["X-Canarails-Entry-Name"] = entry.Name;
       context.Response.Headers["X-Canarails-Entry-ID"] = entry.ID.ToString();
 
-      // 寻找最新的 Container
-      var container = await dbContext.Containers.
-        Where(c => c.Entry.ID.Equals(entry.ID)).
-        OrderByDescending(c => c.CreatedAt).
-        FirstAsync();
-      // 调用 Adapter 寻找容器 IP
-      var ip = await adapter.GetContainerIP(container.ContainerID);
+      // 调用 Adapter 寻找容器信息
+      var forwardUrls = await containerService.GetForwardUrls(entry.ID);
+
+      // 随机负载均衡
+      var forwardUrl = containerService.RandomBlancing(forwardUrls);
 
       var error = await forwarder.SendAsync(
         context,
-        $"http://{ip}:{container.Port}",
+        forwardUrl,
         httpClient,
         requestConfig,
         transformer
