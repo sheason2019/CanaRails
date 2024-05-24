@@ -14,7 +14,7 @@ public class EntryService(
   {
     using var transcation = context.Database.BeginTransaction();
     var count = await context.Entries.
-      Where(e => e.App.ID.Equals(dto.AppID) && e.Name.Equals(dto.Name)).
+      Where(e => e.App.ID.Equals(dto.AppId) && e.Name.Equals(dto.Name)).
       CountAsync();
     if (count > 0)
     {
@@ -22,7 +22,7 @@ public class EntryService(
     }
 
     var query = from apps in context.Apps
-                where apps.ID.Equals(dto.AppID)
+                where apps.ID.Equals(dto.AppId)
                 select apps;
     var app = query.First();
 
@@ -37,7 +37,6 @@ public class EntryService(
   {
     return await context.Entries.
       Include(e => e.App).
-      Include(e => e.Containers).
       Where(e => e.ID.Equals(id)).
       FirstAsync();
   }
@@ -54,7 +53,6 @@ public class EntryService(
     return await context.Entries.
       Where(e => e.App.ID.Equals(appID)).
       Include(e => e.App).
-      Include(e => e.Containers).
       ToArrayAsync();
   }
 }

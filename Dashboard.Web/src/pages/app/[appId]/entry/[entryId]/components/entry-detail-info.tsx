@@ -11,20 +11,16 @@ export default function EntryDetailInfo() {
       </Heading>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <FormControl>
-          <FormLabel>ID</FormLabel>
+          <FormLabel fontWeight="bold">ID</FormLabel>
           <Text>{data?.id}</Text>
         </FormControl>
         <FormControl>
-          <FormLabel>流量入口名称</FormLabel>
+          <FormLabel fontWeight="bold">流量入口名称</FormLabel>
           <Text>{data?.name}</Text>
-        </FormControl>
-        <FormControl>
-          <FormLabel>流量入口版本</FormLabel>
-          <Text>{data?.version}</Text>
         </FormControl>
       </div>
       <FormControl className="mt-2">
-        <FormLabel>简介</FormLabel>
+        <FormLabel fontWeight="bold">简介</FormLabel>
         <Text>{data?.description}</Text>
       </FormControl>
     </>

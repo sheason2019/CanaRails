@@ -6,7 +6,6 @@ using CanaRails.Transformer;
 namespace CanaRails.Controllers.Impl;
 
 public class EntryControllerImpl(
-  AppService appService,
   EntryService entryService
 ) : IEntryController
 {
@@ -18,30 +17,19 @@ public class EntryControllerImpl(
   public async Task<EntryDTO> CreateAsync(EntryDTO body)
   {
     var entry = await entryService.CreateEntry(body);
-    return entry.ToDTO().AddDeployInfo(entry);
+    return entry.ToDTO();
   }
 
-  public async Task<EntryDTO> FindByIDAsync(int id)
+  public async Task<EntryDTO> FindByIdAsync(int id)
   {
     var entry = await entryService.FindByIDAsync(id);
-    return entry.ToDTO().AddDeployInfo(entry);
+    return entry.ToDTO();
   }
 
   public async Task<ICollection<EntryDTO>> ListAsync(int appID)
   {
     var records = await entryService.ListAsync(appID);
-    return records.Select(e => e.ToDTO().AddDeployInfo(e)).ToArray();
-  }
-
-  public async Task<EntryDTO?> FindDefaultEntryAsync(int appID)
-  {
-    var record = await appService.FindDefaultEntry(appID);
-    return record?.ToDTO().AddDeployInfo(record);
-  }
-
-  public Task PutDefaultEntryAsync(int appID, int entryID)
-  {
-    return Task.Run(() => appService.PutDefaultEntry(entryID));
+    return records.Select(e => e.ToDTO()).ToArray();
   }
 
   public Task<int> UpdateAsync(int id, EntryDTO body)

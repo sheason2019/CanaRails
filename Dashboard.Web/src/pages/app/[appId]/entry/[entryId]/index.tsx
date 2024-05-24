@@ -8,7 +8,7 @@ import {
 } from "@chakra-ui/react";
 import useEntryDetail from "./hook/use-entry-detail";
 import EntryDetailInfo from "./components/entry-detail-info";
-import EntryContainerList from "./components/entry-container-list";
+import PublishOrderList from "./components/publish-order-list";
 import EntryMatcherList from "./components/entry-matcher-list";
 
 export default function EntryDetailPage() {
@@ -37,7 +37,7 @@ export default function EntryDetailPage() {
       </Breadcrumb>
       <EntryDetailInfo />
       <EntryMatcherList />
-      <EntryContainerList />
+      <PublishOrderList />
     </PageContainer>
   );
 }

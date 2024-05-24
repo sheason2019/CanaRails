@@ -13,7 +13,6 @@ public static class ImageTransformer
       AppId = image.App.ID,
       Registry = image.Registry,
       ImageName = image.ImageName,
-      Ready = image.Ready,
       CreatedAt = ((DateTimeOffset)image.CreatedAt).ToUnixTimeMilliseconds(),
     };
   }
@@ -26,7 +25,6 @@ public static class ImageTransformer
       Registry = dto.Registry,
       ImageName = dto.ImageName,
       App = app,
-      Ready = dto.Ready,
       CreatedAt = DateTimeOffset.FromUnixTimeMilliseconds(dto.CreatedAt).DateTime,
     };
   }

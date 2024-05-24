@@ -12,7 +12,7 @@ public static class EntryTransformer
       Id = entry.ID,
       Name = entry.Name,
       Description = entry.Description,
-      AppID = entry.App.ID,
+      AppId = entry.App.ID,
     };
   }
 
@@ -25,20 +25,5 @@ public static class EntryTransformer
       Description = dto.Description,
       App = app,
     };
-  }
-
-  public static EntryDTO AddDeployInfo(
-    this EntryDTO dto,
-    Entry record
-  )
-  {
-    var container = record.Containers.
-      OrderByDescending(c => c.CreatedAt).
-      FirstOrDefault();
-    if (container == null) return dto;
-
-    dto.DeployedAt = ((DateTimeOffset)container.CreatedAt).
-      ToUnixTimeMilliseconds();
-    return dto;
   }
 }

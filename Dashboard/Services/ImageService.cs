@@ -38,7 +38,6 @@ public class ImageService(
     var ctx = new CanaRailsContext();
     var img = ctx.Images.Where(e => e.ID.Equals(id)).First();
     await adapter.Image.Pull(img);
-    img.Ready = true;
     ctx.SaveChanges();
   }
 

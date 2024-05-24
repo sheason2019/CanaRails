@@ -14,10 +14,8 @@ namespace Entry;
 model EntryDTO {
   id: int32;
   name: string;
-  version: int32;
   description: string;
-  appID: int32;
-  deployedAt: int64;
+  appId: int32;
 }
 
 @post
@@ -32,16 +30,8 @@ op count(@query appID: int32): int32;
 
 @get
 @route("{id}")
-op findByID(@path id: int32): EntryDTO;
+op findById(@path id: int32): EntryDTO;
 
 @put
 @route("{id}")
 op update(@path id: int32, @body dto: EntryDTO): int32;
-
-@get
-@route("default")
-op findDefaultEntry(@query appID: int32): Entry.EntryDTO | null;
-
-@put
-@route("default")
-op putDefaultEntry(@query appID: int32, @body entryID: int32): void;

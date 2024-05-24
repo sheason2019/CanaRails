@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Database.Migrations
 {
     [DbContext(typeof(CanaRailsContext))]
-    [Migration("20240519134044_AddImageReadyStatus")]
-    partial class AddImageReadyStatus
+    [Migration("20240524125300_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -32,6 +32,9 @@ namespace Database.Migrations
                         .HasColumnType("integer");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ID"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -57,6 +60,9 @@ namespace Database.Migrations
                     b.Property<int>("AppID")
                         .HasColumnType("integer");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<string>("Host")
                         .IsRequired()
                         .HasColumnType("text");
@@ -80,26 +86,18 @@ namespace Database.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<int>("ContainerType")
+                        .HasColumnType("integer");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("EntryID")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("ImageID")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("Port")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("Version")
+                    b.Property<int>("PublishOrderID")
                         .HasColumnType("integer");
 
                     b.HasKey("ID");
 
-                    b.HasIndex("EntryID");
-
-                    b.HasIndex("ImageID");
+                    b.HasIndex("PublishOrderID");
 
                     b.ToTable("Containers");
                 });
@@ -110,13 +108,11 @@ namespace Database.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ID"));
-
-                    b.Property<int>("AppID")
+                    b.Property<int?>("AppID")
                         .HasColumnType("integer");
 
-                    b.Property<bool>("Default")
-                        .HasColumnType("boolean");
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -125,9 +121,6 @@ namespace Database.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
-
-                    b.Property<int>("Version")
-                        .HasColumnType("integer");
 
                     b.HasKey("ID");
 
@@ -143,6 +136,9 @@ namespace Database.Migrations
                         .HasColumnType("integer");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ID"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("EntryID")
                         .HasColumnType("integer");
@@ -180,9 +176,6 @@ namespace Database.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<bool>("Ready")
-                        .HasColumnType("boolean");
-
                     b.Property<string>("Registry")
                         .IsRequired()
                         .HasColumnType("text");
@@ -192,6 +185,42 @@ namespace Database.Migrations
                     b.HasIndex("AppID");
 
                     b.ToTable("Images");
+                });
+
+            modelBuilder.Entity("CanaRails.Database.Entities.PublishOrder", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime?>("CompleteAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int?>("EntryID")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("ImageID")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Port")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Replica")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("EntryID");
+
+                    b.HasIndex("ImageID");
+
+                    b.ToTable("PublishOrders");
                 });
 
             modelBuilder.Entity("CanaRails.Database.Entities.AppMatcher", b =>
@@ -207,28 +236,24 @@ namespace Database.Migrations
 
             modelBuilder.Entity("CanaRails.Database.Entities.Container", b =>
                 {
-                    b.HasOne("CanaRails.Database.Entities.Entry", "Entry")
+                    b.HasOne("CanaRails.Database.Entities.PublishOrder", "PublishOrder")
                         .WithMany("Containers")
-                        .HasForeignKey("EntryID")
+                        .HasForeignKey("PublishOrderID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("CanaRails.Database.Entities.Image", "Image")
-                        .WithMany("Containers")
-                        .HasForeignKey("ImageID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Entry");
-
-                    b.Navigation("Image");
+                    b.Navigation("PublishOrder");
                 });
 
             modelBuilder.Entity("CanaRails.Database.Entities.Entry", b =>
                 {
-                    b.HasOne("CanaRails.Database.Entities.App", "App")
+                    b.HasOne("CanaRails.Database.Entities.App", null)
                         .WithMany("Entries")
-                        .HasForeignKey("AppID")
+                        .HasForeignKey("AppID");
+
+                    b.HasOne("CanaRails.Database.Entities.App", "App")
+                        .WithOne("DefaultEntry")
+                        .HasForeignKey("CanaRails.Database.Entities.Entry", "ID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -257,9 +282,34 @@ namespace Database.Migrations
                     b.Navigation("App");
                 });
 
+            modelBuilder.Entity("CanaRails.Database.Entities.PublishOrder", b =>
+                {
+                    b.HasOne("CanaRails.Database.Entities.Entry", null)
+                        .WithMany("PublishOrders")
+                        .HasForeignKey("EntryID");
+
+                    b.HasOne("CanaRails.Database.Entities.Entry", "Entry")
+                        .WithOne("CurrentPublishOrder")
+                        .HasForeignKey("CanaRails.Database.Entities.PublishOrder", "ID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CanaRails.Database.Entities.Image", "Image")
+                        .WithMany("PublishOrders")
+                        .HasForeignKey("ImageID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Entry");
+
+                    b.Navigation("Image");
+                });
+
             modelBuilder.Entity("CanaRails.Database.Entities.App", b =>
                 {
                     b.Navigation("AppMatchers");
+
+                    b.Navigation("DefaultEntry");
 
                     b.Navigation("Entries");
 
@@ -268,12 +318,19 @@ namespace Database.Migrations
 
             modelBuilder.Entity("CanaRails.Database.Entities.Entry", b =>
                 {
-                    b.Navigation("Containers");
+                    b.Navigation("CurrentPublishOrder");
 
                     b.Navigation("EntryMatchers");
+
+                    b.Navigation("PublishOrders");
                 });
 
             modelBuilder.Entity("CanaRails.Database.Entities.Image", b =>
+                {
+                    b.Navigation("PublishOrders");
+                });
+
+            modelBuilder.Entity("CanaRails.Database.Entities.PublishOrder", b =>
                 {
                     b.Navigation("Containers");
                 });

@@ -11,6 +11,7 @@ using CanaRails.Controllers.AppMatcher;
 using CanaRails.Adapters.IAdapter;
 using CanaRails.Controllers.Container;
 using CanaRails.Controllers.EntryMatcher;
+using CanaRails.Controllers.PublishOrder;
 
 namespace CanaRails.Manage;
 
@@ -34,6 +35,7 @@ public class Program
         builder.Services.AddScoped<ImageService>();
         builder.Services.AddScoped<EntryService>();
         builder.Services.AddScoped<ContainerService>();
+        builder.Services.AddScoped<PublishOrderService>();
 
         // Add Controller
         builder.Services.AddScoped<IAppController, AppControllerImpl>();
@@ -42,6 +44,7 @@ public class Program
         builder.Services.AddScoped<IEntryController, EntryControllerImpl>();
         builder.Services.AddScoped<IEntryMatcherController, EntryMatcherControllerImpl>();
         builder.Services.AddScoped<IContainerController, ContainerControllerImpl>();
+        builder.Services.AddScoped<IPublishOrderController, PublishOrderControllerImpl>();
 
         builder.Services.AddControllers(options => { options.Filters.Add<HttpStandardExceptionFilter>(); });
 

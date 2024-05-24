@@ -1,5 +1,5 @@
 import { ContainerDTO } from "../../../../../../../api-client/Container.client";
-import EntryContainerlistItem from "./entry-container-list-item";
+import PublishOrderListItem from "./publish-order-list-item";
 
 const LOADING_CONTAINER: ContainerDTO = {
   id: 0,
@@ -9,14 +9,14 @@ const LOADING_CONTAINER: ContainerDTO = {
   port: 0,
 };
 
-export default function EntryContainerListLoading() {
+export default function PublishOrderListLoading() {
   return (
     <>
       {[...new Array(3)].map((_, index) => (
-        <EntryContainerlistItem
+        <PublishOrderListItem
           key={index}
           isLoaded={false}
-          container={LOADING_CONTAINER}
+          publishOrder={LOADING_CONTAINER}
         />
       ))}
     </>

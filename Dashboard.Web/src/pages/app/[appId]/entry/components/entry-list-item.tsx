@@ -11,7 +11,7 @@ export default function EntryListItem({ entry, isLoaded }: Props) {
   return (
     <Card
       as={Link}
-      to={`/app/${entry.appID}/entry/${entry.id}`}
+      to={`/app/${entry.appId}/entry/${entry.id}`}
       _hover={{ shadow: "lg" }}
       className="transition-shadow"
     >

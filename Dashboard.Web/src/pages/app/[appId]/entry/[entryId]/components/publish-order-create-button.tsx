@@ -28,11 +28,11 @@ import { useFormik } from "formik";
 import { useState } from "react";
 import * as y from "yup";
 import { ImageDTO } from "../../../../../../../api-client/Image.client";
-import { containerClient } from "../../../../../../api";
+import { publishOrderClient } from "../../../../../../api";
 import { useParams } from "react-router-dom";
-import useContainerList from "../hook/use-container-list";
+import useContainerList from "../hook/use-publish-order-list";
 
-export default function EntryContainerUpdateButton() {
+export default function PublishOrderCreateButton() {
   const { entryId } = useParams();
   const { mutate } = useContainerList();
   const [image, setImage] = useState<ImageDTO | null>(null);
@@ -54,15 +54,13 @@ export default function EntryContainerUpdateButton() {
         .min(1, "实例数量必须为正整数"),
     }),
     async onSubmit(values) {
-      await containerClient.putContainers({
-        container: {
-          id: 0,
-          imageId: image!.id,
-          entryId: Number(entryId),
-          version: 0,
-          port: values.port,
-        },
-        replica: 1,
+      await publishOrderClient.create({
+        id: 0,
+        imageId: image!.id,
+        entryId: Number(entryId),
+        port: values.port,
+        replica: values.replica,
+        status: "",
       });
       onClose();
       mutate();
@@ -116,7 +114,7 @@ export default function EntryContainerUpdateButton() {
 
   return (
     <>
-      <Button onClick={onOpen}>配置变更</Button>
+      <Button onClick={onOpen}>创建</Button>
       <Modal isOpen={isOpen} onClose={onClose} size="xl" isCentered>
         <ModalOverlay />
         <ModalContent mx={4}>
