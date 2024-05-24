@@ -31,3 +31,25 @@ export Database="<db_name>"
 export Username="<db_username>"
 export Password="<db_password>"
 ```
+
+# 应用分层
+
+CanaRails 的设计可以分为三个主要层级：
+
+- 持久层
+
+  主要为 Dao 层。
+
+- 适配层
+
+  主要通过 K8s Api 调度容器。
+
+- 应用层
+
+  - Dashboard
+
+    CanaRails 的管理界面，通过一个 Web 页面和一组经过抽象设计的 Api，为用户提供自动化启停测试环境的能力。
+
+  - Ingress
+
+    根据用户请求中的特征，动态分发用户的请求流量，从而实现分支测试环境。
