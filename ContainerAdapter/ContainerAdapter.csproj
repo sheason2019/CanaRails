@@ -1,7 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Database\Database.csproj" />
+    <ProjectReference Include="..\Database\Database.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="KubernetesClient" Version="14.0.2" />
   </ItemGroup>
 
   <PropertyGroup>
