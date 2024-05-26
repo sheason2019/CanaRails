@@ -49,13 +49,28 @@ public class HttpRouteRule
 public class HttpRouteRuleMatch
 {
   [JsonPropertyName("path")]
-  public HttpRouteRuleMatchPath? Path { get; set; }
+  public HTTPPathMatch? Path { get; set; }
+
+  [JsonPropertyName("headers")]
+  public List<HTTPHeaderMatch>? Headers { get; set; }
 }
 
-public class HttpRouteRuleMatchPath
+public class HTTPPathMatch
 {
   [JsonPropertyName("type")]
   public string? Type { get; set; }
+  [JsonPropertyName("value")]
+  public string? Value { get; set; }
+}
+
+public class HTTPHeaderMatch
+{
+  [JsonPropertyName("type")]
+  public string? Type { get; set; }
+
+  [JsonPropertyName("name")]
+  public string? Name { get; set; }
+
   [JsonPropertyName("value")]
   public string? Value { get; set; }
 }

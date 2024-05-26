@@ -47,11 +47,19 @@ public class GatewayService(
         Rules = [
           new HttpRouteRule {
             Matches = [
-              new HttpRouteRuleMatch {
-                Path = new HttpRouteRuleMatchPath{
+              new HttpRouteRuleMatch
+              {
+                Path = new HTTPPathMatch{
                   Type = "PathPrefix",
                   Value = "/get"
                 },
+                Headers = [
+                  new HTTPHeaderMatch {
+                    Type = "Exact",
+                    Name = "x-httpbin",
+                    Value = "1",
+                  }
+                ],
               },
             ],
             Filters = [
