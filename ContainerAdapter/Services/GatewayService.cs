@@ -1,47 +1,49 @@
-using System.Text.Json;
 using CanaRails.ContainerAdapter.Models;
 using k8s;
 using k8s.Models;
 
 namespace CanaRails.ContainerAdapter.Services;
 
-public class GatewayService(Kubernetes client)
+public class GatewayService(
+  Kubernetes client
+)
 {
-  private readonly string gatewayName = "canarails-gateway";
-  private readonly string ns = "default";
-
-  // 根据当前数据库记录更新主干 Ingress 路由逻辑
-  public void UpdateGateway()
+  // 根据数据库内容全量更新 K8s Gateway API
+  public void Apply()
   {
     // 更新 gateway
-    ReplaceGateway();
+    ApplyGateway();
     // 更新 Http Router
-    ReplaceHttpRoute();
+    ApplyHttpRoute();
   }
 
-  public void ReplaceHttpRoute()
+  public void ApplyHttpRoute()
   {
     var group = "gateway.networking.k8s.io";
     var version = "v1";
     var plural = "httproutes";
 
+    // TODO: 根据 App 和 Entry 动态生成 HTTPRoute
     var route = new HttpRoute
     {
       ApiVersion = "gateway.networking.k8s.io/v1",
       Kind = "HTTPRoute",
       Metadata = new V1ObjectMeta
       {
-        Name = "canarails-route",
-        NamespaceProperty = ns,
+        Name = Constant.HttpRouteName,
+        NamespaceProperty = Constant.Namespace,
       },
       Spec = new HttpRouteSpec
       {
         ParentRefs = [
           new HttpRouteParentRef {
-            Name = gatewayName,
+            Name = Constant.GatewayName,
+            Namespace = Constant.Namespace,
           },
         ],
-        Hostnames = ["httpbin.example.com"],
+        // TODO: 这里收集 App 所有的 Matcher
+        Hostnames = ["localhost"],
+        // TODO: 这里为每个 Entry 创建一个 Rule
         Rules = [
           new HttpRouteRule {
             Matches = [
@@ -49,6 +51,23 @@ public class GatewayService(Kubernetes client)
                 Path = new HttpRouteRuleMatchPath{
                   Type = "PathPrefix",
                   Value = "/get"
+                },
+              },
+            ],
+            Filters = [
+              new HttpRouteRuleFilter {
+                Type = "RequestHeaderModifier",
+                RequestHeaderModifier = new HttpRouteRuleRequestHeaderModifier {
+                  Add = [
+                    new HttpRouteRuleRequestHeaderModifierAdd {
+                      Name = "x-canarails-entry",
+                      Value = "1",
+                    },
+                    new HttpRouteRuleRequestHeaderModifierAdd {
+                      Name = "x-canarails-app",
+                      Value = "1",
+                    },
+                  ],
                 },
               },
             ],
@@ -63,17 +82,40 @@ public class GatewayService(Kubernetes client)
       },
     };
 
-    client.PatchNamespacedCustomObject(
-      new V1Patch(route, V1Patch.PatchType.MergePatch),
-      group,
-      version,
-      ns,
-      plural,
-      route.Metadata.Name
-    );
+    // 尝试替换，如果不存在则创建
+    // TODO: 这里的逻辑明显存在问题，应当在 StatusCode == 404 的时候再执行 Create 逻辑
+    try
+    {
+      client.GetNamespacedCustomObject(
+        group,
+        version,
+        Constant.Namespace,
+        plural,
+        route.Metadata.Name
+      );
+      client.PatchNamespacedCustomObject(
+        new V1Patch(route, V1Patch.PatchType.MergePatch),
+        group,
+        version,
+        Constant.Namespace,
+        plural,
+        route.Metadata.Name
+      );
+    }
+    catch
+    {
+      client.CreateNamespacedCustomObject(
+        route,
+        group,
+        version,
+        Constant.Namespace,
+        plural
+      );
+    }
+
   }
 
-  public void ReplaceGateway()
+  public void ApplyGateway()
   {
     var group = "gateway.networking.k8s.io";
     var version = "v1";
@@ -85,8 +127,8 @@ public class GatewayService(Kubernetes client)
       Kind = "Gateway",
       Metadata = new V1ObjectMeta
       {
-        Name = gatewayName,
-        NamespaceProperty = ns,
+        Name = Constant.GatewayName,
+        NamespaceProperty = Constant.Namespace,
       },
       Spec = new GatewaySpec
       {
@@ -106,13 +148,35 @@ public class GatewayService(Kubernetes client)
       },
     };
 
-    client.CustomObjects.PatchNamespacedCustomObject(
-      new V1Patch(gateway, V1Patch.PatchType.MergePatch),
-      group,
-      version,
-      ns,
-      plural,
-      gateway.Metadata.Name
-    );
+    // 尝试替换，若不存在则创建
+    // TODO: 这里或许可以抽象成一个泛型方法
+    try
+    {
+      client.GetNamespacedCustomObject(
+        group,
+        version,
+        Constant.Namespace,
+        plural,
+        gateway.Metadata.Name
+      );
+      client.PatchNamespacedCustomObject(
+        new V1Patch(gateway, V1Patch.PatchType.MergePatch),
+        group,
+        version,
+        Constant.Namespace,
+        plural,
+        gateway.Metadata.Name
+      );
+    }
+    catch
+    {
+      client.CreateNamespacedCustomObject(
+        gateway,
+        group,
+        version,
+        Constant.Namespace,
+        plural
+      );
+    }
   }
 }

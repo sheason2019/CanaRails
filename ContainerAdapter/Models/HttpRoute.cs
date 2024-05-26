@@ -29,12 +29,18 @@ public class HttpRouteParentRef
 {
   [JsonPropertyName("name")]
   public string? Name { get; set; }
+
+  [JsonPropertyName("namespace")]
+  public string? Namespace { get; set; }
 }
 
 public class HttpRouteRule
 {
   [JsonPropertyName("matches")]
   public List<HttpRouteRuleMatch>? Matches { get; set; }
+
+  [JsonPropertyName("filters")]
+  public List<HttpRouteRuleFilter>? Filters { get; set; }
 
   [JsonPropertyName("backendRefs")]
   public List<HttpRouteRuleBackendRef>? BackendRefs { get; set; }
@@ -50,6 +56,30 @@ public class HttpRouteRuleMatchPath
 {
   [JsonPropertyName("type")]
   public string? Type { get; set; }
+  [JsonPropertyName("value")]
+  public string? Value { get; set; }
+}
+
+public class HttpRouteRuleFilter
+{
+  [JsonPropertyName("type")]
+  public string? Type { get; set; }
+
+  [JsonPropertyName("requestHeaderModifier")]
+  public object? RequestHeaderModifier { get; set; }
+}
+
+public class HttpRouteRuleRequestHeaderModifier
+{
+  [JsonPropertyName("add")]
+  public List<HttpRouteRuleRequestHeaderModifierAdd>? Add { get; set; }
+}
+
+public class HttpRouteRuleRequestHeaderModifierAdd
+{
+  [JsonPropertyName("name")]
+  public string? Name { get; set; }
+
   [JsonPropertyName("value")]
   public string? Value { get; set; }
 }

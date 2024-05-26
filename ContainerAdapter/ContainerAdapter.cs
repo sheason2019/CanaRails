@@ -6,13 +6,9 @@ namespace CanaRails.ContainerAdapter;
 public class ContainerAdapter
 {
   private Kubernetes client;
-  private OrderService order;
 
   public ContainerAdapter()
   {
-    client = new(KubernetesClientConfiguration.BuildConfigFromConfigFile());
-    order = new(client);
+    client = new(KubernetesClientConfiguration.InClusterConfig());
   }
-
-  public OrderService Order { get => order; }
 }
