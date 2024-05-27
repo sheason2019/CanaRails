@@ -1,5 +1,7 @@
+using System.Net;
 using CanaRails.ContainerAdapter.Services;
 using k8s;
+using k8s.Autorest;
 using k8s.Models;
 
 namespace CanaRails.ContainerAdapter.Utils;
@@ -33,15 +35,21 @@ public class CustomObjectUtils
         name
       );
     }
-    catch
+    catch (Exception e) when (e is HttpOperationException)
     {
-      client.CreateNamespacedCustomObject(
-        customObject,
-        group,
-        version,
-        Constant.Namespace,
-        plural
-      );
+      if (((HttpOperationException)e).Response.StatusCode == HttpStatusCode.NotFound)
+      {
+        client.CreateNamespacedCustomObject(
+          customObject,
+          group,
+          version,
+          Constant.Namespace,
+          plural
+        );
+        return;
+      }
+
+      throw;
     }
   }
 }
