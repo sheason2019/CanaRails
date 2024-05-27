@@ -16,6 +16,6 @@ public class UnitTest1
     );
     var gatewayService = new GatewayService(client);
 
-    gatewayService.Apply();
+    gatewayService.ApplyGateway();
   }
 }

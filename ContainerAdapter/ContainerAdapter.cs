@@ -11,4 +11,10 @@ public class ContainerAdapter
   {
     client = new(KubernetesClientConfiguration.InClusterConfig());
   }
+
+  // 全量同步容器
+  public void Apply()
+  {
+
+  }
 }
