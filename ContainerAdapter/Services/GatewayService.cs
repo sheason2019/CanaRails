@@ -1,4 +1,5 @@
 using CanaRails.ContainerAdapter.Models;
+using CanaRails.ContainerAdapter.Utils;
 using CanaRails.Database;
 using CanaRails.Database.Entities;
 using k8s;
@@ -43,35 +44,14 @@ public class GatewayService(
       },
     };
 
-    // 尝试替换，若不存在则创建
-    // TODO: 这里或许可以抽象成一个泛型方法
-    try
-    {
-      client.GetNamespacedCustomObject(
-        group,
-        version,
-        Constant.Namespace,
-        plural,
-        gateway.Metadata.Name
-      );
-      client.PatchNamespacedCustomObject(
-        new V1Patch(gateway, V1Patch.PatchType.MergePatch),
-        group,
-        version,
-        Constant.Namespace,
-        plural,
-        gateway.Metadata.Name
-      );
-    }
-    catch
-    {
-      client.CreateNamespacedCustomObject(
-        gateway,
-        group,
-        version,
-        Constant.Namespace,
-        plural
-      );
-    }
+    // 应用修改
+    CustomObjectUtils.CreateOrPatch(
+      client,
+      gateway,
+      group,
+      version,
+      plural,
+      gateway.Metadata.Name
+    );
   }
 }

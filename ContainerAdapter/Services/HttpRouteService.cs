@@ -1,4 +1,5 @@
 using CanaRails.ContainerAdapter.Models;
+using CanaRails.ContainerAdapter.Utils;
 using CanaRails.Database.Entities;
 using k8s;
 using k8s.Models;
@@ -74,35 +75,13 @@ public class HttpRouteService(Kubernetes client)
       },
     };
 
-    // 尝试替换，如果不存在则创建
-    // TODO: 这里的逻辑明显存在问题，应当在 StatusCode == 404 的时候再执行 Create 逻辑
-    try
-    {
-      client.GetNamespacedCustomObject(
-        group,
-        version,
-        Constant.Namespace,
-        plural,
-        route.Metadata.Name
-      );
-      client.PatchNamespacedCustomObject(
-        new V1Patch(route, V1Patch.PatchType.MergePatch),
-        group,
-        version,
-        Constant.Namespace,
-        plural,
-        route.Metadata.Name
-      );
-    }
-    catch
-    {
-      client.CreateNamespacedCustomObject(
-        route,
-        group,
-        version,
-        Constant.Namespace,
-        plural
-      );
-    }
+    CustomObjectUtils.CreateOrPatch(
+      client,
+      route,
+      group,
+      version,
+      plural,
+      route.Metadata.Name
+    );
   }
 }
