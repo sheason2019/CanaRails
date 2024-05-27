@@ -1,4 +1,6 @@
 using CanaRails.ContainerAdapter.Models;
+using CanaRails.Database;
+using CanaRails.Database.Entities;
 using k8s;
 using k8s.Models;
 
@@ -11,19 +13,23 @@ public class GatewayService(
   // 根据数据库内容全量更新 K8s Gateway API
   public void Apply()
   {
+    var app = new App
+    {
+      Name = "Mock App",
+    };
     // 更新 gateway
     ApplyGateway();
     // 更新 Http Router
-    ApplyHttpRoute();
+    ApplyHttpRoute(app);
   }
 
-  public void ApplyHttpRoute()
+  public void ApplyHttpRoute(App app)
   {
     var group = "gateway.networking.k8s.io";
     var version = "v1";
     var plural = "httproutes";
 
-    // TODO: 根据 App 和 Entry 动态生成 HTTPRoute
+    // 每个 App 生成一个 HTTPRoute，并将 App 注册的 Hostname 填入 Host 字段
     var route = new HttpRoute
     {
       ApiVersion = "gateway.networking.k8s.io/v1",
@@ -41,52 +47,45 @@ public class GatewayService(
             Namespace = Constant.Namespace,
           },
         ],
-        // TODO: 这里收集 App 所有的 Matcher
-        Hostnames = ["localhost"],
-        // TODO: 这里为每个 Entry 创建一个 Rule
-        Rules = [
-          new HttpRouteRule {
-            Matches = [
-              new HttpRouteRuleMatch
+        Hostnames = app.AppMatchers.Select(e => e.Host).ToList(),
+        // 每个 Entry 创建一个 Rule
+        Rules = app.Entries.Select(entry => new HttpRouteRule
+        {
+          Matches = [
+            new HttpRouteRuleMatch
+            {
+              Headers = entry.EntryMatchers.Select(em => new HTTPHeaderMatch
               {
-                Path = new HTTPPathMatch{
-                  Type = "PathPrefix",
-                  Value = "/get"
-                },
-                Headers = [
-                  new HTTPHeaderMatch {
-                    Type = "Exact",
-                    Name = "x-httpbin",
-                    Value = "1",
-                  }
+                Type = "Exact",
+                Name = em.Key,
+                Value = em.Value,
+              }).ToList(),
+            },
+          ],
+          Filters = [
+            new HttpRouteRuleFilter {
+              Type = "RequestHeaderModifier",
+              RequestHeaderModifier = new HttpRouteRuleRequestHeaderModifier {
+                Add = [
+                  new HttpRouteRuleRequestHeaderModifierAdd {
+                    Name = "x-canarails-entry",
+                    Value = entry.ID.ToString(),
+                  },
+                  new HttpRouteRuleRequestHeaderModifierAdd {
+                    Name = "x-canarails-app",
+                    Value = app.ID.ToString(),
+                  },
                 ],
               },
-            ],
-            Filters = [
-              new HttpRouteRuleFilter {
-                Type = "RequestHeaderModifier",
-                RequestHeaderModifier = new HttpRouteRuleRequestHeaderModifier {
-                  Add = [
-                    new HttpRouteRuleRequestHeaderModifierAdd {
-                      Name = "x-canarails-entry",
-                      Value = "1",
-                    },
-                    new HttpRouteRuleRequestHeaderModifierAdd {
-                      Name = "x-canarails-app",
-                      Value = "1",
-                    },
-                  ],
-                },
-              },
-            ],
-            BackendRefs = [
-              new HttpRouteRuleBackendRef {
-                Name = "httpbin",
-                Port = 8000,
-              },
-            ],
-          }
-        ],
+            },
+          ],
+          BackendRefs = [
+            new HttpRouteRuleBackendRef {
+              Name = $"canarails-entry-service-{entry.CurrentPublishOrder?.ID}",
+              Port = entry.CurrentPublishOrder?.Port,
+            },
+          ],
+        }).ToList(),
       },
     };
 
@@ -120,7 +119,16 @@ public class GatewayService(
         plural
       );
     }
+  }
 
+  public void ApplyService()
+  {
+    // 遍历 Entry，设置 Service
+  }
+
+  public void ApplyDeployment()
+  {
+    // 遍历 Entry 中的 CurrentPublishOrder，设置 Deployment
   }
 
   public void ApplyGateway()
