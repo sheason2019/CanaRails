@@ -58,20 +58,22 @@ CanaRails 的设计可以分为三个主要层级：
 
 1. 使用下面的命令安装 K3s，并禁用默认的 Traefik Ingress
 
-  ```bash
-  sudo curl -sfL https://rancher-mirror.rancher.cn/k3s/k3s-install.sh | INSTALL_K3S_MIRROR=cn sh -s - --disable=traefik
-  ```
+   ```bash
+   sudo curl -sfL https://rancher-mirror.rancher.cn/k3s/k3s-install.sh | INSTALL_K3S_MIRROR=cn sh -s - --disable=traefik
+   ```
 
 2. 安装 Istio
 
-  参考 https://istio.io/latest/zh/docs/setup/platform-setup/k3d/
+   推荐使用 Helm 安装，K3s 与 Helm 集成可参考 https://docs.k3s.io/zh/helm?_highlight=hel。
+
+   参考 https://istio.io/latest/zh/docs/setup/install/helm/
 
 3. 安装 Gateway API
 
-  参考 https://istio.io/latest/zh/docs/tasks/traffic-management/ingress/gateway-api/
+   参考 https://istio.io/latest/zh/docs/tasks/traffic-management/ingress/gateway-api/
 
 4. 创建 Canarails 命名空间
 
- ```bash
- kubectl create namespace canarails
- ```
+   ```bash
+   kubectl create namespace canarails
+   ```
