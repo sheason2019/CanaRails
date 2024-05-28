@@ -11,6 +11,7 @@ public class GatewayService(
   Kubernetes client
 )
 {
+  // 检查 Gateway 是否存在，不存在则创建
   public void ApplyGateway()
   {
     var group = "gateway.networking.k8s.io";

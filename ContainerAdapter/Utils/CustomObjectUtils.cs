@@ -35,9 +35,9 @@ public class CustomObjectUtils
         name
       );
     }
-    catch (Exception e) when (e is HttpOperationException)
+    catch (Exception e) when (e is HttpOperationException exception)
     {
-      if (((HttpOperationException)e).Response.StatusCode == HttpStatusCode.NotFound)
+      if (exception.Response.StatusCode == HttpStatusCode.NotFound)
       {
         client.CreateNamespacedCustomObject(
           customObject,
