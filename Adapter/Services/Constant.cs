@@ -1,4 +1,4 @@
-namespace CanaRails.ContainerAdapter.Services;
+namespace CanaRails.Adapter.Services;
 
 public class Constant
 {

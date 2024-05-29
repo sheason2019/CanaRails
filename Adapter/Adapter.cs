@@ -1,8 +1,8 @@
-﻿using CanaRails.ContainerAdapter.Services;
+﻿using CanaRails.Adapter.Services;
 using CanaRails.Database;
 using k8s;
 
-namespace CanaRails.ContainerAdapter;
+namespace CanaRails.Adapter;
 
 public class ContainerAdapter
 {

@@ -1,5 +1,5 @@
 using System.Net;
-using CanaRails.ContainerAdapter.Utils;
+using CanaRails.Adapter.Utils;
 using CanaRails.Database;
 using CanaRails.Database.Entities;
 using k8s;
@@ -7,7 +7,7 @@ using k8s.Autorest;
 using k8s.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace CanaRails.ContainerAdapter.Services;
+namespace CanaRails.Adapter.Services;
 
 public class KubeSvrService(
   Kubernetes client,

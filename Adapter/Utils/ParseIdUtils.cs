@@ -1,6 +1,6 @@
 using System.Text.RegularExpressions;
 
-namespace CanaRails.ContainerAdapter.Utils;
+namespace CanaRails.Adapter.Utils;
 
 public class ParseIdUtils
 {

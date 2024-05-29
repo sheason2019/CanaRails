@@ -1,11 +1,9 @@
-using CanaRails.ContainerAdapter.Models;
-using CanaRails.ContainerAdapter.Utils;
-using CanaRails.Database;
-using CanaRails.Database.Entities;
+using CanaRails.Adapter.Models;
+using CanaRails.Adapter.Utils;
 using k8s;
 using k8s.Models;
 
-namespace CanaRails.ContainerAdapter.Services;
+namespace CanaRails.Adapter.Services;
 
 public class GatewayService(
   Kubernetes client

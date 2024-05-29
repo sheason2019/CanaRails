@@ -46,31 +46,6 @@ namespace Database.Migrations
                     b.ToTable("Apps");
                 });
 
-            modelBuilder.Entity("CanaRails.Database.Entities.AppMatcher", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ID"));
-
-                    b.Property<int>("AppID")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Host")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("AppID");
-
-                    b.ToTable("AppMatchers");
-                });
-
             modelBuilder.Entity("CanaRails.Database.Entities.Container", b =>
                 {
                     b.Property<int>("ID")
@@ -126,35 +101,6 @@ namespace Database.Migrations
                     b.ToTable("Entries");
                 });
 
-            modelBuilder.Entity("CanaRails.Database.Entities.EntryMatcher", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ID"));
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<int>("EntryID")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Key")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Value")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("EntryID");
-
-                    b.ToTable("EntryMatchers");
-                });
-
             modelBuilder.Entity("CanaRails.Database.Entities.Image", b =>
                 {
                     b.Property<int>("ID")
@@ -173,10 +119,6 @@ namespace Database.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("Registry")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.HasKey("ID");
 
                     b.HasIndex("AppID");
@@ -189,9 +131,6 @@ namespace Database.Migrations
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
-
-                    b.Property<DateTime?>("CompleteAt")
-                        .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
@@ -211,6 +150,9 @@ namespace Database.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("integer");
 
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
                     b.HasKey("ID");
 
                     b.HasIndex("EntryID");
@@ -220,21 +162,34 @@ namespace Database.Migrations
                     b.ToTable("PublishOrders");
                 });
 
-            modelBuilder.Entity("CanaRails.Database.Entities.AppMatcher", b =>
+            modelBuilder.Entity("CanaRails.Database.Entities.App", b =>
                 {
-                    b.HasOne("CanaRails.Database.Entities.App", "App")
-                        .WithMany("AppMatchers")
-                        .HasForeignKey("AppID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.OwnsOne("System.Collections.Generic.List<string>", "Hostnames", b1 =>
+                        {
+                            b1.Property<int>("AppID")
+                                .HasColumnType("integer");
 
-                    b.Navigation("App");
+                            b1.Property<int>("Capacity")
+                                .HasColumnType("integer");
+
+                            b1.HasKey("AppID");
+
+                            b1.ToTable("Apps");
+
+                            b1.ToJson("Hostnames");
+
+                            b1.WithOwner()
+                                .HasForeignKey("AppID");
+                        });
+
+                    b.Navigation("Hostnames")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("CanaRails.Database.Entities.Container", b =>
                 {
                     b.HasOne("CanaRails.Database.Entities.PublishOrder", "PublishOrder")
-                        .WithMany("Containers")
+                        .WithMany()
                         .HasForeignKey("PublishOrderID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -254,18 +209,28 @@ namespace Database.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.OwnsOne("System.Collections.Generic.List<CanaRails.Database.Entities.EntryMatcher>", "EntryMatchers", b1 =>
+                        {
+                            b1.Property<int>("EntryID")
+                                .HasColumnType("integer");
+
+                            b1.Property<int>("Capacity")
+                                .HasColumnType("integer");
+
+                            b1.HasKey("EntryID");
+
+                            b1.ToTable("Entries");
+
+                            b1.ToJson("EntryMatchers");
+
+                            b1.WithOwner()
+                                .HasForeignKey("EntryID");
+                        });
+
                     b.Navigation("App");
-                });
 
-            modelBuilder.Entity("CanaRails.Database.Entities.EntryMatcher", b =>
-                {
-                    b.HasOne("CanaRails.Database.Entities.Entry", "Entry")
-                        .WithMany("EntryMatchers")
-                        .HasForeignKey("EntryID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                    b.Navigation("EntryMatchers")
                         .IsRequired();
-
-                    b.Navigation("Entry");
                 });
 
             modelBuilder.Entity("CanaRails.Database.Entities.Image", b =>
@@ -304,8 +269,6 @@ namespace Database.Migrations
 
             modelBuilder.Entity("CanaRails.Database.Entities.App", b =>
                 {
-                    b.Navigation("AppMatchers");
-
                     b.Navigation("DefaultEntry");
 
                     b.Navigation("Entries");
@@ -317,19 +280,12 @@ namespace Database.Migrations
                 {
                     b.Navigation("CurrentPublishOrder");
 
-                    b.Navigation("EntryMatchers");
-
                     b.Navigation("PublishOrders");
                 });
 
             modelBuilder.Entity("CanaRails.Database.Entities.Image", b =>
                 {
                     b.Navigation("PublishOrders");
-                });
-
-            modelBuilder.Entity("CanaRails.Database.Entities.PublishOrder", b =>
-                {
-                    b.Navigation("Containers");
                 });
 #pragma warning restore 612, 618
         }

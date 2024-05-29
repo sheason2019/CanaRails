@@ -6,9 +6,7 @@ namespace CanaRails.Database;
 public class CanaRailsContext : DbContext
 {
     public DbSet<App> Apps { get; set; }
-    public DbSet<AppMatcher> AppMatchers { get; set; }
     public DbSet<Entry> Entries { get; set; }
-    public DbSet<EntryMatcher> EntryMatchers { get; set; }
     public DbSet<Image> Images { get; set; }
     public DbSet<Container> Containers { get; set; }
     public DbSet<PublishOrder> PublishOrders { get; set; }
@@ -39,5 +37,18 @@ public class CanaRailsContext : DbContext
             .HasOne(e => e.DefaultEntry)
             .WithOne(e => e.App)
             .HasForeignKey<Entry>();
+
+        modelBuilder.Entity<App>().OwnsOne(
+            e => e.Hostnames, builder =>
+            {
+                builder.ToJson();
+            });
+
+        modelBuilder.Entity<Entry>().OwnsOne(
+            e => e.EntryMatchers, builder =>
+            {
+                builder.ToJson();
+            }
+        );
     }
 }

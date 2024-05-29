@@ -1,7 +1,4 @@
-using System.Text.RegularExpressions;
-using CanaRails.ContainerAdapter.Services;
-using CanaRails.ContainerAdapter.Utils;
-using k8s;
+using CanaRails.Adapter.Utils;
 
 namespace CanaRails.ContainerAdapter.Test;
 

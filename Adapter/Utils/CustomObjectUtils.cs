@@ -1,10 +1,10 @@
 using System.Net;
-using CanaRails.ContainerAdapter.Services;
+using CanaRails.Adapter.Services;
 using k8s;
 using k8s.Autorest;
 using k8s.Models;
 
-namespace CanaRails.ContainerAdapter.Utils;
+namespace CanaRails.Adapter.Utils;
 
 public class CustomObjectUtils
 {

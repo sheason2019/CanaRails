@@ -9,9 +9,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ingress", "Ingress\Ingress.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dashboard", "Dashboard\Dashboard.csproj", "{C33A6D34-64E4-47F1-B9A7-4D4496B9F1C3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContainerAdapter", "ContainerAdapter\ContainerAdapter.csproj", "{5038CEF6-096C-44F1-9CE1-BF2844DFECB3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Adapter", "Adapter\Adapter.csproj", "{186D317D-B618-4073-868E-B0FCE7E1E963}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContainerAdapter.Test", "ContainerAdapter.Test\ContainerAdapter.Test.csproj", "{B06E7083-A92B-49D9-A62B-A861714ED360}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Adapter.Test", "Adapter.Test\Adapter.Test.csproj", "{D59ACDFF-CEDE-4D38-A040-CFA357BFF8D2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -42,5 +42,13 @@ Global
 		{B06E7083-A92B-49D9-A62B-A861714ED360}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B06E7083-A92B-49D9-A62B-A861714ED360}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B06E7083-A92B-49D9-A62B-A861714ED360}.Release|Any CPU.Build.0 = Release|Any CPU
+		{186D317D-B618-4073-868E-B0FCE7E1E963}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{186D317D-B618-4073-868E-B0FCE7E1E963}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{186D317D-B618-4073-868E-B0FCE7E1E963}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{186D317D-B618-4073-868E-B0FCE7E1E963}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D59ACDFF-CEDE-4D38-A040-CFA357BFF8D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D59ACDFF-CEDE-4D38-A040-CFA357BFF8D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D59ACDFF-CEDE-4D38-A040-CFA357BFF8D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D59ACDFF-CEDE-4D38-A040-CFA357BFF8D2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

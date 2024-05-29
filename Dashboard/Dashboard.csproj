@@ -9,6 +9,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Adapters\DockerAdapter\DockerAdapter.csproj" />
     <ProjectReference Include="..\Database\Database.csproj" />
+    <ProjectReference Include="..\Adapter\Adapter.csproj" />
   </ItemGroup>
 
 </Project>

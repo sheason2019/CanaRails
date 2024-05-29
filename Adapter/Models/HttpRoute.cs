@@ -2,7 +2,7 @@ using System.Text.Json.Serialization;
 using k8s;
 using k8s.Models;
 
-namespace CanaRails.ContainerAdapter.Models;
+namespace CanaRails.Adapter.Models;
 
 public class HttpRoute : KubernetesObject, IMetadata<V1ObjectMeta>
 {

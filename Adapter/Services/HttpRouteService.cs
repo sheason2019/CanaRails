@@ -1,13 +1,13 @@
 using System.Text.RegularExpressions;
-using CanaRails.ContainerAdapter.Models;
-using CanaRails.ContainerAdapter.Utils;
+using CanaRails.Adapter.Models;
+using CanaRails.Adapter.Utils;
 using CanaRails.Database;
 using CanaRails.Database.Entities;
 using k8s;
 using k8s.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace CanaRails.ContainerAdapter.Services;
+namespace CanaRails.Adapter.Services;
 
 public class HttpRouteService(
   Kubernetes client,
@@ -27,7 +27,7 @@ public class HttpRouteService(
                     .Count() > 0
                    select apps;
     var validApps = queryApp
-      .Include(e => e.AppMatchers)
+      .Include(e => e.Hostnames)
       .Include(e => e.Entries)
       .ToArray();
 
@@ -86,7 +86,7 @@ public class HttpRouteService(
             Namespace = Constant.Namespace,
           },
         ],
-        Hostnames = app.AppMatchers.Select(e => e.Host).ToList(),
+        Hostnames = app.Hostnames,
         Rules = app.Entries.Select(entry => new HttpRouteRule
         {
           Matches = [
