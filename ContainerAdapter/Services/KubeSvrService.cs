@@ -14,7 +14,7 @@ public class KubeSvrService(
   CanaRailsContext context
 )
 {
-  public void ApplyService()
+  public void ApplyServiceAndDeployment()
   {
     var queryEntries = from entries in context.Entries
                        where entries.CurrentPublishOrder != null
