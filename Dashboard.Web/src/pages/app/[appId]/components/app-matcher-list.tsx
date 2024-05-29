@@ -26,7 +26,7 @@ export default function AppMatcherList() {
     <>
       <Flex className="mt-6 mb-3 items-center">
         <Heading size="md" className="grow">
-          匹配器
+          App Hostnames
         </Heading>
         <AppMatcherCreateButton />
       </Flex>

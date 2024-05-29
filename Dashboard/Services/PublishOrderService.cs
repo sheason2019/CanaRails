@@ -1,13 +1,14 @@
-using CanaRails.Adapters.IAdapter;
+using CanaRails.Adapter;
 using CanaRails.Controllers.PublishOrder;
 using CanaRails.Database;
 using CanaRails.Database.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace CanaRails.Services;
 
 public class PublishOrderService(
   CanaRailsContext context,
-  IAdapter adapter
+  ContainerAdapter adapter
 )
 {
   public PublishOrder CreateOrder(PublishOrderDTO dto)
@@ -35,14 +36,19 @@ public class PublishOrderService(
     return record;
   }
 
-  public async Task ApplyOrder(PublishOrder order)
+  public void ApplyOrder(int orderId)
   {
-    // 为当前 Order 创建容器集合
-    var containers = await adapter.Order.Start(order);
-    
-
     // 将 Entry 的 CurrentOrder 切换至当前 Order
+    var queryOrder = from orders in context.PublishOrders
+      where orders.ID.Equals(orderId)
+      select orders;
+    var order = queryOrder.Include(e => e.Entry).First();
 
-    // 停止其他 Order 创建的容器
+    order.Entry.CurrentPublishOrder = order;
+    order.Status = PublishOrderStatus.Approval;
+    context.SaveChanges();
+
+    // 变更容器配置
+    adapter.Apply();
   }
 }

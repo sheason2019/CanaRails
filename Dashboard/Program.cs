@@ -5,7 +5,6 @@ using CanaRails.Exceptions;
 using CanaRails.Controllers.App;
 using CanaRails.Controllers.Image;
 using CanaRails.Controllers.Entry;
-using CanaRails.Controllers.AppMatcher;
 using CanaRails.Controllers.Container;
 using CanaRails.Controllers.EntryMatcher;
 using CanaRails.Adapter;
@@ -26,7 +25,6 @@ public class Program
 
         // Add Services
         builder.Services.AddScoped<AppService>();
-        builder.Services.AddScoped<AppMatcherService>();
         builder.Services.AddScoped<ImageService>();
         builder.Services.AddScoped<EntryService>();
         builder.Services.AddScoped<ContainerService>();
@@ -34,10 +32,8 @@ public class Program
 
         // Add Controller
         builder.Services.AddScoped<IAppController, AppControllerImpl>();
-        builder.Services.AddScoped<IAppMatcherController, AppMatcherControllerImpl>();
         builder.Services.AddScoped<IImageController, ImageControllerImpl>();
         builder.Services.AddScoped<IEntryController, EntryControllerImpl>();
-        builder.Services.AddScoped<IEntryMatcherController, EntryMatcherControllerImpl>();
         builder.Services.AddScoped<IContainerController, ContainerControllerImpl>();
 
         builder.Services.AddControllers(options => { options.Filters.Add<HttpStandardExceptionFilter>(); });

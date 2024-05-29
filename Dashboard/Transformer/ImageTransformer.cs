@@ -11,7 +11,6 @@ public static class ImageTransformer
     {
       Id = image.ID,
       AppId = image.App.ID,
-      Registry = image.Registry,
       ImageName = image.ImageName,
       CreatedAt = ((DateTimeOffset)image.CreatedAt).ToUnixTimeMilliseconds(),
     };
@@ -22,7 +21,6 @@ public static class ImageTransformer
     return new Image
     {
       ID = dto.Id,
-      Registry = dto.Registry,
       ImageName = dto.ImageName,
       App = app,
       CreatedAt = DateTimeOffset.FromUnixTimeMilliseconds(dto.CreatedAt).DateTime,

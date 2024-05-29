@@ -1,4 +1,4 @@
-using CanaRails.Adapters.IAdapter;
+using CanaRails.Adapter;
 using CanaRails.Controllers.Image;
 using CanaRails.Database;
 using CanaRails.Database.Entities;
@@ -8,8 +8,7 @@ using Microsoft.EntityFrameworkCore;
 namespace CanaRails.Services;
 
 public class ImageService(
-  CanaRailsContext context,
-  IAdapter adapter
+  CanaRailsContext context
 )
 {
   public async Task<Image> CreateImageAsync(ImageDTO dto)
@@ -27,18 +26,7 @@ public class ImageService(
     await context.Images.AddAsync(image);
     await context.SaveChangesAsync();
 
-    // 尝试拉取镜像
-    _ = PullImageAsync(image.ID);
-
     return image;
-  }
-
-  public async Task PullImageAsync(int id)
-  {
-    var ctx = new CanaRailsContext();
-    var img = ctx.Images.Where(e => e.ID.Equals(id)).First();
-    await adapter.Image.Pull(img);
-    ctx.SaveChanges();
   }
 
   public Task<List<Image>> ListImageByAppIDAsync(int appID)

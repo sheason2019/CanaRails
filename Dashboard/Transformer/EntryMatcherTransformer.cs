@@ -9,10 +9,8 @@ public static class EntryMatcherTransformer
   {
     return new EntryMatcherDTO
     {
-      Id = em.ID,
       Key = em.Key,
       Value = em.Value,
-      EntryId = em.Entry.ID,
     };
   }
 
@@ -20,10 +18,8 @@ public static class EntryMatcherTransformer
   {
     return new EntryMatcher
     {
-      ID = dto.Id,
       Key = dto.Key,
       Value = dto.Value,
-      Entry = entry,
     };
   }
 }
