@@ -11,10 +11,16 @@ using TypeSpec.Rest;
 @server("/api/entry", "App Entry Server endpoint")
 namespace Entry;
 
+model EntryMatcherDTO {
+  key: string;
+  value: string;
+}
+
 model EntryDTO {
   id: int32;
   name: string;
   description: string;
+  matchers: EntryMatcherDTO[];
   appId: int32;
 }
 
@@ -35,3 +41,11 @@ op findById(@path id: int32): EntryDTO;
 @put
 @route("{id}")
 op update(@path id: int32, @body dto: EntryDTO): int32;
+
+@post
+@route("{id}/matcher")
+op createMatcher(@path id: int32, @body dto: EntryMatcherDTO): void;
+
+@delete
+@route("{id}/matcher")
+op deleteMatcher(@path id: int32, @query key: string): void;

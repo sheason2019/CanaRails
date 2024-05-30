@@ -1,12 +1,12 @@
 import { Alert, AlertIcon, Flex, Heading, Stack } from "@chakra-ui/react";
 import PublishOrderCreateButton from "./publish-order-create-button";
-import useContainerList from "../hook/use-publish-order-list";
+import usePublishOrderList from "../hook/use-publish-order-list";
 import PublishOrderListLoading from "./publish-order-list-loading";
 import { useMemo } from "react";
 import PublishOrderListItem from "./publish-order-list-item";
 
 export default function PublishOrderList() {
-  const { data, isLoading } = useContainerList();
+  const { data, isLoading } = usePublishOrderList();
 
   const contentRenderer = useMemo(() => {
     if (isLoading) return <PublishOrderListLoading />;

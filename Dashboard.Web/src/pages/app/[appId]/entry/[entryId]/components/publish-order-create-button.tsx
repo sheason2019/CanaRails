@@ -30,11 +30,11 @@ import * as y from "yup";
 import { ImageDTO } from "../../../../../../../api-client/Image.client";
 import { publishOrderClient } from "../../../../../../api";
 import { useParams } from "react-router-dom";
-import useContainerList from "../hook/use-publish-order-list";
+import usePublishOrderList from "../hook/use-publish-order-list";
 
 export default function PublishOrderCreateButton() {
   const { entryId } = useParams();
-  const { mutate } = useContainerList();
+  const { mutate } = usePublishOrderList();
   const [image, setImage] = useState<ImageDTO | null>(null);
   const { isOpen, onClose, onOpen } = useDisclosure();
 
