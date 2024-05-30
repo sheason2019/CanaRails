@@ -6,20 +6,19 @@ import {
   MenuItem,
   MenuList,
 } from "@chakra-ui/react";
-import { AppMatcherDTO } from "../../../../../api-client/AppMatcher.client";
 import { DeleteIcon, HamburgerIcon } from "@chakra-ui/icons";
-import { appMatcherClient } from "../../../../api";
-import useAppMatchers from "../hooks/use-app-matchers";
+import { appClient } from "../../../../api";
+import useAppDetail from "../hooks/use-app-detail";
 
 interface Props {
-  appMatcher: AppMatcherDTO;
+  hostname: string;
 }
 
-export default function AppMatcherListItem({ appMatcher }: Props) {
-  const { mutate } = useAppMatchers();
+export default function AppMatcherListItem({ hostname }: Props) {
+  const { data, mutate } = useAppDetail();
 
   const handleDelete = async () => {
-    await appMatcherClient.delete(appMatcher.appID, appMatcher.id);
+    await appClient.deleteHostname(data?.id ?? 0, hostname);
     mutate();
   };
 
@@ -38,7 +37,7 @@ export default function AppMatcherListItem({ appMatcher }: Props) {
           </MenuItem>
         </MenuList>
       </Menu>
-      {appMatcher.host}
+      {hostname}
     </ListItem>
   );
 }

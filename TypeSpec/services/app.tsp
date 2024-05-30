@@ -16,6 +16,7 @@ namespace App;
 model AppDTO {
   id: int32;
   name: string;
+  hostnames: string[];
   description: string;
 }
 
@@ -28,3 +29,11 @@ op list(): AppDTO[];
 @get
 @route("{id}")
 op findByID(@path id: int32): AppDTO;
+
+@post
+@route("{id}/hostname")
+op createHostname(@path id: int32, hostname: string): void;
+
+@delete
+@route("{id}/hostname")
+op deleteHostname(@path id: int32, @query hostname: string): void;

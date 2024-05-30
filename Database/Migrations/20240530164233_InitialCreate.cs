@@ -20,8 +20,8 @@ namespace Database.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Name = table.Column<string>(type: "text", nullable: false),
                     Description = table.Column<string>(type: "text", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    Hostnames = table.Column<string>(type: "jsonb", nullable: false)
+                    Hostnames = table.Column<string>(type: "text", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -37,7 +37,7 @@ namespace Database.Migrations
                     Description = table.Column<string>(type: "text", nullable: false),
                     AppID = table.Column<int>(type: "integer", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    EntryMatchers = table.Column<string>(type: "jsonb", nullable: false)
+                    EntryMatchers = table.Column<string>(type: "jsonb", nullable: true)
                 },
                 constraints: table =>
                 {

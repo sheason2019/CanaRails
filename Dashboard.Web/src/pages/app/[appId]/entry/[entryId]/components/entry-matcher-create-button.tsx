@@ -15,7 +15,6 @@ import {
 } from "@chakra-ui/react";
 import { useFormik } from "formik";
 import * as y from "yup";
-import { entryMatcherClient } from "../../../../../../api";
 import { useParams } from "react-router-dom";
 import useEntryMatcherList from "../hook/use-entry-matcher-list";
 
@@ -33,12 +32,7 @@ export default function EntryMatcherCreateButton() {
       value: y.string().required("Value 值不能为空"),
     }),
     async onSubmit(values) {
-      await entryMatcherClient.put({
-        id: 0,
-        key: values.key,
-        value: values.value,
-        entryId: Number(entryId),
-      });
+      throw new Error("Unimplemented Error");
       mutate();
       onClose();
     },

@@ -27,7 +27,6 @@ public class HttpRouteService(
                     .Count() > 0
                    select apps;
     var validApps = queryApp
-      .Include(e => e.Hostnames)
       .Include(e => e.Entries)
       .ToArray();
 

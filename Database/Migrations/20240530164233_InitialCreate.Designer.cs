@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Database.Migrations
 {
     [DbContext(typeof(CanaRailsContext))]
-    [Migration("20240529144631_InitialCreate")]
+    [Migration("20240530164233_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -37,6 +37,10 @@ namespace Database.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Hostnames")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -165,30 +169,6 @@ namespace Database.Migrations
                     b.ToTable("PublishOrders");
                 });
 
-            modelBuilder.Entity("CanaRails.Database.Entities.App", b =>
-                {
-                    b.OwnsOne("System.Collections.Generic.List<string>", "Hostnames", b1 =>
-                        {
-                            b1.Property<int>("AppID")
-                                .HasColumnType("integer");
-
-                            b1.Property<int>("Capacity")
-                                .HasColumnType("integer");
-
-                            b1.HasKey("AppID");
-
-                            b1.ToTable("Apps");
-
-                            b1.ToJson("Hostnames");
-
-                            b1.WithOwner()
-                                .HasForeignKey("AppID");
-                        });
-
-                    b.Navigation("Hostnames")
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("CanaRails.Database.Entities.Container", b =>
                 {
                     b.HasOne("CanaRails.Database.Entities.PublishOrder", "PublishOrder")
@@ -212,15 +192,24 @@ namespace Database.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.OwnsOne("System.Collections.Generic.List<CanaRails.Database.Entities.EntryMatcher>", "EntryMatchers", b1 =>
+                    b.OwnsMany("CanaRails.Database.Entities.EntryMatcher", "EntryMatchers", b1 =>
                         {
                             b1.Property<int>("EntryID")
                                 .HasColumnType("integer");
 
-                            b1.Property<int>("Capacity")
+                            b1.Property<int>("Id")
+                                .ValueGeneratedOnAdd()
                                 .HasColumnType("integer");
 
-                            b1.HasKey("EntryID");
+                            b1.Property<string>("Key")
+                                .IsRequired()
+                                .HasColumnType("text");
+
+                            b1.Property<string>("Value")
+                                .IsRequired()
+                                .HasColumnType("text");
+
+                            b1.HasKey("EntryID", "Id");
 
                             b1.ToTable("Entries");
 
@@ -232,8 +221,7 @@ namespace Database.Migrations
 
                     b.Navigation("App");
 
-                    b.Navigation("EntryMatchers")
-                        .IsRequired();
+                    b.Navigation("EntryMatchers");
                 });
 
             modelBuilder.Entity("CanaRails.Database.Entities.Image", b =>

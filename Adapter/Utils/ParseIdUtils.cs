@@ -26,10 +26,16 @@ public class ParseIdUtils
   {
     var match = Regex.Match(source, pattern);
     var matchId = match?.Groups[1].Value;
-    if (matchId != null)
+
+    // 尝试解析匹配 id，若解析失败则返回 null
+    try
     {
-      return int.Parse(matchId);
+      if (matchId != null)
+      {
+        return int.Parse(matchId);
+      }
     }
+    catch { }
 
     return null;
   }

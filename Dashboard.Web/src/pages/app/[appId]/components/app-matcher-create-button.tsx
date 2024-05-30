@@ -3,7 +3,6 @@ import {
   Button,
   FormControl,
   FormErrorMessage,
-  FormLabel,
   IconButton,
   Input,
   Modal,
@@ -19,13 +18,13 @@ import { useFormik } from "formik";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import * as y from "yup";
-import useAppMatchers from "../hooks/use-app-matchers";
-import { appMatcherClient } from "../../../../api";
+import useAppDetail from "../hooks/use-app-detail";
+import { appClient } from "../../../../api";
 
 export default function AppMatcherCreateButton() {
   const { appId } = useParams();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { mutate } = useAppMatchers();
+  const { mutate } = useAppDetail();
 
   const formik = useFormik({
     initialValues: {
@@ -35,11 +34,7 @@ export default function AppMatcherCreateButton() {
       host: y.string().required("Host不能为空"),
     }),
     async onSubmit(values) {
-      await appMatcherClient.create(Number(appId), {
-        host: values.host,
-        id: 0,
-        appID: Number(appId),
-      });
+      await appClient.createHostname(Number(appId), { hostname: values.host });
       onClose();
       mutate();
     },
@@ -59,17 +54,16 @@ export default function AppMatcherCreateButton() {
         <ModalOverlay />
         <ModalContent>
           <form onSubmit={formik.handleSubmit}>
-            <ModalHeader>创建应用匹配器</ModalHeader>
+            <ModalHeader>创建 Hostname</ModalHeader>
             <ModalCloseButton />
             <ModalBody>
               <FormControl isInvalid={!!formik.errors.host}>
-                <FormLabel htmlFor="create-matcher__host">Host</FormLabel>
                 <Input
                   name="host"
                   id="create-matcher__host"
                   readOnly={formik.isSubmitting}
                   type="text"
-                  placeholder="请输入 Host"
+                  placeholder="请输入 Hostname"
                   value={formik.values.host}
                   onChange={formik.handleChange}
                 />
