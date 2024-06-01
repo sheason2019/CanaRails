@@ -5,8 +5,6 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Database", "Database\Database.csproj", "{8BAD9D2D-61F0-413B-B4DA-754AD8C80870}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ingress", "Ingress\Ingress.csproj", "{D67ECCDE-8424-4856-828D-9AE677341A42}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dashboard", "Dashboard\Dashboard.csproj", "{C33A6D34-64E4-47F1-B9A7-4D4496B9F1C3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Adapter", "Adapter\Adapter.csproj", "{186D317D-B618-4073-868E-B0FCE7E1E963}"
@@ -26,10 +24,6 @@ Global
 		{8BAD9D2D-61F0-413B-B4DA-754AD8C80870}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8BAD9D2D-61F0-413B-B4DA-754AD8C80870}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8BAD9D2D-61F0-413B-B4DA-754AD8C80870}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D67ECCDE-8424-4856-828D-9AE677341A42}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D67ECCDE-8424-4856-828D-9AE677341A42}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D67ECCDE-8424-4856-828D-9AE677341A42}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D67ECCDE-8424-4856-828D-9AE677341A42}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C33A6D34-64E4-47F1-B9A7-4D4496B9F1C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C33A6D34-64E4-47F1-B9A7-4D4496B9F1C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C33A6D34-64E4-47F1-B9A7-4D4496B9F1C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
