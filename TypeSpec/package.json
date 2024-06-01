@@ -3,14 +3,16 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "compile": "tsp compile .",
+    "compile": "rimraf tsp-output && tsp compile .",
     "gen": "node ./script/gen-web.mjs && node ./script/gen-dotnet.mjs"
   },
   "dependencies": {
+    "@types/node": "^20.13.0",
     "@typespec/compiler": "latest",
     "@typespec/http": "latest",
     "@typespec/openapi3": "latest",
-    "@typespec/rest": "latest"
+    "@typespec/rest": "latest",
+    "rimraf": "^5.0.7"
   },
   "private": true,
   "devDependencies": {

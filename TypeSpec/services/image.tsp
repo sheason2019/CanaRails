@@ -14,12 +14,13 @@ namespace Image {
     id: int32;
     registry: string;
     imageName: string;
-    tagName: string;
-    appID: int32;
+    appId: int32;
+    ready: boolean;
+    createdAt: int64;
   }
 
   @post
-  op create(dto: ImageDTO): ImageDTO;
+  op create(@body dto: ImageDTO): ImageDTO;
 
   @get
   op list(@query appID: int32): ImageDTO[];
@@ -30,5 +31,5 @@ namespace Image {
 
   @get
   @route("{id}")
-  op findByID(@path id: int32): ImageDTO;
+  op findById(@path id: int32): ImageDTO;
 }
