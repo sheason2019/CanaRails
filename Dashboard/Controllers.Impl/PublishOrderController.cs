@@ -18,7 +18,7 @@ public class PublishOrderControllerImpl(
 
     // 异步执行工单
     // 这里的分离处理是为了方便后续在这一部分提供审批功能
-
+    service.ApplyOrder(order.ID);
 
     return Task.FromResult(order.ID);
   }

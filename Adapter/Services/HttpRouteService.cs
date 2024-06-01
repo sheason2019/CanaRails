@@ -1,4 +1,3 @@
-using System.Text.RegularExpressions;
 using CanaRails.Adapter.Models;
 using CanaRails.Adapter.Utils;
 using CanaRails.Database;
@@ -22,13 +21,16 @@ public class HttpRouteService(
   {
     // 查询当前应生效的 App
     var queryApp = from apps in context.Apps
-                   where apps.Entries
-                    .Select(e => e.CurrentPublishOrder != null)
-                    .Count() > 0
+                   join entries in context.Entries on apps.ID equals entries.App.ID
+                   join publishOrders in context.PublishOrders on entries.ID equals publishOrders.Entry.ID
+                   where publishOrders.Status == PublishOrderStatus.Approval
                    select apps;
     var validApps = queryApp
       .Include(e => e.Entries)
-      .ToArray();
+      .ThenInclude(e => e.PublishOrders)
+      .ToList();
+
+    var allApps = context.Apps.Include(e => e.Entries).ThenInclude(e => e.PublishOrders).ToList();
 
     // 查询集群中已生效的 HttpRoute
     var routes = client.ListNamespacedCustomObject<CustomResourceList<HttpRoute>>(
@@ -118,8 +120,12 @@ public class HttpRouteService(
           ],
           BackendRefs = [
             new HttpRouteRuleBackendRef {
-              Name = $"canarails-service-by-entry-{entry.CurrentPublishOrder!.ID}",
-              Port = entry.CurrentPublishOrder!.Port,
+              Name = $"canarails-service-by-entry-{entry.ID}",
+              Port = entry
+                .PublishOrders
+                .Where(order => order.Status == PublishOrderStatus.Approval)
+                .First()
+                .Port,
             },
           ],
         }).ToList(),

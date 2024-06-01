@@ -30,16 +30,9 @@ public class CanaRailsContext : DbContext
 
   protected override void OnModelCreating(ModelBuilder modelBuilder)
   {
-    modelBuilder.Entity<Entry>()
-      .HasOne(e => e.CurrentPublishOrder)
-      .WithOne(e => e.Entry)
-      .HasForeignKey<PublishOrder>();
-
     modelBuilder.Entity<App>()
       .HasOne(e => e.DefaultEntry)
-      .WithOne(e => e.App)
-      .HasForeignKey<Entry>();
-
+      .WithOne();
 
     modelBuilder.Entity<App>()
       .Property(e => e.Hostnames)
@@ -47,9 +40,9 @@ public class CanaRailsContext : DbContext
         v => JsonSerializer.Serialize(v, JsonSerializerOptions.Default),
         v => JsonSerializer.Deserialize<List<string>>(v, JsonSerializerOptions.Default) ?? new List<string>(),
         new ValueComparer<ICollection<string>>(
-          (c1, c2) => (c1 ?? new List<string>()).SequenceEqual((c2 ?? new List<string>())),
+          (c1, c2) => (c1 ?? new List<string>()).SequenceEqual(c2 ?? new List<string>()),
           c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),
-          c => (ICollection<string>)c.ToList()));
+          c => c.ToList()));
 
     modelBuilder.Entity<Entry>().OwnsMany(
         e => e.EntryMatchers, builder =>

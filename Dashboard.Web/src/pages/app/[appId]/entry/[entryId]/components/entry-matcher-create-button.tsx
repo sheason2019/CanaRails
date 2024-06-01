@@ -17,6 +17,7 @@ import { useFormik } from "formik";
 import * as y from "yup";
 import { useParams } from "react-router-dom";
 import useEntryMatcherList from "../hook/use-entry-matcher-list";
+import { entryClient } from "../../../../../../api";
 
 export default function EntryMatcherCreateButton() {
   const { entryId } = useParams();
@@ -32,7 +33,10 @@ export default function EntryMatcherCreateButton() {
       value: y.string().required("Value 值不能为空"),
     }),
     async onSubmit(values) {
-      throw new Error("Unimplemented Error");
+      await entryClient.createMatcher(Number(entryId), {
+        key: values.key,
+        value: values.value,
+      });
       mutate();
       onClose();
     },

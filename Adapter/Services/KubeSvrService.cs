@@ -17,10 +17,12 @@ public class KubeSvrService(
   public void ApplyServiceAndDeployment()
   {
     var queryEntries = from entries in context.Entries
-                       where entries.CurrentPublishOrder != null
+                       join publishOrders in context.PublishOrders on entries.ID equals publishOrders.Entry.ID
+                       where publishOrders.Status == PublishOrderStatus.Approval
                        select entries;
     var validEntries = queryEntries
-      .Include(e => e.CurrentPublishOrder)
+      .Include(e => e.PublishOrders)
+      .ThenInclude(e => e.Image)
       .ToArray();
 
     var svrList = client.ListNamespacedService(
@@ -75,22 +77,30 @@ public class KubeSvrService(
 
   public void ApplyServiceByEntry(Entry entry)
   {
+    var curOrder = entry
+      .PublishOrders
+      .Where(e => e.Status == PublishOrderStatus.Approval)
+      .First();
+
     // 将 Entry 映射为 Kubenetes Service
     var svr = new V1Service
     {
-      Metadata = {
+      Metadata = new V1ObjectMeta
+      {
         Name = $"canarails-service-by-entry-{entry.ID}",
       },
-      Spec = {
-        Selector = {
+      Spec = new V1ServiceSpec
+      {
+        Selector = new Dictionary<string, string>
+        {
           {"canarails-deployment-by-entry",$"{entry.ID}"}
         },
         Ports = [
           new V1ServicePort {
             Name = "main-expose",
             Protocol = "TCP",
-            Port = entry.CurrentPublishOrder!.Port,
-            TargetPort = entry.CurrentPublishOrder!.Port,
+            Port = curOrder.Port,
+            TargetPort = curOrder.Port,
           }
         ],
       },
@@ -122,46 +132,60 @@ public class KubeSvrService(
       throw;
     }
   }
-  
+
   public void ApplyDeploymentByEntry(Entry entry)
   {
-    var deploy = new V1Deployment
+    var curOrder = entry
+      .PublishOrders
+      .Where(e => e.Status == PublishOrderStatus.Approval)
+      .First();
+
+    V1Deployment deploy = new()
     {
-      Metadata = {
+      Metadata = new V1ObjectMeta
+      {
         Name = $"canarails-deployment-by-entry-{entry.ID}",
-        Labels = {
-          {"canarails-deployment-by-entry", $"{entry.ID}"},
+        Labels = new Dictionary<string, string>
+        {
+          {"canarails-deployment-by-entry", entry.ID.ToString()},
         },
       },
-      Spec = {
-        Replicas = entry.CurrentPublishOrder!.Replica,
-        Selector = {
-          MatchLabels = {
-            {"canarails-deployment-by-entry", $"{entry.ID}"},
+      Spec = new V1DeploymentSpec
+      {
+        Replicas = curOrder.Replica,
+        Selector = new V1LabelSelector
+        {
+          MatchLabels = new Dictionary<string, string>
+          {
+            {"canarails-deployment-by-entry", entry.ID.ToString()},
           },
         },
-        Template = {
-          Metadata = {
-            Labels = {
-              {"canarails-deployment-by-entry", $"{entry.ID}"},
+        Template = new V1PodTemplateSpec
+        {
+          Metadata = new V1ObjectMeta
+          {
+            Labels = new Dictionary<string, string>
+            {
+              {"canarails-deployment-by-entry", entry.ID.ToString()},
             },
           },
-          Spec = {
+          Spec = new V1PodSpec
+          {
             Containers = [
               new V1Container {
-                Name = entry.CurrentPublishOrder!.Image.ImageName,
-                Image = entry.CurrentPublishOrder!.Image.ImageName,
+                Name = $"image-{curOrder.Image.ID}",
+                Image = curOrder.Image.ImageName,
                 Ports = [
                   new V1ContainerPort
                   {
-                    ContainerPort = 80,
+                    ContainerPort = curOrder.Port,
                   },
                 ],
               },
             ],
           },
         },
-      }
+      },
     };
 
     try

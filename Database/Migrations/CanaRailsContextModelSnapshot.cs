@@ -33,6 +33,9 @@ namespace Database.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<int?>("DefaultEntryId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("text");
@@ -46,6 +49,9 @@ namespace Database.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("ID");
+
+                    b.HasIndex("DefaultEntryId")
+                        .IsUnique();
 
                     b.ToTable("Apps");
                 });
@@ -84,7 +90,9 @@ namespace Database.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    b.Property<int?>("AppID")
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ID"));
+
+                    b.Property<int>("AppID")
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("CreatedAt")
@@ -136,10 +144,12 @@ namespace Database.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ID"));
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int?>("EntryID")
+                    b.Property<int>("EntryID")
                         .HasColumnType("integer");
 
                     b.Property<int>("ImageID")
@@ -166,6 +176,15 @@ namespace Database.Migrations
                     b.ToTable("PublishOrders");
                 });
 
+            modelBuilder.Entity("CanaRails.Database.Entities.App", b =>
+                {
+                    b.HasOne("CanaRails.Database.Entities.Entry", "DefaultEntry")
+                        .WithOne()
+                        .HasForeignKey("CanaRails.Database.Entities.App", "DefaultEntryId");
+
+                    b.Navigation("DefaultEntry");
+                });
+
             modelBuilder.Entity("CanaRails.Database.Entities.Container", b =>
                 {
                     b.HasOne("CanaRails.Database.Entities.PublishOrder", "PublishOrder")
@@ -179,13 +198,9 @@ namespace Database.Migrations
 
             modelBuilder.Entity("CanaRails.Database.Entities.Entry", b =>
                 {
-                    b.HasOne("CanaRails.Database.Entities.App", null)
-                        .WithMany("Entries")
-                        .HasForeignKey("AppID");
-
                     b.HasOne("CanaRails.Database.Entities.App", "App")
-                        .WithOne("DefaultEntry")
-                        .HasForeignKey("CanaRails.Database.Entities.Entry", "ID")
+                        .WithMany("Entries")
+                        .HasForeignKey("AppID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -234,13 +249,9 @@ namespace Database.Migrations
 
             modelBuilder.Entity("CanaRails.Database.Entities.PublishOrder", b =>
                 {
-                    b.HasOne("CanaRails.Database.Entities.Entry", null)
-                        .WithMany("PublishOrders")
-                        .HasForeignKey("EntryID");
-
                     b.HasOne("CanaRails.Database.Entities.Entry", "Entry")
-                        .WithOne("CurrentPublishOrder")
-                        .HasForeignKey("CanaRails.Database.Entities.PublishOrder", "ID")
+                        .WithMany("PublishOrders")
+                        .HasForeignKey("EntryID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -257,8 +268,6 @@ namespace Database.Migrations
 
             modelBuilder.Entity("CanaRails.Database.Entities.App", b =>
                 {
-                    b.Navigation("DefaultEntry");
-
                     b.Navigation("Entries");
 
                     b.Navigation("Images");
@@ -266,8 +275,6 @@ namespace Database.Migrations
 
             modelBuilder.Entity("CanaRails.Database.Entities.Entry", b =>
                 {
-                    b.Navigation("CurrentPublishOrder");
-
                     b.Navigation("PublishOrders");
                 });
 

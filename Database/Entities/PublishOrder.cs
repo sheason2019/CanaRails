@@ -5,6 +5,7 @@ public enum PublishOrderStatus
   Pending, // 正在等待处理
   Approval, // 变更已完成
   Rejct, // 变更被拒绝
+  Close, // 变更已关闭
 }
 
 public class PublishOrder : Entity

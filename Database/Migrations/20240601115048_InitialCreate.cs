@@ -21,6 +21,7 @@ namespace Database.Migrations
                     Name = table.Column<string>(type: "text", nullable: false),
                     Description = table.Column<string>(type: "text", nullable: false),
                     Hostnames = table.Column<string>(type: "text", nullable: false),
+                    DefaultEntryId = table.Column<int>(type: "integer", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
@@ -32,10 +33,11 @@ namespace Database.Migrations
                 name: "Entries",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "integer", nullable: false),
+                    ID = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Name = table.Column<string>(type: "text", nullable: false),
                     Description = table.Column<string>(type: "text", nullable: false),
-                    AppID = table.Column<int>(type: "integer", nullable: true),
+                    AppID = table.Column<int>(type: "integer", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     EntryMatchers = table.Column<string>(type: "jsonb", nullable: true)
                 },
@@ -45,11 +47,6 @@ namespace Database.Migrations
                     table.ForeignKey(
                         name: "FK_Entries_Apps_AppID",
                         column: x => x.AppID,
-                        principalTable: "Apps",
-                        principalColumn: "ID");
-                    table.ForeignKey(
-                        name: "FK_Entries_Apps_ID",
-                        column: x => x.ID,
                         principalTable: "Apps",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
@@ -80,13 +77,14 @@ namespace Database.Migrations
                 name: "PublishOrders",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "integer", nullable: false),
+                    ID = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    EntryID = table.Column<int>(type: "integer", nullable: false),
                     ImageID = table.Column<int>(type: "integer", nullable: false),
                     Port = table.Column<int>(type: "integer", nullable: false),
                     Replica = table.Column<int>(type: "integer", nullable: false),
                     Status = table.Column<int>(type: "integer", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    EntryID = table.Column<int>(type: "integer", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
@@ -95,11 +93,6 @@ namespace Database.Migrations
                     table.ForeignKey(
                         name: "FK_PublishOrders_Entries_EntryID",
                         column: x => x.EntryID,
-                        principalTable: "Entries",
-                        principalColumn: "ID");
-                    table.ForeignKey(
-                        name: "FK_PublishOrders_Entries_ID",
-                        column: x => x.ID,
                         principalTable: "Entries",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
@@ -134,6 +127,12 @@ namespace Database.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Apps_DefaultEntryId",
+                table: "Apps",
+                column: "DefaultEntryId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Containers_PublishOrderID",
                 table: "Containers",
                 column: "PublishOrderID");
@@ -157,11 +156,22 @@ namespace Database.Migrations
                 name: "IX_PublishOrders_ImageID",
                 table: "PublishOrders",
                 column: "ImageID");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Apps_Entries_DefaultEntryId",
+                table: "Apps",
+                column: "DefaultEntryId",
+                principalTable: "Entries",
+                principalColumn: "ID");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropForeignKey(
+                name: "FK_Apps_Entries_DefaultEntryId",
+                table: "Apps");
+
             migrationBuilder.DropTable(
                 name: "Containers");
 
@@ -169,10 +179,10 @@ namespace Database.Migrations
                 name: "PublishOrders");
 
             migrationBuilder.DropTable(
-                name: "Entries");
+                name: "Images");
 
             migrationBuilder.DropTable(
-                name: "Images");
+                name: "Entries");
 
             migrationBuilder.DropTable(
                 name: "Apps");

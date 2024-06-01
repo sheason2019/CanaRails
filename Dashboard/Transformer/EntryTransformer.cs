@@ -12,6 +12,14 @@ public static class EntryTransformer
       Id = entry.ID,
       Name = entry.Name,
       Description = entry.Description,
+      Matchers = entry
+        .EntryMatchers
+        .Select(e => new EntryMatcherDTO
+        {
+          Key = e.Key,
+          Value = e.Value,
+        })
+        .ToList(),
       AppId = entry.App.ID,
     };
   }
@@ -23,6 +31,14 @@ public static class EntryTransformer
       ID = dto.Id,
       Name = dto.Name,
       Description = dto.Description,
+      EntryMatchers = dto
+        .Matchers
+        .Select(e => new EntryMatcher
+        {
+          Key = e.Key,
+          Value = e.Value,
+        })
+        .ToList(),
       App = app,
     };
   }

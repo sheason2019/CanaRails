@@ -7,7 +7,6 @@ public class Entry : Entity
   public required App App { get; set; }
   public List<EntryMatcher> EntryMatchers { get; set; } = [];
   public ICollection<PublishOrder> PublishOrders { get; set; } = [];
-  public PublishOrder? CurrentPublishOrder { get; set; }
 }
 
 public class EntryMatcher

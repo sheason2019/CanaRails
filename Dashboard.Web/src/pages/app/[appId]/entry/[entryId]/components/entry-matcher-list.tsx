@@ -1,17 +1,14 @@
 import { Alert, AlertIcon, Flex, Heading, Stack } from "@chakra-ui/react";
-import EntryMatcherListLoading from "./entry-matcher-list-loading";
-import useEntryMatcherList from "../hook/use-entry-matcher-list";
 import { useMemo } from "react";
 import EntryMatcherListItem from "./entry-matcher-list-item";
 import EntryMatcherCreateButton from "./entry-matcher-create-button";
+import useEntryDetail from "../hook/use-entry-detail";
 
 export default function EntryMatcherList() {
-  const { isLoading, data } = useEntryMatcherList();
+  const { data } = useEntryDetail();
 
   const renderer = useMemo(() => {
-    if (isLoading) return <EntryMatcherListLoading />;
-
-    if (!data?.length) {
+    if (!data?.matchers.length) {
       return (
         <Alert status="warning">
           <AlertIcon />
@@ -22,12 +19,12 @@ export default function EntryMatcherList() {
 
     return (
       <>
-        {data.map((item) => (
+        {data.matchers.map((item) => (
           <EntryMatcherListItem key={item.id} matcher={item} isLoaded />
         ))}
       </>
     );
-  }, [data, isLoading]);
+  }, [data]);
 
   return (
     <>

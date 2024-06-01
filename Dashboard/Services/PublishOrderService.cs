@@ -44,7 +44,6 @@ public class PublishOrderService(
       select orders;
     var order = queryOrder.Include(e => e.Entry).First();
 
-    order.Entry.CurrentPublishOrder = order;
     order.Status = PublishOrderStatus.Approval;
     context.SaveChanges();
 

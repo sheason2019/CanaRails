@@ -1,10 +1,11 @@
 using CanaRails.Adapter.Services;
+using CanaRails.Database;
 using k8s;
 
-namespace CanaRails.ContainerAdapter.Test;
+namespace CanaRails.Adapter.Test;
 
 [TestClass]
-public class UnitTest1
+public class ApplyTest
 {
   [TestMethod]
   public void TestUpdateGateway()
@@ -17,5 +18,12 @@ public class UnitTest1
     var gatewayService = new GatewayService(client);
 
     gatewayService.ApplyGateway();
+  }
+
+  [TestMethod]
+  public void TestApply()
+  {
+    var adapter = new ContainerAdapter(new CanaRailsContext());
+    adapter.Apply();
   }
 }
