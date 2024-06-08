@@ -15,10 +15,10 @@ public class CanaRailsContext : DbContext
 
   protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
   {
-    var host = Environment.GetEnvironmentVariable("Host");
-    var dbname = Environment.GetEnvironmentVariable("Database");
-    var username = Environment.GetEnvironmentVariable("Username");
-    var password = Environment.GetEnvironmentVariable("Password");
+    var host = Environment.GetEnvironmentVariable("CANARAILS_DBHOST");
+    var dbname = Environment.GetEnvironmentVariable("CANARAILS_DBNAME");
+    var username = Environment.GetEnvironmentVariable("CANARAILS_DBUSER");
+    var password = Environment.GetEnvironmentVariable("CANARAILS_DBPSWD");
 
     optionsBuilder.UseNpgsql(
         $"Host={host};" +
