@@ -1,5 +1,5 @@
 import { Card, CardBody, Flex, Skeleton, Stack } from "@chakra-ui/react";
-import { EntryMatcherDTO } from "../../../../../../../api-client/EntryMatcher.client";
+import { EntryMatcherDTO } from "../../../../../../../api-client/Entry.client";
 
 interface Props {
   matcher: EntryMatcherDTO;

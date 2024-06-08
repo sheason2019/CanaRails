@@ -6,8 +6,10 @@ const LOADING_IMAGE: ImageDTO = {
   id: 0,
   registry: "LOADING",
   imageName: "LOADING",
-  tagName: "LOADING",
   appID: 0,
+  appId: 0,
+  ready: false,
+  createdAt: 0,
 };
 
 export default function AppImageListLoading() {
