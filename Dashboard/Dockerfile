@@ -1,10 +1,10 @@
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
 
 # Postgres 数据库使用的相关环境变量
-ENV Host ""
-ENV Database ""
-ENV Username ""
-ENV Password ""
+ENV CANARAILS_DBHOST ""
+ENV CANARAILS_DBNAME ""
+ENV CANARAILS_DBUSER ""
+ENV CANARAILS_DBPSWD ""
 
 WORKDIR /app
 

@@ -72,7 +72,7 @@ public class Program
 
   public static Task Main()
   {
-    return CreateApplication().RunAsync("http://localhost:8080");
+    return CreateApplication().RunAsync("http://*:8080");
   }
 }
 
