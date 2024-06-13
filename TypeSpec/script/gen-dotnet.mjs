@@ -5,7 +5,13 @@ import { findNamespaces } from "./gen-common.mjs";
 
 function main() {
   console.log("正在移除旧版本 .NET 产物");
-  fs.rmSync("../Dashboard/Controllers", { recursive: true });
+  if (fs.existsSync("../Dashboard/Controllers")) {
+    fs.rmSync("../Dashboard/Controllers", { recursive: true });
+  }
+
+  if (!fs.existsSync("../Dashboard/Controllers")) {
+    fs.mkdirSync("../Dashboard/Controllers");
+  }
 
   const namespaces = findNamespaces();
   console.log("正在生成 .NET 控制器", namespaces);
