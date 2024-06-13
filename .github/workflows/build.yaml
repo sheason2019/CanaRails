@@ -36,6 +36,7 @@ jobs:
       - name: BuildImageAndPushToDockerIO
         run: |
           cd Dashboard
-          docker build . -t sheason/canarails:${{ github.sha }}
+          docker build . -t sheason/canarails:${{ github.sha }} -t sheason/canarails:latest
           docker login --username=${{ secrets.DOCKER_USERNAME }} --password ${{ secrets.DOCKER_PASSWORD }}
           docker push sheason/canarails:${{ github.sha }}
+          docker push sheason/canarails:latest
