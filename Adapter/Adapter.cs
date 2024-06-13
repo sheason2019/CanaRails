@@ -13,9 +13,7 @@ public class ContainerAdapter
 
   public ContainerAdapter(CanaRailsContext context)
   {
-    client = new(KubernetesClientConfiguration.BuildConfigFromConfigFile(
-      Environment.GetEnvironmentVariable("KUBECONFIG"))
-    );
+    client = new(KubernetesClientConfiguration.InClusterConfig());
     gatewaySvr = new(client);
     httpRouteSvr = new(client, context);
     kubeSvr = new(client, context);

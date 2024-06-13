@@ -29,8 +29,9 @@ export default function NewEntryForm() {
       const resp = await entryClient.create({
         ...values,
         id: 0,
-        appID: Number(appId),
         deployedAt: 0,
+        matchers: [],
+        appId: Number(appId),
       });
       navigate(`/app/${appId}/entry/${resp.id}`);
     },

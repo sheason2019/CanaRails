@@ -18,18 +18,18 @@ CanaRails 依赖于 Postgres 数据库，在启动项目前需要设置以下环
 
 ```pwsh
 # Powershell
-$env:Host="<host>:<port>"
-$env:Database="<db_name>"
-$env:Username="<db_username>"
-$env:Password="<db_password>"
+$env:CANARAILS_DBHOST="<host>:<port>"
+$env:CANARAILS_DBNAME="<db_name>"
+$env:CANARAILS_DBUSER="<db_username>"
+$env:CANARAILS_DBPSWD="<db_password>"
 ```
 
 ```sh
 # bash
-export Host="<host>:<port>"
-export Database="<db_name>"
-export Username="<db_username>"
-export Password="<db_password>"
+export CANARAILS_DBHOST="<host>:<port>"
+export CANARAILS_DBNAME="<db_name>"
+export CANARAILS_DBUSER="<db_username>"
+export CANARAILS_DBPSWD="<db_password>"
 ```
 
 # 应用分层

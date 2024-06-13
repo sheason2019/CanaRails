@@ -8,6 +8,7 @@ using CanaRails.Controllers.Entry;
 using CanaRails.Controllers.Container;
 using CanaRails.Adapter;
 using CanaRails.Controllers.PublishOrder;
+using Microsoft.EntityFrameworkCore;
 
 namespace CanaRails.Manage;
 
@@ -41,8 +42,15 @@ public class Program
 
     var app = builder.Build();
 
-    // 尝试连接至 Kubernetes Api 如果没有权限对 Kubernetes 进行操作，则抛出异常中断服务
+    // Database auto migrate
+    using (var scope = app.Services.CreateScope())
     {
+      // 服务启动时执行数据库迁移逻辑
+      var db = scope.ServiceProvider.GetRequiredService<CanaRailsContext>();
+      db.Database.Migrate();
+
+      // 尝试连接至 Kubernetes Api 应用当前数据库中存储的状态
+      // 此时如果没有权限对 Kubernetes 进行操作，则会抛出异常并中断服务
       var adapter = app.Services.GetRequiredService<ContainerAdapter>();
       adapter.Apply();
     }
@@ -64,7 +72,7 @@ public class Program
 
   public static Task Main()
   {
-    return CreateApplication().RunAsync("http://localhost:8080");
+    return CreateApplication().RunAsync("http://*:8080");
   }
 }
 

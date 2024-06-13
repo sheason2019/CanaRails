@@ -6,8 +6,9 @@ const LOADING_ENTRY: EntryDTO = {
   id: 0,
   name: "LOADING",
   description: "LOADING",
-  appID: 0,
   deployedAt: 0,
+  matchers: [],
+  appId: 0,
 };
 
 export default function EntryListLoading() {
