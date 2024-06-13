@@ -5,7 +5,13 @@ import { findNamespaces } from "./gen-common.mjs";
 
 function main() {
   console.log("正在移除旧版本 Web 产物");
-  fs.rmSync("../Dashboard.Web/api-client", { recursive: true });
+  if (fs.existsSync("../Dashboard.Web/api-client")) {
+    fs.rmSync("../Dashboard.Web/api-client", { recursive: true });
+  }
+
+  if (!fs.existsSync("../Dashboard.Web/api-client")) {
+    fs.mkdirSync("../Dashboard.Web/api-client");
+  }
 
   const namespaces = findNamespaces();
   console.log("正在生成 Web 请求库", namespaces);
