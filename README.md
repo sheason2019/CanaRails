@@ -77,3 +77,11 @@ CanaRails 的设计可以分为三个主要层级：
    ```bash
    kubectl create namespace canarails
    ```
+
+为 containerd 配置国内镜像源，以在无网络代理的环境下拉取 istiod 镜像
+https://docs.rancher.cn/docs/k3s/advanced/_index#%E9%85%8D%E7%BD%AE-containerd
+
+资源受限环境下指定 istiod 需求的资源，以避免 istiod Deployment 被 k3s 驱逐。
+```bash
+istioctl install --set profile=minimal --set values.pilot.resources.requests.memory=512Mi -y
+```
