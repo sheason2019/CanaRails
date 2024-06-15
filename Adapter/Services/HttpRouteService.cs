@@ -26,11 +26,10 @@ public class HttpRouteService(
                    where publishOrders.Status == PublishOrderStatus.Approval
                    select apps;
     var validApps = queryApp
+      .Include(e => e.DefaultEntry)
       .Include(e => e.Entries)
       .ThenInclude(e => e.PublishOrders)
       .ToList();
-
-    var allApps = context.Apps.Include(e => e.Entries).ThenInclude(e => e.PublishOrders).ToList();
 
     // 查询集群中已生效的 HttpRoute
     var routes = client.ListNamespacedCustomObject<CustomResourceList<HttpRoute>>(
@@ -50,8 +49,10 @@ public class HttpRouteService(
 
     foreach (var app in validApps)
     {
-      deleteSet.Remove($"canarails-http-route-by-app-{app.ID}");
-      ApplyHttpRouteByApp(app);
+      if (ApplyHttpRouteByApp(app))
+      {
+        deleteSet.Remove($"canarails-http-route-by-app-{app.ID}");
+      }
     }
 
     foreach (var name in deleteSet)
@@ -65,18 +66,32 @@ public class HttpRouteService(
       );
     }
   }
-  public void ApplyHttpRouteByApp(App app)
+
+  // 尝试应用 App
+  // 返回值为 true 时表示应用成功，为 false 时表示应用失败
+  // 应用失败时应当移除该 HTTPRoute
+  public bool ApplyHttpRouteByApp(App app)
   {
-    // 每个 App 生成一个 HTTPRoute
-    // 将 App 注册的 Hostname 填入 Host 字段
-    // 将 Entry 构成的小流量泳道记录至 Rules 字段
+    var routeName = $"canarails-http-route-by-app-{app.ID}";
+
+    var validEntries = app.Entries
+      .Where(e => e.EntryMatchers.Count > 0 || e.ID == app.DefaultEntryId)
+      .ToList();
+
+    // 当 App 无法访问时，尝试移除此 App 的 HTTPRoute
+    if (app.Entries.Count == 0 || app.Hostnames.Count == 0 || validEntries.Count == 0)
+    {
+      return false;
+    }
+
+    // 根据 App 属性生成 HTTPRoute
     var route = new HttpRoute
     {
       ApiVersion = "gateway.networking.k8s.io/v1",
       Kind = "HTTPRoute",
       Metadata = new V1ObjectMeta
       {
-        Name = $"canarails-http-route-by-app-{app.ID}",
+        Name = routeName,
         NamespaceProperty = Constant.Namespace,
       },
       Spec = new HttpRouteSpec
@@ -88,9 +103,9 @@ public class HttpRouteService(
           },
         ],
         Hostnames = app.Hostnames,
-        Rules = app.Entries.Select(entry => new HttpRouteRule
+        Rules = validEntries.Select(entry => new HttpRouteRule
         {
-          Matches = [
+          Matches = entry.ID == app.DefaultEntryId ? null : [
             new HttpRouteRuleMatch
             {
               Headers = entry.EntryMatchers.Select(em => new HTTPHeaderMatch
@@ -104,19 +119,34 @@ public class HttpRouteService(
           Filters = [
             new HttpRouteRuleFilter {
               Type = "RequestHeaderModifier",
-              RequestHeaderModifier = new HttpRouteRuleRequestHeaderModifier {
+              RequestHeaderModifier = new HTTPHeaderFilter {
                 Add = [
-                  new HttpRouteRuleRequestHeaderModifierAdd {
+                  new HTTPHeader {
                     Name = "x-canarails-entry",
                     Value = entry.ID.ToString(),
                   },
-                  new HttpRouteRuleRequestHeaderModifierAdd {
+                  new HTTPHeader {
                     Name = "x-canarails-app",
                     Value = app.ID.ToString(),
                   },
                 ],
               },
             },
+            new HttpRouteRuleFilter {
+              Type = "ResponseHeaderModifier",
+              ResponseHeaderModifier = new HTTPHeaderFilter {
+                Add = [
+                  new HTTPHeader {
+                    Name = "x-canarails-entry",
+                    Value = entry.ID.ToString(),
+                  },
+                  new HTTPHeader {
+                    Name = "x-canarails-app",
+                    Value = app.ID.ToString(),
+                  },
+                ],
+              },
+            }
           ],
           BackendRefs = [
             new HttpRouteRuleBackendRef {
@@ -124,8 +154,8 @@ public class HttpRouteService(
               Port = entry
                 .PublishOrders
                 .Where(order => order.Status == PublishOrderStatus.Approval)
-                .First()
-                .Port,
+                .FirstOrDefault()
+                ?.Port ?? 80,
             },
           ],
         }).ToList(),
@@ -140,5 +170,6 @@ public class HttpRouteService(
       plural,
       route.Metadata.Name
     );
+    return true;
   }
 }

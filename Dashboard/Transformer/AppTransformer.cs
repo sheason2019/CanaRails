@@ -13,6 +13,7 @@ public static class AppTransformer
       Name = app.Name,
       Description = app.Description,
       Hostnames = app.Hostnames,
+      DefaultEntryId = app.DefaultEntry?.ID,
     };
   }
 

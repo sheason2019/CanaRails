@@ -82,15 +82,18 @@ public class HttpRouteRuleFilter
 
   [JsonPropertyName("requestHeaderModifier")]
   public object? RequestHeaderModifier { get; set; }
+
+  [JsonPropertyName("responseHeaderModifier")]
+  public object? ResponseHeaderModifier { get; set; }
 }
 
-public class HttpRouteRuleRequestHeaderModifier
+public class HTTPHeaderFilter
 {
   [JsonPropertyName("add")]
-  public List<HttpRouteRuleRequestHeaderModifierAdd>? Add { get; set; }
+  public List<HTTPHeader>? Add { get; set; }
 }
 
-public class HttpRouteRuleRequestHeaderModifierAdd
+public class HTTPHeader
 {
   [JsonPropertyName("name")]
   public string? Name { get; set; }

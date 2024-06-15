@@ -53,7 +53,7 @@ namespace Database.Migrations
                     b.HasIndex("DefaultEntryId")
                         .IsUnique();
 
-                    b.ToTable("Apps");
+                    b.ToTable("Apps", (string)null);
                 });
 
             modelBuilder.Entity("CanaRails.Database.Entities.Container", b =>
@@ -81,7 +81,7 @@ namespace Database.Migrations
 
                     b.HasIndex("PublishOrderID");
 
-                    b.ToTable("Containers");
+                    b.ToTable("Containers", (string)null);
                 });
 
             modelBuilder.Entity("CanaRails.Database.Entities.Entry", b =>
@@ -110,7 +110,7 @@ namespace Database.Migrations
 
                     b.HasIndex("AppID");
 
-                    b.ToTable("Entries");
+                    b.ToTable("Entries", (string)null);
                 });
 
             modelBuilder.Entity("CanaRails.Database.Entities.Image", b =>
@@ -135,7 +135,7 @@ namespace Database.Migrations
 
                     b.HasIndex("AppID");
 
-                    b.ToTable("Images");
+                    b.ToTable("Images", (string)null);
                 });
 
             modelBuilder.Entity("CanaRails.Database.Entities.PublishOrder", b =>
@@ -173,7 +173,7 @@ namespace Database.Migrations
 
                     b.HasIndex("ImageID");
 
-                    b.ToTable("PublishOrders");
+                    b.ToTable("PublishOrders", (string)null);
                 });
 
             modelBuilder.Entity("CanaRails.Database.Entities.App", b =>
@@ -204,7 +204,7 @@ namespace Database.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.OwnsMany("CanaRails.Database.Entities.EntryMatcher", "EntryMatchers", b1 =>
+                    b.OwnsMany("CanaRails.Database.Entities.Entry.EntryMatchers#CanaRails.Database.Entities.EntryMatcher", "EntryMatchers", b1 =>
                         {
                             b1.Property<int>("EntryID")
                                 .HasColumnType("integer");
@@ -223,7 +223,7 @@ namespace Database.Migrations
 
                             b1.HasKey("EntryID", "Id");
 
-                            b1.ToTable("Entries");
+                            b1.ToTable("Entries", (string)null);
 
                             b1.ToJson("EntryMatchers");
 

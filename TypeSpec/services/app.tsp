@@ -17,6 +17,7 @@ model AppDTO {
   id: int32;
   name: string;
   hostnames: string[];
+  defaultEntryId: int32 | null;
   description: string;
 }
 
@@ -37,3 +38,7 @@ op createHostname(@path id: int32, hostname: string): void;
 @delete
 @route("{id}/hostname")
 op deleteHostname(@path id: int32, @query hostname: string): void;
+
+@put
+@route("{id}/default-entry")
+op putDefaultEntry(@path id: int32, @body entryId: int32): void;

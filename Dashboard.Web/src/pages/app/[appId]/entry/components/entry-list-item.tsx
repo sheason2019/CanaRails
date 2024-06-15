@@ -1,13 +1,42 @@
-import { Card, CardBody, Flex, Skeleton, Text } from "@chakra-ui/react";
+import {
+  Card,
+  CardBody,
+  Flex,
+  IconButton,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
+  Skeleton,
+  Tag,
+  Text,
+} from "@chakra-ui/react";
 import { EntryDTO } from "../../../../../../api-client/Entry.client";
 import { Link } from "react-router-dom";
+import { HamburgerIcon } from "@chakra-ui/icons";
+import useAppDetail from "../../hooks/use-app-detail";
+import useSWRMutation from "swr/mutation";
+import { appClient } from "../../../../../api";
 
 interface Props {
   entry: EntryDTO;
+  isDefault: boolean;
   isLoaded: boolean;
 }
 
-export default function EntryListItem({ entry, isLoaded }: Props) {
+export default function EntryListItem({ entry, isDefault, isLoaded }: Props) {
+  const { data, mutate } = useAppDetail();
+
+  const { trigger } = useSWRMutation(
+    ["put-default-entry"],
+    async () => appClient.putDefaultEntry(data!.id, entry.id),
+    {
+      onSuccess() {
+        mutate();
+      },
+    }
+  );
+
   return (
     <Card
       as={Link}
@@ -17,9 +46,30 @@ export default function EntryListItem({ entry, isLoaded }: Props) {
     >
       <Skeleton isLoaded={isLoaded}>
         <CardBody>
-          <Flex gap={2} alignItems="baseline" className="mb-2">
-            <p className="text-lg font-bold">{entry.name}</p>
-            <p className="text-gray-500 font-bold text-sm">ID {entry.id}</p>
+          <Flex gap={2} alignItems="center" className="mb-2">
+            {isDefault && <Tag colorScheme="blue">默认入口</Tag>}
+            <Flex alignItems="baseline" gap={2} flexGrow={1}>
+              <p className="text-lg font-bold">{entry.name}</p>
+              <p className="text-gray-500 font-bold text-sm">ID {entry.id}</p>
+            </Flex>
+            <object
+              onClick={(e) => {
+                e.stopPropagation();
+                e.preventDefault();
+              }}
+            >
+              <Menu>
+                <MenuButton
+                  as={IconButton}
+                  aria-label="entry-menu"
+                  icon={<HamburgerIcon />}
+                  variant="ghost"
+                />
+                <MenuList>
+                  <MenuItem onClick={() => trigger()}>设置为默认入口</MenuItem>
+                </MenuList>
+              </Menu>
+            </object>
           </Flex>
           <Text>{entry.description}</Text>
         </CardBody>
