@@ -1,17 +1,12 @@
-import useSWR from "swr";
-import { entryClient } from "../../../../../api";
-import { useParams } from "react-router-dom";
 import EntryListLoading from "./entry-list-loading";
 import { Alert, AlertIcon, VStack } from "@chakra-ui/react";
 import EntryListItem from "./entry-list-item";
 import useAppDetail from "../../hooks/use-app-detail";
+import useAppEntryList from "../../hooks/use-app-entry-list";
 
 export default function EntryList() {
-  const { appId } = useParams();
   const { data: appDetail } = useAppDetail();
-  const { data, isLoading } = useSWR(["entry-list", appId], () =>
-    entryClient.list(Number(appId))
-  );
+  const { data, isLoading } = useAppEntryList();
 
   if (isLoading) {
     return <EntryListLoading />;

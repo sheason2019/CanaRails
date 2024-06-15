@@ -5,7 +5,6 @@ using CanaRails.Exceptions;
 using CanaRails.Controllers.App;
 using CanaRails.Controllers.Image;
 using CanaRails.Controllers.Entry;
-using CanaRails.Controllers.Container;
 using CanaRails.Adapter;
 using CanaRails.Controllers.PublishOrder;
 using Microsoft.EntityFrameworkCore;
@@ -57,7 +56,6 @@ public class Program
     builder.Services.AddScoped<IAppController, AppControllerImpl>();
     builder.Services.AddScoped<IImageController, ImageControllerImpl>();
     builder.Services.AddScoped<IEntryController, EntryControllerImpl>();
-    builder.Services.AddScoped<IContainerController, ContainerControllerImpl>();
     builder.Services.AddScoped<IPublishOrderController, PublishOrderControllerImpl>();
 
     builder.Services.AddControllers(options => { options.Filters.Add<HttpStandardExceptionFilter>(); });

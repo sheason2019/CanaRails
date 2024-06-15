@@ -1,15 +1,12 @@
 import { Stack } from "@chakra-ui/react";
-import useSWR from "swr";
-import { appClient } from "../../../api";
 import AppListLoading from "./app-list-loading";
 import { useMemo } from "react";
 import AppListEmpty from "./app-list-empty";
 import AppListItem from "./app-list-item";
+import useAppList from "../hooks/use-app-list";
 
 export default function AppList() {
-  const { data, isLoading } = useSWR(["app-list"], async () =>
-    appClient.list()
-  );
+  const { data, isLoading } = useAppList();
 
   const renderer = useMemo(() => {
     if (isLoading) {

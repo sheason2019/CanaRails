@@ -31,6 +31,10 @@ op list(): AppDTO[];
 @route("{id}")
 op findByID(@path id: int32): AppDTO;
 
+@delete
+@route("{id}")
+op delete(@path id: int32): int32;
+
 @post
 @route("{id}/hostname")
 op createHostname(@path id: int32, hostname: string): void;

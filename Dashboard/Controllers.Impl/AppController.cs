@@ -84,4 +84,29 @@ public class AppControllerImpl(
 
     return Task.CompletedTask;
   }
+
+  public Task<int> DeleteAsync(int id)
+  {
+    var queryApp = from apps in context.Apps
+                   where apps.ID.Equals(id)
+                   select apps;
+    var app = queryApp.Include(e => e.Entries).First();
+    app.DefaultEntryId = null;
+    context.SaveChanges();
+
+    // PublishOrder
+    context.PublishOrders.Where(e => e.Entry.App.ID.Equals(id)).ExecuteDelete();
+    // Entry
+    context.Entries.Where(e => e.App.ID.Equals(id)).ExecuteDelete();
+    // Image
+    context.Images.Where(e => e.App.ID.Equals(id)).ExecuteDelete();
+    // App
+    context.Apps.Where(e => e.ID.Equals(id)).ExecuteDelete();
+
+    context.SaveChanges();
+
+    adapter.Apply();
+
+    return Task.FromResult(id);
+  }
 }
