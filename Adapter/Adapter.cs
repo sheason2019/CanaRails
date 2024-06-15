@@ -11,9 +11,9 @@ public class ContainerAdapter
   private readonly HttpRouteService httpRouteSvr;
   private readonly KubeSvrService kubeSvr;
 
-  public ContainerAdapter(CanaRailsContext context)
+  public ContainerAdapter(CanaRailsContext context, AdapterConfiguration config)
   {
-    client = new(KubernetesClientConfiguration.InClusterConfig());
+    client = config.Client;
     gatewaySvr = new(client);
     httpRouteSvr = new(client, context);
     kubeSvr = new(client, context);

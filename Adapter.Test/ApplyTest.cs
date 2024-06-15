@@ -23,7 +23,17 @@ public class ApplyTest
   [TestMethod]
   public void TestApply()
   {
-    var adapter = new ContainerAdapter(new CanaRailsContext());
+    var adapter = new ContainerAdapter(
+      new CanaRailsContext(),
+      new AdapterConfiguration
+      {
+        Client = new Kubernetes(
+          KubernetesClientConfiguration.BuildConfigFromConfigFile(
+            "/etc/rancher/k3s/k3s.yaml"
+          )
+        )
+      }
+    );
     adapter.Apply();
   }
 }

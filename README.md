@@ -32,6 +32,12 @@ export CANARAILS_DBUSER="<db_username>"
 export CANARAILS_DBPSWD="<db_password>"
 ```
 
+同时，在生产环境进行部署时，我们需要通过环境变量定义一个额外的变量，帮助 Canarails 以 InCluster 模式启动 K8s 客户端。
+
+```sh
+export CANARAILS_CLIENT_CONFIG="IN_CLUSTER"
+```
+
 # 应用分层
 
 CanaRails 的设计可以分为三个主要层级：
