@@ -42,6 +42,10 @@ op findById(@path id: int32): EntryDTO;
 @route("{id}")
 op update(@path id: int32, @body dto: EntryDTO): int32;
 
+@delete
+@route("{id}")
+op delete(@path id: int32): int32;
+
 @post
 @route("{id}/matcher")
 op createMatcher(@path id: int32, @body dto: EntryMatcherDTO): void;

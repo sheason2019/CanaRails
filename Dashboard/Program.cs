@@ -5,10 +5,10 @@ using CanaRails.Exceptions;
 using CanaRails.Controllers.App;
 using CanaRails.Controllers.Image;
 using CanaRails.Controllers.Entry;
-using CanaRails.Controllers.Container;
 using CanaRails.Adapter;
 using CanaRails.Controllers.PublishOrder;
 using Microsoft.EntityFrameworkCore;
+using k8s;
 
 namespace CanaRails.Manage;
 
@@ -22,6 +22,27 @@ public class Program
 
     builder.Services.AddDbContext<CanaRailsContext>();
 
+    builder.Services.AddScoped(config =>
+    {
+      var clientConfig = Environment.GetEnvironmentVariable("CANARAILS_CLIENT_CONFIG");
+      if (clientConfig == "IN_CLUSTER")
+      {
+        return new AdapterConfiguration
+        {
+          Client = new Kubernetes(
+            KubernetesClientConfiguration.InClusterConfig()
+          )
+        };
+      }
+      return new AdapterConfiguration
+      {
+        Client = new Kubernetes(
+          KubernetesClientConfiguration.BuildConfigFromConfigFile(
+            "/etc/rancher/k3s/k3s.yaml"
+          )
+        )
+      };
+    });
     builder.Services.AddScoped<ContainerAdapter>();
 
     // Add Services
@@ -35,7 +56,6 @@ public class Program
     builder.Services.AddScoped<IAppController, AppControllerImpl>();
     builder.Services.AddScoped<IImageController, ImageControllerImpl>();
     builder.Services.AddScoped<IEntryController, EntryControllerImpl>();
-    builder.Services.AddScoped<IContainerController, ContainerControllerImpl>();
     builder.Services.AddScoped<IPublishOrderController, PublishOrderControllerImpl>();
 
     builder.Services.AddControllers(options => { options.Filters.Add<HttpStandardExceptionFilter>(); });

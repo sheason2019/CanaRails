@@ -3,6 +3,7 @@ using CanaRails.Controllers.App;
 using CanaRails.Database;
 using CanaRails.Services;
 using CanaRails.Transformer;
+using Microsoft.EntityFrameworkCore;
 
 namespace CanaRails.Controllers.Impl;
 
@@ -23,7 +24,7 @@ public class AppControllerImpl(
     var query = from app in context.Apps
                 where app.ID.Equals(id)
                 select app;
-    var dto = query.First().ToDTO();
+    var dto = query.Include(e => e.DefaultEntry).First().ToDTO();
     return Task.FromResult(dto);
   }
 
@@ -62,5 +63,50 @@ public class AppControllerImpl(
     adapter.Apply();
 
     return Task.CompletedTask;
+  }
+
+  public Task PutDefaultEntryAsync(int id, int entryId)
+  {
+    var queryApp = from apps in context.Apps
+                   where apps.ID.Equals(id)
+                   select apps;
+    var app = queryApp.First();
+
+    var queryEntry = from entries in context.Entries
+                     where entries.ID.Equals(entryId)
+                     select entries;
+    var entry = queryEntry.First();
+
+    app.DefaultEntry = entry;
+    context.SaveChanges();
+
+    adapter.Apply();
+
+    return Task.CompletedTask;
+  }
+
+  public Task<int> DeleteAsync(int id)
+  {
+    var queryApp = from apps in context.Apps
+                   where apps.ID.Equals(id)
+                   select apps;
+    var app = queryApp.Include(e => e.Entries).First();
+    app.DefaultEntryId = null;
+    context.SaveChanges();
+
+    // PublishOrder
+    context.PublishOrders.Where(e => e.Entry.App.ID.Equals(id)).ExecuteDelete();
+    // Entry
+    context.Entries.Where(e => e.App.ID.Equals(id)).ExecuteDelete();
+    // Image
+    context.Images.Where(e => e.App.ID.Equals(id)).ExecuteDelete();
+    // App
+    context.Apps.Where(e => e.ID.Equals(id)).ExecuteDelete();
+
+    context.SaveChanges();
+
+    adapter.Apply();
+
+    return Task.FromResult(id);
   }
 }

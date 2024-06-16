@@ -1,15 +1,18 @@
 
+using CanaRails.Adapter;
 using CanaRails.Controllers.Entry;
 using CanaRails.Database;
 using CanaRails.Database.Entities;
 using CanaRails.Services;
 using CanaRails.Transformer;
+using Microsoft.EntityFrameworkCore;
 
 namespace CanaRails.Controllers.Impl;
 
 public class EntryControllerImpl(
   EntryService entryService,
-  CanaRailsContext context
+  CanaRailsContext context,
+  ContainerAdapter adapter
 ) : IEntryController
 {
   public Task<int> CountAsync(int appID)
@@ -20,6 +23,9 @@ public class EntryControllerImpl(
   public async Task<EntryDTO> CreateAsync(EntryDTO body)
   {
     var entry = await entryService.CreateEntry(body);
+
+    adapter.Apply();
+
     return entry.ToDTO();
   }
 
@@ -37,7 +43,38 @@ public class EntryControllerImpl(
     });
 
     context.SaveChanges();
+
+    adapter.Apply();
+
     return Task.CompletedTask;
+  }
+
+  public Task<int> DeleteAsync(int entryId)
+  {
+    var queryApp = from apps in context.Apps
+                   join entries in context.Entries on apps.ID equals entries.App.ID
+                   where entries.ID.Equals(entryId)
+                   select apps;
+    var app = queryApp.First();
+    if (app.DefaultEntryId == entryId)
+    {
+      app.DefaultEntryId = null;
+      context.SaveChanges();
+    }
+
+    // delete publish orders
+    context.PublishOrders
+      .Where(e => e.Entry.ID.Equals(entryId))
+      .ExecuteDelete();
+    // delete entry
+    context.Entries
+      .Where(e => e.ID.Equals(entryId))
+      .ExecuteDelete();
+    context.SaveChanges();
+
+    adapter.Apply();
+
+    return Task.FromResult(entryId);
   }
 
   public Task DeleteMatcherAsync(int id, string key)
@@ -49,6 +86,8 @@ public class EntryControllerImpl(
 
     entry.EntryMatchers.RemoveAll(e => e.Key.Equals(key));
     context.SaveChanges();
+
+    adapter.Apply();
 
     return Task.CompletedTask;
   }
