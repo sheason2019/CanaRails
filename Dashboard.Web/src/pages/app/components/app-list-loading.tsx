@@ -6,6 +6,7 @@ const EMPTY_APP: AppDTO = {
   name: "Empty Name",
   description: "Empty Description",
   hostnames: [],
+  defaultEntryId: 0,
 };
 
 export default function AppListLoading() {

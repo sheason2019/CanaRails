@@ -84,6 +84,9 @@ CanaRails 的设计可以分为三个主要层级：
    kubectl create namespace canarails
    ```
 
+若要为 k3s 配置网络代理，参考下面的网页内容：
+https://docs.k3s.io/zh/advanced#%E9%85%8D%E7%BD%AE-http-%E4%BB%A3%E7%90%86
+
 为 containerd 配置国内镜像源，以在无网络代理的环境下拉取 istiod 镜像
 https://docs.rancher.cn/docs/k3s/advanced/_index#%E9%85%8D%E7%BD%AE-containerd
 
