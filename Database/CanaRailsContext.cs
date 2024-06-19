@@ -13,6 +13,9 @@ public class CanaRailsContext : DbContext
   public DbSet<Container> Containers { get; set; }
   public DbSet<PublishOrder> PublishOrders { get; set; }
 
+  public DbSet<User> Users { get; set; }
+  public DbSet<UserToken> UserTokens { get; set; }
+
   protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
   {
     var host = Environment.GetEnvironmentVariable("CANARAILS_DBHOST");

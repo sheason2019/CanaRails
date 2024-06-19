@@ -9,6 +9,7 @@ using CanaRails.Adapter;
 using CanaRails.Controllers.PublishOrder;
 using Microsoft.EntityFrameworkCore;
 using k8s;
+using Canarails.Utils;
 
 namespace CanaRails.Manage;
 
@@ -24,7 +25,7 @@ public class Program
 
     builder.Services.AddScoped(config =>
     {
-      var clientConfig = Environment.GetEnvironmentVariable("CANARAILS_CLIENT_CONFIG");
+      var clientConfig = EnvVariables.CANARAILS_CLIENT_CONFIG;
       if (clientConfig == "IN_CLUSTER")
       {
         return new AdapterConfiguration
