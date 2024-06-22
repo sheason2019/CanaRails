@@ -1,32 +1,24 @@
-using System.Buffers.Text;
-using System.Security.Cryptography;
-using System.Text;
+using CanaRails.Database;
+using CanaRails.Database.Entities;
+using CanaRails.Utils;
 
 namespace CanaRails.Services;
 
-public class AuthService
+public class AuthService(CanaRailsContext context)
 {
-  // 哈希化密码
-  public (string salt, string passwordHash) HashPassword(string password)
+  public User Login(string username, string password)
   {
-    var rand = new Random();
-    // 生成 64 位随机 Salt 值
-    var salt = new byte[64];
-    rand.NextBytes(salt);
+    var queryUser = from users in context.Users
+                    where users.Username.Equals(username)
+                    select users;
+    var user = queryUser.First();
 
-    // 使用 utf8 解码 Password
-    var utf8 = new UTF8Encoding();
-    var passwordBuf = utf8.GetBytes(password);
+    var passwordHash = AuthUtils.GetPasswordHash(password, user.PasswordSalt);
+    if (!passwordHash.Equals(user.PasswordHash))
+    {
+      throw new Exception("用户名或密码错误");
+    }
 
-    // 创建加盐密码 Buffer
-    var combineBuf = passwordBuf.Concat(salt).ToArray();
-
-    // SHA256 计算哈希值
-    var combineHash = SHA256.HashData(combineBuf);
-
-    return (
-      salt: Convert.ToBase64String(salt),
-      passwordHash: Convert.ToBase64String(combineHash)
-    );
+    return user;
   }
 }

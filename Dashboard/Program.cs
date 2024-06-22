@@ -10,6 +10,7 @@ using CanaRails.Controllers.PublishOrder;
 using Microsoft.EntityFrameworkCore;
 using k8s;
 using Canarails.Utils;
+using CanaRails.Utils;
 
 namespace CanaRails.Manage;
 
@@ -52,6 +53,7 @@ public class Program
     builder.Services.AddScoped<EntryService>();
     builder.Services.AddScoped<ContainerService>();
     builder.Services.AddScoped<PublishOrderService>();
+    builder.Services.AddScoped<AdminUtils>();
 
     // Add Controller
     builder.Services.AddScoped<IAppController, AppControllerImpl>();
@@ -74,6 +76,10 @@ public class Program
       // 此时如果没有权限对 Kubernetes 进行操作，则会抛出异常并中断服务
       var adapter = app.Services.GetRequiredService<ContainerAdapter>();
       adapter.Apply();
+
+      // 根据环境变量修改 admin 账号密码
+      var adminUtils = app.Services.GetRequiredService<AdminUtils>();
+      adminUtils.SetupAdmin(EnvVariables.CANARAILS_ADMIN_PSWD ?? "");
     }
 
     app.MapControllers();

@@ -1,9 +1,8 @@
 using CanaRails.Database;
-using CanaRails.Services;
 
 namespace CanaRails.Utils;
 
-public class AdminUtils(CanaRailsContext context, AuthService authService)
+public class AdminUtils(CanaRailsContext context)
 {
   // 初始化管理员账户
   public void SetupAdmin(string adminPassword)
@@ -15,7 +14,7 @@ public class AdminUtils(CanaRailsContext context, AuthService authService)
                      select users;
     var admin = queryAdmin.First();
 
-    var (salt, passwordHash) = authService.HashPassword(adminPassword);
+    var (salt, passwordHash) = AuthUtils.CreatePasswordWithHash(adminPassword);
     admin.PasswordHash = passwordHash;
     admin.PasswordSalt = salt;
 
