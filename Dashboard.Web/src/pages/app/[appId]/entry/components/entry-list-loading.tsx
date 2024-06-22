@@ -1,6 +1,6 @@
 import { VStack } from "@chakra-ui/react";
 import EntryListItem from "./entry-list-item";
-import { EntryDTO } from "../../../../../../api-client/Entry.client";
+import { EntryDTO } from "../../../../../../api-client";
 
 const LOADING_ENTRY: EntryDTO = {
   id: 0,

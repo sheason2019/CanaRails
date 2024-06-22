@@ -1,5 +1,5 @@
 import { Stack } from "@chakra-ui/react";
-import { ImageDTO } from "../../../../../../api-client/Image.client";
+import { ImageDTO } from "../../../../../../api-client";
 import AppImageListItem from "./app-image-list-item";
 
 const LOADING_IMAGE: ImageDTO = {

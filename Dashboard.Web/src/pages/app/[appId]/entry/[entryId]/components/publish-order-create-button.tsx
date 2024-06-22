@@ -27,7 +27,7 @@ import ImageSelector from "./image-selector";
 import { useFormik } from "formik";
 import { useState } from "react";
 import * as y from "yup";
-import { ImageDTO } from "../../../../../../../api-client/Image.client";
+import { ImageDTO } from "../../../../../../../api-client";
 import { publishOrderClient } from "../../../../../../api";
 import { useParams } from "react-router-dom";
 import usePublishOrderList from "../hook/use-publish-order-list";

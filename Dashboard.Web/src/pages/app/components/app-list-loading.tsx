@@ -1,5 +1,5 @@
 import AppListItem from "./app-list-item";
-import { AppDTO } from "../../../../api-client/App.client";
+import { AppDTO } from "../../../../api-client";
 
 const EMPTY_APP: AppDTO = {
   id: 0,

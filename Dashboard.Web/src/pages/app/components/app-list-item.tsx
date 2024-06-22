@@ -11,7 +11,7 @@ import {
   MenuItem,
   useDisclosure,
 } from "@chakra-ui/react";
-import { AppDTO } from "../../../../api-client/App.client";
+import { AppDTO } from "../../../../api-client";
 import { Link } from "react-router-dom";
 import { HamburgerIcon } from "@chakra-ui/icons";
 import AppDeleteConfirmModal from "./app-delete-confirm-modal";

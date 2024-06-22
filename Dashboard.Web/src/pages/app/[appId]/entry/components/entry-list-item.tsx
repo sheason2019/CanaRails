@@ -12,7 +12,7 @@ import {
   Text,
   useDisclosure,
 } from "@chakra-ui/react";
-import { EntryDTO } from "../../../../../../api-client/Entry.client";
+import { EntryDTO } from "../../../../../../api-client";
 import { Link } from "react-router-dom";
 import { HamburgerIcon } from "@chakra-ui/icons";
 import useAppDetail from "../../hooks/use-app-detail";
