@@ -1,5 +1,5 @@
 using CanaRails.Adapter;
-using CanaRails.Controllers.PublishOrder;
+using CanaRails.Controllers;
 using CanaRails.Database;
 using CanaRails.Database.Entities;
 using Microsoft.EntityFrameworkCore;

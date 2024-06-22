@@ -1,4 +1,4 @@
-namespace Canarails.Utils;
+namespace CanaRails.Utils;
 
 // 收集环境变量
 public static class EnvVariables

@@ -5,18 +5,9 @@ import "@typespec/openapi3";
 using TypeSpec.Http;
 using TypeSpec.Rest;
 
-@service({
-  title: "App Auth Service",
-})
-@server("/api/auth", "App Auth Server endpoint")
-@tag("AuthController")
-namespace Auth;
-
 model AuthData {
   username: string;
 }
-
-op getAuthData(): AuthData;
 
 model LoginReq {
   username: string;
@@ -27,5 +18,11 @@ model LoginRes {
   jwt: string;
 }
 
-@post
-op login(@body req: LoginReq): LoginRes;
+@tag("AuthController")
+@route("/api/auth")
+interface Auth {
+  getAuthData(): AuthData;
+
+  @post
+  login(@body req: LoginReq): LoginRes;
+}

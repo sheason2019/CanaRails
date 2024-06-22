@@ -1,4 +1,4 @@
-using CanaRails.Controllers.PublishOrder;
+using CanaRails.Controllers;
 using CanaRails.Database;
 using CanaRails.Services;
 using CanaRails.Transformer;

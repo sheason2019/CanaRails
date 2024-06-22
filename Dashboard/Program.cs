@@ -2,14 +2,10 @@ using CanaRails.Database;
 using CanaRails.Controllers.Impl;
 using CanaRails.Services;
 using CanaRails.Exceptions;
-using CanaRails.Controllers.App;
-using CanaRails.Controllers.Image;
-using CanaRails.Controllers.Entry;
+using CanaRails.Controllers;
 using CanaRails.Adapter;
-using CanaRails.Controllers.PublishOrder;
 using Microsoft.EntityFrameworkCore;
 using k8s;
-using Canarails.Utils;
 using CanaRails.Utils;
 
 namespace CanaRails.Manage;
@@ -51,7 +47,6 @@ public class Program
     builder.Services.AddScoped<AppService>();
     builder.Services.AddScoped<ImageService>();
     builder.Services.AddScoped<EntryService>();
-    builder.Services.AddScoped<ContainerService>();
     builder.Services.AddScoped<PublishOrderService>();
     builder.Services.AddScoped<AdminUtils>();
 

@@ -1,4 +1,4 @@
-using CanaRails.Controllers.Image;
+using CanaRails.Controllers;
 using CanaRails.Services;
 using CanaRails.Transformer;
 

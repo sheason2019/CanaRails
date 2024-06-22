@@ -1,4 +1,4 @@
-using CanaRails.Controllers.App;
+using CanaRails.Controllers;
 using CanaRails.Database.Entities;
 
 namespace CanaRails.Transformer;

@@ -1,4 +1,4 @@
-using CanaRails.Controllers.App;
+using CanaRails.Controllers;
 using CanaRails.Database;
 using CanaRails.Database.Entities;
 using CanaRails.Exceptions;

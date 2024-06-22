@@ -1,4 +1,4 @@
-using CanaRails.Controllers.Auth;
+using CanaRails.Controllers;
 
 namespace CanaRails.Controllers.Impl;
 

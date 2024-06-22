@@ -1,5 +1,5 @@
 using CanaRails.Adapter;
-using CanaRails.Controllers.Image;
+using CanaRails.Controllers;
 using CanaRails.Database;
 using CanaRails.Database.Entities;
 using CanaRails.Transformer;
