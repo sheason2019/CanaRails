@@ -1,5 +1,6 @@
 using CanaRails.Database;
 using CanaRails.Database.Entities;
+using CanaRails.Exceptions;
 using CanaRails.Utils;
 
 namespace CanaRails.Services;
@@ -16,7 +17,10 @@ public class AuthService(CanaRailsContext context)
     var passwordHash = AuthUtils.GetPasswordHash(password, user.PasswordSalt);
     if (!passwordHash.Equals(user.PasswordHash))
     {
-      throw new Exception("用户名或密码错误");
+      throw new HttpStandardException(
+        StatusCodes.Status422UnprocessableEntity,
+        "用户名或密码错误"
+      );
     }
 
     return user;

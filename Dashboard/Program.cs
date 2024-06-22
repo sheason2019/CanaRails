@@ -55,6 +55,7 @@ public class Program
     builder.Services.AddScoped<IImageController, ImageControllerImpl>();
     builder.Services.AddScoped<IEntryController, EntryControllerImpl>();
     builder.Services.AddScoped<IPublishOrderController, PublishOrderControllerImpl>();
+    builder.Services.AddScoped<IAuthController, AuthControllerImpl>();
 
     builder.Services.AddControllers(options => { options.Filters.Add<HttpStandardExceptionFilter>(); });
 

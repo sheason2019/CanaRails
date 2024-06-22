@@ -1,8 +1,9 @@
 using CanaRails.Controllers;
+using CanaRails.Services;
 
 namespace CanaRails.Controllers.Impl;
 
-public class AuthControllerImpl : IAuthController
+public class AuthControllerImpl(AuthService authService) : IAuthController
 {
   public Task<AuthData> GetAuthDataAsync()
   {
@@ -11,6 +12,13 @@ public class AuthControllerImpl : IAuthController
 
   public Task<LoginRes> LoginAsync(LoginReq body)
   {
-    throw new NotImplementedException();
+    var user = authService.Login(body.Username, body.Password);
+    // TODO: 添加创建 JWT 的方法
+    var resp = new LoginRes
+    {
+      Jwt = ""
+    };
+
+    return Task.FromResult(resp);
   }
 }
