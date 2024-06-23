@@ -1,3 +1,6 @@
+using System.Security.Cryptography;
+using System.Text;
+
 namespace CanaRails.Utils;
 
 // 收集环境变量
@@ -5,7 +8,7 @@ public static class EnvVariables
 {
   public static string? CANARAILS_ADMIN_PSWD
   {
-    get { return Environment.GetEnvironmentVariable("CANARAILAS_ADMIN_PSWD"); }
+    get { return Environment.GetEnvironmentVariable("CANARAILS_ADMIN_PSWD"); }
   }
 
   public static string? CANARAILS_DBHOST
@@ -31,5 +34,17 @@ public static class EnvVariables
   public static string? CANARAILS_CLIENT_CONFIG
   {
     get { return Environment.GetEnvironmentVariable("CANARAILS_CLIENT_CONFIG"); }
+  }
+
+  public static byte[]? CANARAILS_AUTH_SECRET_BYTES
+  {
+    get
+    {
+      var secret = Environment.GetEnvironmentVariable("CANARAILS_AUTH_SECRET");
+      if (secret == null) return null;
+
+      var secretByte = Encoding.UTF8.GetBytes(secret);
+      return SHA256.HashData(secretByte);
+    }
   }
 }

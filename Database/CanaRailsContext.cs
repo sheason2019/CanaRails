@@ -2,19 +2,18 @@ using System.Text.Json;
 using CanaRails.Database.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 namespace CanaRails.Database;
 
-public class CanaRailsContext : DbContext
+public class CanaRailsContext : IdentityDbContext<IdentityUser>
 {
   public DbSet<App> Apps { get; set; }
   public DbSet<Entry> Entries { get; set; }
   public DbSet<Image> Images { get; set; }
   public DbSet<Container> Containers { get; set; }
   public DbSet<PublishOrder> PublishOrders { get; set; }
-
-  public DbSet<User> Users { get; set; }
-  public DbSet<UserToken> UserTokens { get; set; }
 
   protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
   {
@@ -33,6 +32,8 @@ public class CanaRailsContext : DbContext
 
   protected override void OnModelCreating(ModelBuilder modelBuilder)
   {
+    base.OnModelCreating(modelBuilder);
+
     modelBuilder.Entity<App>()
       .HasOne(e => e.DefaultEntry)
       .WithOne();

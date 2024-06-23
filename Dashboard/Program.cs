@@ -1,12 +1,13 @@
+using k8s;
 using CanaRails.Database;
 using CanaRails.Controllers.Impl;
 using CanaRails.Services;
 using CanaRails.Exceptions;
 using CanaRails.Controllers;
 using CanaRails.Adapter;
-using Microsoft.EntityFrameworkCore;
-using k8s;
 using CanaRails.Utils;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 namespace CanaRails.Manage;
 
@@ -43,12 +44,27 @@ public class Program
     });
     builder.Services.AddScoped<ContainerAdapter>();
 
+    // Authorization
+    builder.Services.AddAuthorization();
+    builder.Services.AddAuthentication()
+    .AddCookie(IdentityConstants.ApplicationScheme);
+    builder.Services.AddIdentityCore<IdentityUser>()
+      .AddRoles<IdentityRole>()
+      .AddUserManager<UserManager<IdentityUser>>()
+      .AddSignInManager<SignInManager<IdentityUser>>()
+      .AddEntityFrameworkStores<CanaRailsContext>();
+    builder.Services.Configure<IdentityOptions>(options =>
+    {
+      options.Password.RequireLowercase = false;
+      options.Password.RequireUppercase = false;
+    });
+
     // Add Services
     builder.Services.AddScoped<AppService>();
     builder.Services.AddScoped<ImageService>();
     builder.Services.AddScoped<EntryService>();
+    builder.Services.AddScoped<AdminService>();
     builder.Services.AddScoped<PublishOrderService>();
-    builder.Services.AddScoped<AdminUtils>();
 
     // Add Controller
     builder.Services.AddScoped<IAppController, AppControllerImpl>();
@@ -73,22 +89,16 @@ public class Program
       var adapter = app.Services.GetRequiredService<ContainerAdapter>();
       adapter.Apply();
 
-      // 根据环境变量修改 admin 账号密码
-      var adminUtils = app.Services.GetRequiredService<AdminUtils>();
-      adminUtils.SetupAdmin(EnvVariables.CANARAILS_ADMIN_PSWD ?? "");
+      // 修改 admin 密码
+      var adminService = scope.ServiceProvider.GetRequiredService<AdminService>();
+      adminService.Setup().Wait();
     }
 
     app.MapControllers();
 
     // 添加对内置 SPA 页面的支持
     app.UseFileServer();
-    app.MapFallback(async (context) =>
-    {
-      context.Response.StatusCode = 200;
-      await context.Response.SendFileAsync(
-              Path.Join(app.Environment.WebRootPath, "index.html")
-          );
-    });
+    app.MapFallbackToFile(Path.Join(app.Environment.WebRootPath, "index.html"));
 
     return app;
   }

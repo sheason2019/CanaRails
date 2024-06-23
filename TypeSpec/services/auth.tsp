@@ -14,15 +14,15 @@ model LoginReq {
   password: string;
 }
 
-model LoginRes {
-  jwt: string;
-}
-
 @tag("AuthController")
 @route("/api/auth")
 interface Auth {
+  @get
   getAuthData(): AuthData;
 
   @post
-  login(@body req: LoginReq): LoginRes;
+  login(@body req: LoginReq): void;
+
+  @delete
+  logout(): void;
 }
