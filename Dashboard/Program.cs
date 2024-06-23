@@ -110,7 +110,13 @@ public class Program
 
     // 添加对内置 SPA 页面的支持
     app.UseFileServer();
-    app.MapFallbackToFile(Path.Join(app.Environment.WebRootPath, "index.html"));
+    app.MapFallback(async (context) =>
+    {
+      context.Response.StatusCode = 200;
+      await context.Response.SendFileAsync(
+              Path.Join(app.Environment.WebRootPath, "index.html")
+          );
+    });
 
     return app;
   }
