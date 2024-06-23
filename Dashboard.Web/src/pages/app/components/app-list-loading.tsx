@@ -1,11 +1,12 @@
 import AppListItem from "./app-list-item";
-import { AppDTO } from "../../../../api-client/App.client";
+import { AppDTO } from "../../../../api-client";
 
 const EMPTY_APP: AppDTO = {
   id: 0,
   name: "Empty Name",
   description: "Empty Description",
   hostnames: [],
+  defaultEntryId: 0,
 };
 
 export default function AppListLoading() {

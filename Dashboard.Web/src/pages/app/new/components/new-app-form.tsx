@@ -29,6 +29,7 @@ export default function NewAppForm() {
         name: values.name,
         description: values.description,
         hostnames: [],
+        defaultEntryId: 0,
       });
       navigate(`/app/${app.id}`);
     },

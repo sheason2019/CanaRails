@@ -52,4 +52,40 @@ public class CustomObjectUtils
       throw;
     }
   }
+
+  public static void Drop(
+    Kubernetes client,
+    string group,
+    string version,
+    string plural,
+    string name
+  )
+  {
+    try
+    {
+      client.GetNamespacedCustomObject(
+        group,
+        version,
+        Constant.Namespace,
+        plural,
+        name
+      );
+      client.DeleteNamespacedCustomObject(
+        group,
+        version,
+        Constant.Namespace,
+        plural,
+        name
+      );
+    }
+    catch (Exception e) when (e is HttpOperationException exception)
+    {
+      if (exception.Response.StatusCode == HttpStatusCode.NotFound)
+      {
+        return;
+      }
+
+      throw;
+    }
+  }
 }

@@ -1,4 +1,4 @@
-using CanaRails.Controllers.App;
+using CanaRails.Controllers;
 using CanaRails.Database.Entities;
 
 namespace CanaRails.Transformer;
@@ -13,6 +13,7 @@ public static class AppTransformer
       Name = app.Name,
       Description = app.Description,
       Hostnames = app.Hostnames,
+      DefaultEntryId = app.DefaultEntry?.ID,
     };
   }
 

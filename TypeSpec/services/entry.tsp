@@ -5,12 +5,6 @@ import "@typespec/openapi3";
 using TypeSpec.Http;
 using TypeSpec.Rest;
 
-@service({
-  title: "App Service",
-})
-@server("/api/entry", "App Entry Server endpoint")
-namespace Entry;
-
 model EntryMatcherDTO {
   key: string;
   value: string;
@@ -24,28 +18,36 @@ model EntryDTO {
   appId: int32;
 }
 
-@post
-op create(@body dto: EntryDTO): EntryDTO;
+@tag("EntryController")
+@route("/api/entry")
+interface Entry {
+  @post
+  create(@body dto: EntryDTO): EntryDTO;
 
-@get
-op list(@query appID: int32): EntryDTO[];
+  @get
+  list(@query appID: int32): EntryDTO[];
 
-@get
-@route("count")
-op count(@query appID: int32): int32;
+  @get
+  @route("count")
+  count(@query appID: int32): int32;
 
-@get
-@route("{id}")
-op findById(@path id: int32): EntryDTO;
+  @get
+  @route("{id}")
+  findById(@path id: int32): EntryDTO;
 
-@put
-@route("{id}")
-op update(@path id: int32, @body dto: EntryDTO): int32;
+  @put
+  @route("{id}")
+  update(@path id: int32, @body dto: EntryDTO): int32;
 
-@post
-@route("{id}/matcher")
-op createMatcher(@path id: int32, @body dto: EntryMatcherDTO): void;
+  @delete
+  @route("{id}")
+  delete(@path id: int32): int32;
 
-@delete
-@route("{id}/matcher")
-op deleteMatcher(@path id: int32, @query key: string): void;
+  @post
+  @route("{id}/matcher")
+  createMatcher(@path id: int32, @body dto: EntryMatcherDTO): void;
+
+  @delete
+  @route("{id}/matcher")
+  deleteMatcher(@path id: int32, @query key: string): void;
+}

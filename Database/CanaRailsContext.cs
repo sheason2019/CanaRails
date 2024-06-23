@@ -2,10 +2,12 @@ using System.Text.Json;
 using CanaRails.Database.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 namespace CanaRails.Database;
 
-public class CanaRailsContext : DbContext
+public class CanaRailsContext : IdentityDbContext<IdentityUser>
 {
   public DbSet<App> Apps { get; set; }
   public DbSet<Entry> Entries { get; set; }
@@ -30,6 +32,8 @@ public class CanaRailsContext : DbContext
 
   protected override void OnModelCreating(ModelBuilder modelBuilder)
   {
+    base.OnModelCreating(modelBuilder);
+
     modelBuilder.Entity<App>()
       .HasOne(e => e.DefaultEntry)
       .WithOne();

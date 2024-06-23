@@ -1,5 +1,5 @@
 import { Card, CardBody, Flex, Skeleton } from "@chakra-ui/react";
-import { ImageDTO } from "../../../../../../api-client/Image.client";
+import { ImageDTO } from "../../../../../../api-client";
 
 interface Props {
   image: ImageDTO;

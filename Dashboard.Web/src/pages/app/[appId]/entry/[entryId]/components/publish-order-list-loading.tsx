@@ -1,4 +1,4 @@
-import { PublishOrderDTO } from "../../../../../../../api-client/PublishOrder.client";
+import { PublishOrderDTO } from "../../../../../../../api-client";
 import PublishOrderListItem from "./publish-order-list-item";
 
 const LOADING_CONTAINER: PublishOrderDTO = {

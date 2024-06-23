@@ -20,7 +20,7 @@ export default function EntryMatcherList() {
     return (
       <>
         {data.matchers.map((item) => (
-          <EntryMatcherListItem key={item.id} matcher={item} isLoaded />
+          <EntryMatcherListItem key={item.key} matcher={item} isLoaded />
         ))}
       </>
     );
