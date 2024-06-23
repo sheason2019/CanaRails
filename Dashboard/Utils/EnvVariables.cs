@@ -35,16 +35,4 @@ public static class EnvVariables
   {
     get { return Environment.GetEnvironmentVariable("CANARAILS_CLIENT_CONFIG"); }
   }
-
-  public static byte[]? CANARAILS_AUTH_SECRET_BYTES
-  {
-    get
-    {
-      var secret = Environment.GetEnvironmentVariable("CANARAILS_AUTH_SECRET");
-      if (secret == null) return null;
-
-      var secretByte = Encoding.UTF8.GetBytes(secret);
-      return SHA256.HashData(secretByte);
-    }
-  }
 }
