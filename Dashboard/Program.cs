@@ -60,10 +60,12 @@ public class Program
     });
 
     // Add Services
+    builder.Services.AddScoped<AuthService>();
     builder.Services.AddScoped<AppService>();
     builder.Services.AddScoped<ImageService>();
     builder.Services.AddScoped<EntryService>();
     builder.Services.AddScoped<AdminService>();
+    builder.Services.AddScoped<RoleService>();
     builder.Services.AddScoped<PublishOrderService>();
 
     // Add Controller
@@ -73,7 +75,10 @@ public class Program
     builder.Services.AddScoped<IPublishOrderController, PublishOrderControllerImpl>();
     builder.Services.AddScoped<IAuthController, AuthControllerImpl>();
 
-    builder.Services.AddControllers(options => { options.Filters.Add<HttpStandardExceptionFilter>(); });
+    builder.Services.AddControllers(options =>
+    {
+      options.Filters.Add<HttpStandardExceptionFilter>();
+    });
 
     var app = builder.Build();
 
@@ -89,7 +94,11 @@ public class Program
       var adapter = app.Services.GetRequiredService<ContainerAdapter>();
       adapter.Apply();
 
-      // 修改 admin 密码
+      // 初始化 role 信息
+      var roleService = scope.ServiceProvider.GetRequiredService<RoleService>();
+      roleService.Setup().Wait();
+
+      // 初始化 admin 账户信息
       var adminService = scope.ServiceProvider.GetRequiredService<AdminService>();
       adminService.Setup().Wait();
     }

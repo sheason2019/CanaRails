@@ -1,8 +1,9 @@
-using CanaRails.Controllers;
 using CanaRails.Adapter;
 using CanaRails.Database;
+using CanaRails.Enum;
 using CanaRails.Services;
 using CanaRails.Transformer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 
 namespace CanaRails.Controllers.Impl;
@@ -10,7 +11,8 @@ namespace CanaRails.Controllers.Impl;
 public class AppControllerImpl(
   AppService service,
   CanaRailsContext context,
-  ContainerAdapter adapter
+  ContainerAdapter adapter,
+  AuthService authService
 ) : IAppController
 {
   public async Task<ICollection<AppDTO>> ListAsync()
@@ -30,13 +32,17 @@ public class AppControllerImpl(
 
   public async Task<AppDTO> CreateAsync(AppDTO body)
   {
+    await authService.RequireRole(Roles.Administrator);
+
     var record = await service.CreateAppAsync(body);
     adapter.Apply();
     return record.ToDTO();
   }
 
-  public Task CreateHostnameAsync(int id, Body body)
+  public async Task CreateHostnameAsync(int id, Body body)
   {
+    await authService.RequireRole(Roles.Administrator);
+
     var queryApp = from apps in context.Apps
                    where apps.ID.Equals(id)
                    select apps;
@@ -46,12 +52,12 @@ public class AppControllerImpl(
     context.SaveChanges();
 
     adapter.Apply();
-
-    return Task.CompletedTask;
   }
 
-  public Task DeleteHostnameAsync(int id, string hostname)
+  public async Task DeleteHostnameAsync(int id, string hostname)
   {
+    await authService.RequireRole(Roles.Administrator);
+
     var queryApp = from apps in context.Apps
                    where apps.ID.Equals(id)
                    select apps;
@@ -61,12 +67,12 @@ public class AppControllerImpl(
     context.SaveChanges();
 
     adapter.Apply();
-
-    return Task.CompletedTask;
   }
 
-  public Task PutDefaultEntryAsync(int id, int entryId)
+  public async Task PutDefaultEntryAsync(int id, int entryId)
   {
+    await authService.RequireRole(Roles.Administrator);
+
     var queryApp = from apps in context.Apps
                    where apps.ID.Equals(id)
                    select apps;
@@ -81,12 +87,12 @@ public class AppControllerImpl(
     context.SaveChanges();
 
     adapter.Apply();
-
-    return Task.CompletedTask;
   }
 
-  public Task<int> DeleteAsync(int id)
+  public async Task<int> DeleteAsync(int id)
   {
+    await authService.RequireRole(Roles.Administrator);
+
     var queryApp = from apps in context.Apps
                    where apps.ID.Equals(id)
                    select apps;
@@ -107,6 +113,6 @@ public class AppControllerImpl(
 
     adapter.Apply();
 
-    return Task.FromResult(id);
+    return id;
   }
 }

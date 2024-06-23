@@ -1,10 +1,13 @@
-using CanaRails.Controllers;
+using CanaRails.Enum;
 using CanaRails.Services;
 using CanaRails.Transformer;
 
 namespace CanaRails.Controllers.Impl;
 
-public class ImageControllerImpl(ImageService service) : IImageController
+public class ImageControllerImpl(
+  ImageService service,
+  AuthService authService
+) : IImageController
 {
   public Task<int> CountAsync(int appID)
   {
@@ -13,6 +16,8 @@ public class ImageControllerImpl(ImageService service) : IImageController
 
   public async Task<ImageDTO> CreateAsync(ImageDTO body)
   {
+    await authService.RequireRole(Roles.Administrator);
+
     var image = await service.CreateImageAsync(body);
     return image.ToDTO();
   }

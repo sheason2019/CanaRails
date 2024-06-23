@@ -1,3 +1,4 @@
+using CanaRails.Enum;
 using CanaRails.Utils;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.VisualBasic;
@@ -9,6 +10,12 @@ public class AdminService(
 )
 {
   public async Task Setup()
+  {
+    await SetupUser();
+    await SetupRole();
+  }
+
+  public async Task SetupUser()
   {
     var adminPassword = EnvVariables.CANARAILS_ADMIN_PSWD ?? "";
     var admin = await userManager.FindByNameAsync("admin");
@@ -42,6 +49,15 @@ public class AdminService(
         );
         throw new Exception($"update admin password error:{errMessage}");
       }
+    }
+  }
+
+  public async Task SetupRole()
+  {
+    var admin = (await userManager.FindByNameAsync("admin"))!;
+    if (!await userManager.IsInRoleAsync(admin, Roles.Administrator))
+    {
+      await userManager.AddToRoleAsync(admin, Roles.Administrator);
     }
   }
 }

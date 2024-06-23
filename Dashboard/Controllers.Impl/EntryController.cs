@@ -1,8 +1,8 @@
 
 using CanaRails.Adapter;
-using CanaRails.Controllers;
 using CanaRails.Database;
 using CanaRails.Database.Entities;
+using CanaRails.Enum;
 using CanaRails.Services;
 using CanaRails.Transformer;
 using Microsoft.EntityFrameworkCore;
@@ -12,7 +12,8 @@ namespace CanaRails.Controllers.Impl;
 public class EntryControllerImpl(
   EntryService entryService,
   CanaRailsContext context,
-  ContainerAdapter adapter
+  ContainerAdapter adapter,
+  AuthService authService
 ) : IEntryController
 {
   public Task<int> CountAsync(int appID)
@@ -22,15 +23,18 @@ public class EntryControllerImpl(
 
   public async Task<EntryDTO> CreateAsync(EntryDTO body)
   {
-    var entry = await entryService.CreateEntry(body);
+    await authService.RequireRole(Roles.Administrator);
 
+    var entry = await entryService.CreateEntry(body);
     adapter.Apply();
 
     return entry.ToDTO();
   }
 
-  public Task CreateMatcherAsync(int id, EntryMatcherDTO body)
+  public async Task CreateMatcherAsync(int id, EntryMatcherDTO body)
   {
+    await authService.RequireRole(Roles.Administrator);
+
     var queryEntry = from entries in context.Entries
                      where entries.ID.Equals(id)
                      select entries;
@@ -45,12 +49,12 @@ public class EntryControllerImpl(
     context.SaveChanges();
 
     adapter.Apply();
-
-    return Task.CompletedTask;
   }
 
-  public Task<int> DeleteAsync(int entryId)
+  public async Task<int> DeleteAsync(int entryId)
   {
+    await authService.RequireRole(Roles.Administrator);
+
     var queryApp = from apps in context.Apps
                    join entries in context.Entries on apps.ID equals entries.App.ID
                    where entries.ID.Equals(entryId)
@@ -74,11 +78,13 @@ public class EntryControllerImpl(
 
     adapter.Apply();
 
-    return Task.FromResult(entryId);
+    return entryId;
   }
 
-  public Task DeleteMatcherAsync(int id, string key)
+  public async Task DeleteMatcherAsync(int id, string key)
   {
+    await authService.RequireRole(Roles.Administrator);
+
     var queryEntry = from entries in context.Entries
                      where entries.ID.Equals(id)
                      select entries;
@@ -88,8 +94,6 @@ public class EntryControllerImpl(
     context.SaveChanges();
 
     adapter.Apply();
-
-    return Task.CompletedTask;
   }
 
   public async Task<EntryDTO> FindByIdAsync(int id)
