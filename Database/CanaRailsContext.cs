@@ -4,16 +4,19 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
 
 namespace CanaRails.Database;
 
-public class CanaRailsContext : IdentityDbContext<IdentityUser>
+public class CanaRailsContext : IdentityDbContext<IdentityUser>, IDataProtectionKeyContext
 {
   public DbSet<App> Apps { get; set; }
   public DbSet<Entry> Entries { get; set; }
   public DbSet<Image> Images { get; set; }
   public DbSet<Container> Containers { get; set; }
   public DbSet<PublishOrder> PublishOrders { get; set; }
+
+  public DbSet<DataProtectionKey> DataProtectionKeys { get; set; }
 
   protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
   {

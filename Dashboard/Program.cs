@@ -8,6 +8,7 @@ using CanaRails.Adapter;
 using CanaRails.Utils;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.DataProtection;
 
 namespace CanaRails.Manage;
 
@@ -58,6 +59,8 @@ public class Program
       options.Password.RequireLowercase = false;
       options.Password.RequireUppercase = false;
     });
+    builder.Services.AddDataProtection()
+      .PersistKeysToDbContext<CanaRailsContext>();
 
     // Add Services
     builder.Services.AddScoped<AuthService>();
