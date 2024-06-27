@@ -8,10 +8,12 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  useToast,
 } from "@chakra-ui/react";
 import useSWRMutation from "swr/mutation";
 import { appClient } from "../../../api";
 import useAppList from "../hooks/use-app-list";
+import { ApiException } from "../../../../api-client";
 
 interface Props {
   isOpen: boolean;
@@ -24,6 +26,10 @@ export default function AppDeleteConfirmModal({
   onClose,
   appId,
 }: Props) {
+  const toast = useToast({
+    position: "bottom-right",
+    variant: "left-accent",
+  });
   const { mutate } = useAppList();
   const { trigger: handleDelete, isMutating } = useSWRMutation(
     ["delete-app", appId],
@@ -32,6 +38,18 @@ export default function AppDeleteConfirmModal({
       onSuccess() {
         mutate();
         onClose();
+        toast({
+          status: "success",
+          title: "删除成功",
+        });
+      },
+      onError(err) {
+        const isApiException = err instanceof ApiException;
+        toast({
+          status: "error",
+          title: isApiException ? "请求失败" : "未知错误",
+          description: isApiException ? err.response : String(err),
+        });
       },
     }
   );

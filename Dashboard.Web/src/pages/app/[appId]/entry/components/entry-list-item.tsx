@@ -11,8 +11,9 @@ import {
   Tag,
   Text,
   useDisclosure,
+  useToast,
 } from "@chakra-ui/react";
-import { EntryDTO } from "../../../../../../api-client";
+import { ApiException, EntryDTO } from "../../../../../../api-client";
 import { Link } from "react-router-dom";
 import { HamburgerIcon } from "@chakra-ui/icons";
 import useAppDetail from "../../hooks/use-app-detail";
@@ -27,6 +28,10 @@ interface Props {
 }
 
 export default function EntryListItem({ entry, isDefault, isLoaded }: Props) {
+  const toast = useToast({
+    position: "bottom-right",
+    variant: "left-accent",
+  });
   const { isOpen, onClose, onOpen } = useDisclosure();
   const { data, mutate: mutateAppDetail } = useAppDetail();
 
@@ -36,6 +41,18 @@ export default function EntryListItem({ entry, isDefault, isLoaded }: Props) {
     {
       onSuccess() {
         mutateAppDetail();
+        toast({
+          status: "success",
+          title: "修改默认流量入口成功",
+        });
+      },
+      onError(err) {
+        const isApiException = err instanceof ApiException;
+        toast({
+          status: "error",
+          title: isApiException ? "请求失败" : "未知错误",
+          description: isApiException ? err.response : String(err),
+        });
       },
     }
   );

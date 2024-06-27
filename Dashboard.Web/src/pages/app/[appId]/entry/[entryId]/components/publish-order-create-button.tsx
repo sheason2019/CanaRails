@@ -22,17 +22,22 @@ import {
   Stepper,
   useDisclosure,
   useSteps,
+  useToast,
 } from "@chakra-ui/react";
 import ImageSelector from "./image-selector";
 import { useFormik } from "formik";
 import { useState } from "react";
 import * as y from "yup";
-import { ImageDTO } from "../../../../../../../api-client";
+import { ApiException, ImageDTO } from "../../../../../../../api-client";
 import { publishOrderClient } from "../../../../../../api";
 import { useParams } from "react-router-dom";
 import usePublishOrderList from "../hook/use-publish-order-list";
 
 export default function PublishOrderCreateButton() {
+  const toast = useToast({
+    position: "bottom-right",
+    variant: "left-accent",
+  });
   const { entryId } = useParams();
   const { mutate } = usePublishOrderList();
   const [image, setImage] = useState<ImageDTO | null>(null);
@@ -54,16 +59,29 @@ export default function PublishOrderCreateButton() {
         .min(1, "实例数量必须为正整数"),
     }),
     async onSubmit(values) {
-      await publishOrderClient.create({
-        id: 0,
-        imageId: image!.id,
-        entryId: Number(entryId),
-        port: values.port,
-        replica: values.replica,
-        status: "",
-      });
-      onClose();
-      mutate();
+      try {
+        await publishOrderClient.create({
+          id: 0,
+          imageId: image!.id,
+          entryId: Number(entryId),
+          port: values.port,
+          replica: values.replica,
+          status: "",
+        });
+        onClose();
+        mutate();
+        toast({
+          status: "success",
+          title: "创建成功",
+        });
+      } catch (e) {
+        const isApiException = e instanceof ApiException;
+        toast({
+          status: "error",
+          title: isApiException ? "请求失败" : "未知错误",
+          description: isApiException ? e.response : String(e),
+        });
+      }
     },
   });
 

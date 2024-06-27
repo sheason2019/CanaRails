@@ -6,13 +6,19 @@ import {
   Input,
   Textarea,
   VStack,
+  useToast,
 } from "@chakra-ui/react";
 import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
 import * as y from "yup";
 import { appClient } from "../../../../api";
+import { ApiException } from "../../../../../api-client";
 
 export default function NewAppForm() {
+  const toast = useToast({
+    position: "bottom-right",
+    variant: "left-accent",
+  });
   const navigate = useNavigate();
 
   const formik = useFormik({
@@ -24,14 +30,27 @@ export default function NewAppForm() {
       name: y.string().required("App名称不能为空"),
     }),
     async onSubmit(values) {
-      const app = await appClient.create({
-        id: 0,
-        name: values.name,
-        description: values.description,
-        hostnames: [],
-        defaultEntryId: 0,
-      });
-      navigate(`/app/${app.id}`);
+      try {
+        const app = await appClient.create({
+          id: 0,
+          name: values.name,
+          description: values.description,
+          hostnames: [],
+          defaultEntryId: 0,
+        });
+        navigate(`/app/${app.id}`);
+        toast({
+          status: "success",
+          title: "操作成功",
+        });
+      } catch (e) {
+        const isApiException = e instanceof ApiException;
+        toast({
+          status: "error",
+          title: isApiException ? "请求失败" : "未知错误",
+          description: isApiException ? e.response : String(e),
+        });
+      }
     },
   });
 

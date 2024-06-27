@@ -7,13 +7,19 @@ import {
   Input,
   Textarea,
   VStack,
+  useToast,
 } from "@chakra-ui/react";
 import { useFormik } from "formik";
 import * as y from "yup";
 import { entryClient } from "../../../../../../api";
 import { useNavigate, useParams } from "react-router-dom";
+import { ApiException } from "../../../../../../../api-client";
 
 export default function NewEntryForm() {
+  const toast = useToast({
+    position: "bottom-right",
+    variant: "left-accent",
+  });
   const { appId } = useParams();
   const navigate = useNavigate();
 
@@ -26,14 +32,27 @@ export default function NewEntryForm() {
       name: y.string().required("流量入口名称不能为空"),
     }),
     async onSubmit(values) {
-      const resp = await entryClient.create({
-        ...values,
-        id: 0,
-        deployedAt: 0,
-        matchers: [],
-        appId: Number(appId),
-      });
-      navigate(`/app/${appId}/entry/${resp.id}`);
+      try {
+        const resp = await entryClient.create({
+          ...values,
+          id: 0,
+          deployedAt: 0,
+          matchers: [],
+          appId: Number(appId),
+        });
+        navigate(`/app/${appId}/entry/${resp.id}`);
+        toast({
+          status: "success",
+          title: "新建流量入口成功",
+        });
+      } catch (e) {
+        const isApiException = e instanceof ApiException;
+        toast({
+          status: "error",
+          title: isApiException ? "请求失败" : "未知错误",
+          description: isApiException ? e.response : String(e),
+        });
+      }
     },
   });
 

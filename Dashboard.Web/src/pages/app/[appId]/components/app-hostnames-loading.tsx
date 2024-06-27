@@ -1,12 +1,12 @@
 import { List, Skeleton } from "@chakra-ui/react";
-import AppMatcherListItem from "./app-matcher-list-item";
+import AppHostnamesItem from "./app-hostnames-item";
 
-export default function AppMatcherListLoading() {
+export default function AppHostnamesLoading() {
   return (
     <List>
       {[...new Array(2)].map((_, index) => (
         <Skeleton key={index}>
-          <AppMatcherListItem hostname="LOADING" />
+          <AppHostnamesItem hostname="LOADING" />
         </Skeleton>
       ))}
     </List>

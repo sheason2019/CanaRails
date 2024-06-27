@@ -8,14 +8,21 @@ import {
   CardBody,
   CardHeader,
   Heading,
+  useToast,
 } from "@chakra-ui/react";
 import { useFormik } from "formik";
 import * as y from "yup";
 import { authClient } from "../../../api";
 import useUser from "../../../hooks/use-user";
+import { ApiException } from "../../../../api-client";
 
 export default function LoginForm() {
+  const toast = useToast({
+    position: "bottom-right",
+    variant: "left-accent",
+  });
   const { mutate } = useUser();
+
   const formik = useFormik({
     initialValues: {
       username: "",
@@ -26,8 +33,28 @@ export default function LoginForm() {
       password: y.string().required(),
     }),
     async onSubmit(values) {
-      await authClient.login(values);
-      mutate();
+      try {
+        await authClient.login(values);
+        mutate();
+        toast({
+          status: "success",
+          title: "登录成功",
+        });
+      } catch (e) {
+        if (e instanceof ApiException) {
+          toast({
+            status: "error",
+            title: "登录失败",
+            description: e.response,
+          });
+        } else {
+          toast({
+            status: "error",
+            title: "未知错误",
+            description: String(e),
+          });
+        }
+      }
     },
   });
 

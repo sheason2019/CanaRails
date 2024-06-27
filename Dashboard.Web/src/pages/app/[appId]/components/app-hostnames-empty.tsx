@@ -1,6 +1,6 @@
 import { Alert, AlertIcon } from "@chakra-ui/react";
 
-export default function AppMatcherListEmpty() {
+export default function AppHostnamesEmpty() {
   return (
     <Alert status="warning">
       <AlertIcon />
