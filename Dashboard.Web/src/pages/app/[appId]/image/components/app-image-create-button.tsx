@@ -12,14 +12,22 @@ import {
   ModalHeader,
   ModalOverlay,
   useDisclosure,
+  useToast,
 } from "@chakra-ui/react";
 import { useFormik } from "formik";
 import * as y from "yup";
 import { imageClient } from "../../../../../api";
 import useImageList from "../hooks/use-image-list";
 import { useParams } from "react-router-dom";
+import { useEffect } from "react";
+import { ApiException } from "../../../../../../api-client";
 
 export default function AppImageCreateButton() {
+  const toast = useToast({
+    position: "bottom-right",
+    variant: "left-accent",
+  });
+
   const { appId } = useParams();
   const { mutate } = useImageList();
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -31,18 +39,35 @@ export default function AppImageCreateButton() {
       imageName: y.string().required("镜像名称不能为空"),
     }),
     async onSubmit(values) {
-      await imageClient.create({
-        id: 0,
-        registry: "",
-        imageName: values.imageName,
-        appId: Number(appId),
-        ready: false,
-        createdAt: 0
-      });
-      mutate();
-      onClose();
+      try {
+        await imageClient.create({
+          id: 0,
+          registry: "",
+          imageName: values.imageName,
+          appId: Number(appId),
+          ready: false,
+          createdAt: 0,
+        });
+        mutate();
+        onClose();
+        toast({
+          status: "success",
+          title: "创建成功",
+        });
+      } catch (e) {
+        const isApiException = e instanceof ApiException;
+        toast({
+          status: "error",
+          title: isApiException ? "请求失败" : "未知错误",
+          description: isApiException ? e.response : String(e),
+        });
+      }
     },
   });
+
+  useEffect(() => {
+    formik.resetForm();
+  }, [isOpen]);
 
   return (
     <>

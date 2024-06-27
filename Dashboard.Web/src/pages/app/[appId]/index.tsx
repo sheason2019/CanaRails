@@ -1,7 +1,7 @@
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink } from "@chakra-ui/react";
 import PageContainer from "../../../components/page-container";
 import AppDetailInfo from "./components/app-detail-info";
-import AppMatcherList from "./components/app-matcher-list";
+import AppHostnames from "./components/app-hostnames";
 import AppStats from "./components/app-stats";
 import AppHeading from "./components/app-heading";
 
@@ -16,7 +16,7 @@ export default function AppDetailPage() {
       </Breadcrumb>
       <AppDetailInfo />
       <AppStats />
-      <AppMatcherList />
+      <AppHostnames />
     </PageContainer>
   );
 }

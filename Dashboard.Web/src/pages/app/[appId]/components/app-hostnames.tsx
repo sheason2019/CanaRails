@@ -1,22 +1,22 @@
 import { Flex, Heading, List } from "@chakra-ui/react";
-import AppMatcherListLoading from "./app-matcher-list-loading";
+import AppHostnamesLoading from "./app-hostnames-loading";
 import { useMemo } from "react";
-import AppMatcherListEmpty from "./app-matcher-list-empty";
-import AppMatcherCreateButton from "./app-matcher-create-button";
-import AppMatcherListItem from "./app-matcher-list-item";
+import AppHostnamesEmpty from "./app-hostnames-empty";
+import AppHostnamesCreateButton from "./app-hostnames-create-button";
+import AppHostnamesItem from "./app-hostnames-item";
 import useAppDetail from "../hooks/use-app-detail";
 
-export default function AppMatcherList() {
+export default function AppHostnames() {
   const { data, isLoading } = useAppDetail();
 
   const listRenderer = useMemo(() => {
-    if (isLoading) return <AppMatcherListLoading />;
-    if (!data?.hostnames.length) return <AppMatcherListEmpty />;
+    if (isLoading) return <AppHostnamesLoading />;
+    if (!data?.hostnames.length) return <AppHostnamesEmpty />;
 
     return (
       <List>
         {data.hostnames.map((item) => (
-          <AppMatcherListItem key={item} hostname={item} />
+          <AppHostnamesItem key={item} hostname={item} />
         ))}
       </List>
     );
@@ -28,7 +28,7 @@ export default function AppMatcherList() {
         <Heading size="md" className="grow">
           App Hostnames
         </Heading>
-        <AppMatcherCreateButton />
+        <AppHostnamesCreateButton />
       </Flex>
       {listRenderer}
     </>

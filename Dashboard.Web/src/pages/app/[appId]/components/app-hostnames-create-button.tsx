@@ -13,6 +13,7 @@ import {
   ModalHeader,
   ModalOverlay,
   useDisclosure,
+  useToast,
 } from "@chakra-ui/react";
 import { useFormik } from "formik";
 import { useEffect } from "react";
@@ -20,8 +21,14 @@ import { useParams } from "react-router-dom";
 import * as y from "yup";
 import useAppDetail from "../hooks/use-app-detail";
 import { appClient } from "../../../../api";
+import { ApiException } from "../../../../../api-client";
 
-export default function AppMatcherCreateButton() {
+export default function AppHostnamesCreateButton() {
+  const toast = useToast({
+    position: "bottom-right",
+    variant: "left-accent",
+  });
+
   const { appId } = useParams();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { mutate } = useAppDetail();
@@ -34,9 +41,24 @@ export default function AppMatcherCreateButton() {
       host: y.string().required("Host不能为空"),
     }),
     async onSubmit(values) {
-      await appClient.createHostname(Number(appId), { hostname: values.host });
-      onClose();
-      mutate();
+      try {
+        await appClient.createHostname(Number(appId), {
+          hostname: values.host,
+        });
+        onClose();
+        mutate();
+        toast({
+          status: "success",
+          title: "创建成功",
+        });
+      } catch (e) {
+        const isApiException = e instanceof ApiException;
+        toast({
+          status: "error",
+          title: isApiException ? "请求错误" : "未知错误",
+          description: isApiException ? e.response : String(e),
+        });
+      }
     },
   });
   const { resetForm } = formik;

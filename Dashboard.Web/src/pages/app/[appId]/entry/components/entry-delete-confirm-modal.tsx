@@ -11,7 +11,9 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  useToast,
 } from "@chakra-ui/react";
+import { ApiException } from "../../../../../../api-client";
 
 interface Props {
   isOpen: boolean;
@@ -24,6 +26,10 @@ export default function EntryDeleteConfirmModal({
   onClose,
   entryId,
 }: Props) {
+  const toast = useToast({
+    position: "bottom-right",
+    variant: "left-accent",
+  });
   const { mutate: mutateEntryList } = useAppEntryList();
   const { trigger: handleDelete } = useSWRMutation(
     ["delete-entry"],
@@ -32,6 +38,18 @@ export default function EntryDeleteConfirmModal({
       onSuccess() {
         onClose();
         mutateEntryList();
+        toast({
+          status: "success",
+          title: "删除成功",
+        });
+      },
+      onError(err) {
+        const isApiException = err instanceof ApiException;
+        toast({
+          status: "error",
+          title: isApiException ? "请求失败" : "未知错误",
+          description: isApiException ? err.response : String(err),
+        });
       },
     }
   );

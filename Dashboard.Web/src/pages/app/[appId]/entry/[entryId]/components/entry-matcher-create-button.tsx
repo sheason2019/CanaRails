@@ -12,16 +12,24 @@ import {
   ModalOverlay,
   Stack,
   useDisclosure,
+  useToast,
 } from "@chakra-ui/react";
 import { useFormik } from "formik";
 import * as y from "yup";
 import { useParams } from "react-router-dom";
-import useEntryMatcherList from "../hook/use-entry-matcher-list";
 import { entryClient } from "../../../../../../api";
+import { ApiException } from "../../../../../../../api-client";
+import useEntryDetail from "../hook/use-entry-detail";
+import { useEffect } from "react";
 
 export default function EntryMatcherCreateButton() {
+  const toast = useToast({
+    position: "bottom-right",
+    variant: "left-accent",
+  });
+
   const { entryId } = useParams();
-  const { mutate } = useEntryMatcherList();
+  const { mutate } = useEntryDetail();
   const { isOpen, onClose, onOpen } = useDisclosure();
   const formik = useFormik({
     initialValues: {
@@ -33,14 +41,31 @@ export default function EntryMatcherCreateButton() {
       value: y.string().required("Value 值不能为空"),
     }),
     async onSubmit(values) {
-      await entryClient.createMatcher(Number(entryId), {
-        key: values.key,
-        value: values.value,
-      });
-      mutate();
-      onClose();
+      try {
+        await entryClient.createMatcher(Number(entryId), {
+          key: values.key,
+          value: values.value,
+        });
+        mutate();
+        onClose();
+        toast({
+          status: "success",
+          title: "创建成功",
+        });
+      } catch (e) {
+        const isApiException = e instanceof ApiException;
+        toast({
+          status: "error",
+          title: isApiException ? "请求失败" : "未知错误",
+          description: isApiException ? e.response : String(e),
+        });
+      }
     },
   });
+
+  useEffect(() => {
+    formik.resetForm();
+  }, [isOpen]);
 
   return (
     <>
