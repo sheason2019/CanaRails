@@ -13,4 +13,4 @@ COPY ./bin/Release/net8.0 ./
 # 复制静态资源
 COPY ./wwwroot ./wwwroot
 
-ENTRYPOINT ["dotnet", "./Dashboard.dll"]
+ENTRYPOINT ["dotnet", "./Admin.dll"]
