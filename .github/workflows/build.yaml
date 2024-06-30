@@ -20,22 +20,22 @@ jobs:
           dotnet-version: "8.0.x"
       - name: GenTypeSpec
         run: |
-          cd TypeSpec
+          cd Canarails/TypeSpec
           npm i
           npm run compile
           npm run gen
       - name: BuildDashboard
         run: |
-          cd Dashboard
+          cd Canarails/Admin
           dotnet build . --configuration Release
       - name: BuildDashboardWeb
         run: |
-          cd Dashboard.Web
+          cd Canarails/Web
           npm i
           npm run build
       - name: BuildImageAndPushToDockerIO
         run: |
-          cd Dashboard
+          cd Canarails/Admin
           docker build . -t sheason/canarails:${{ github.sha }} -t sheason/canarails:latest
           docker login --username=${{ secrets.DOCKER_USERNAME }} --password ${{ secrets.DOCKER_PASSWORD }}
           docker push sheason/canarails:${{ github.sha }}
