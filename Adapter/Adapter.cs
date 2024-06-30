@@ -7,14 +7,12 @@ namespace CanaRails.Adapter;
 public class ContainerAdapter
 {
   private readonly Kubernetes client;
-  private readonly GatewayService gatewaySvr;
   private readonly HttpRouteService httpRouteSvr;
   private readonly KubeSvrService kubeSvr;
 
   public ContainerAdapter(CanaRailsContext context, AdapterConfiguration config)
   {
     client = config.Client;
-    gatewaySvr = new(client);
     httpRouteSvr = new(client, context);
     kubeSvr = new(client, context);
   }
@@ -22,7 +20,6 @@ public class ContainerAdapter
   // 全量同步容器
   public void Apply()
   {
-    gatewaySvr.ApplyGateway();
     httpRouteSvr.ApplyHttpRoute();
     kubeSvr.ApplyServiceAndDeployment();
   }
