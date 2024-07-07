@@ -1,5 +1,5 @@
 using Admin.Domains.Core.Models.Entities;
-using CanaRails.Controllers;
+using Admin.Infrastructure.IDL;
 
 namespace CanaRails.Transformer;
 

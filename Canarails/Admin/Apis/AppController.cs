@@ -3,7 +3,7 @@ using Admin.Domains.Auth.Services;
 using Admin.Domains.Core.Repositories;
 using Admin.Domains.Core.Services;
 using Admin.Infrastructure.Repository;
-using CanaRails.Controllers;
+using Admin.Infrastructure.IDL;
 using CanaRails.Transformer;
 
 namespace Admin.Apis;

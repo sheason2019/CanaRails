@@ -1,7 +1,7 @@
 using Admin.Domains.Auth.Constants;
 using Admin.Domains.Auth.Services;
 using Admin.Domains.Core.Repositories;
-using CanaRails.Controllers;
+using Admin.Infrastructure.IDL;
 
 namespace Admin.Apis;
 
