@@ -5,7 +5,7 @@
   "scripts": {
     "compile": "rimraf tsp-output && tsp compile .",
     "gen": "npm run gen-svr && npm run gen-web",
-    "gen-svr": "nswag openapi2cscontroller /input:\"./tsp-output/@typespec/openapi3/openapi.yaml\" /namespace:CanaRails.Controllers /output:\"../Admin/Controllers/Controller.cs\" /ControllerBaseClass:\"Microsoft.AspNetCore.Mvc.Controller\"",
+    "gen-svr": "nswag openapi2cscontroller /input:\"./tsp-output/@typespec/openapi3/openapi.yaml\" /namespace:Admin.Infrastructure.IDL /output:\"../Admin/Infrastructure/IDL/IDL.cs\" /ControllerBaseClass:\"Microsoft.AspNetCore.Mvc.Controller\"",
     "gen-web": "npx nswag openapi2tsclient /input:\"./tsp-output/@typespec/openapi3/openapi.yaml\" /output:\"../Web/api-client/index.ts\" /TypeStyle:Interface"
   },
   "dependencies": {

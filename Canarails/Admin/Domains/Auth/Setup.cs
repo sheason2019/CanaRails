@@ -3,7 +3,7 @@ using Admin.Domains.Auth.Actions;
 using Admin.Domains.Auth.Services;
 using Admin.Domains.Auth.Models;
 using Admin.Infrastructure.Repository;
-using CanaRails.Controllers;
+using Admin.Infrastructure.IDL;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
 

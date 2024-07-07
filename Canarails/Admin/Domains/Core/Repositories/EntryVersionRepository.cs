@@ -1,6 +1,6 @@
 using Admin.Domains.Core.Models.Entities;
 using Admin.Infrastructure.Repository;
-using CanaRails.Controllers;
+using Admin.Infrastructure.IDL;
 using Microsoft.EntityFrameworkCore;
 
 namespace Admin.Domains.Core.Repositories;

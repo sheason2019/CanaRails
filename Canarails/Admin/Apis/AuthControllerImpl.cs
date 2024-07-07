@@ -1,7 +1,7 @@
 using Admin.Domains.Auth.Services;
 using Admin.Domains.Auth.Models;
 using Admin.Infrastructure.Exceptions;
-using CanaRails.Controllers;
+using Admin.Infrastructure.IDL;
 
 namespace Admin.Apis;
 

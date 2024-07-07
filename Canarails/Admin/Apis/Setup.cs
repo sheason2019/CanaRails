@@ -1,4 +1,4 @@
-using CanaRails.Controllers;
+using Admin.Infrastructure.IDL;
 
 namespace Admin.Apis;
 

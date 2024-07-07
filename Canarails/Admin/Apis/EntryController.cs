@@ -4,14 +4,15 @@ using Admin.Domains.Core.Models.Entities;
 using Admin.Domains.Core.Repositories;
 using Admin.Domains.Core.Services;
 using Admin.Infrastructure.Repository;
-using CanaRails.Controllers;
-using CanaRails.Transformer;
+using Admin.Infrastructure.IDL;
+using Admin.Domains.Core.Factories;
 
 namespace Admin.Apis;
 
 public class EntryControllerImpl(
-  EntryRepository entryRepository,
   CanaRailsContext context,
+  EntryRepository entryRepository,
+  DtoFactory dtoFactory,
   GatewayService gatewayService,
   AuthService authService
 ) : IEntryController
@@ -28,7 +29,7 @@ public class EntryControllerImpl(
     var entry = entryRepository.Create(body);
     gatewayService.Update();
 
-    return entry.ToDTO();
+    return dtoFactory.CreateEntryDTO(entry);
   }
 
   public async Task CreateMatcherAsync(int id, EntryMatcherDTO body)
@@ -73,13 +74,17 @@ public class EntryControllerImpl(
 
   public Task<EntryDTO> FindByIdAsync(int id)
   {
-    return Task.FromResult(entryRepository.FindById(id).ToDTO());
+    return Task.FromResult(
+      dtoFactory.CreateEntryDTO(entryRepository.FindById(id))
+    );
   }
 
   public Task<ICollection<EntryDTO>> ListAsync(int appId)
   {
     var records = entryRepository.ListByAppId(appId);
-    return Task.FromResult<ICollection<EntryDTO>>(records.Select(e => e.ToDTO()).ToArray());
+    return Task.FromResult<ICollection<EntryDTO>>(
+      records.Select(dtoFactory.CreateEntryDTO).ToArray()
+    );
   }
 
   public Task<int> UpdateAsync(int id, EntryDTO body)

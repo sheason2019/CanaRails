@@ -1,8 +1,7 @@
 using Admin.Domains.Core.Models.Entities;
 using Admin.Infrastructure.Exceptions;
 using Admin.Infrastructure.Repository;
-using CanaRails.Controllers;
-using CanaRails.Transformer;
+using Admin.Infrastructure.IDL;
 using Microsoft.EntityFrameworkCore;
 
 namespace Admin.Domains.Core.Repositories;
@@ -27,7 +26,21 @@ public class EntryRepository(CanaRailsContext context)
                 select apps;
     var app = query.First();
 
-    var entry = dto.ToEntity(app);
+    var entry = new Entry
+    {
+      ID = dto.Id,
+      Name = dto.Name,
+      Description = dto.Description,
+      EntryMatchers = dto
+        .Matchers
+        .Select(e => new EntryMatcher
+        {
+          Key = e.Key,
+          Value = e.Value,
+        })
+        .ToList(),
+      App = app,
+    };
     context.Entries.Add(entry);
     context.SaveChanges();
     transcation.Commit();
