@@ -1,7 +1,6 @@
 using Admin.Domains.Core.Models.Entities;
 using Admin.Infrastructure.Repository;
 using Admin.Infrastructure.IDL;
-using CanaRails.Transformer;
 using Microsoft.EntityFrameworkCore;
 
 namespace Admin.Domains.Core.Repositories;
@@ -16,7 +15,13 @@ public class ImageRepository(CanaRailsContext context)
                 select apps;
     var app = query.First();
 
-    Image image = dto.ToEntity(app);
+    var image = new Image
+    {
+      ID = dto.Id,
+      ImageName = dto.ImageName,
+      App = app,
+      CreatedAt = DateTimeOffset.FromUnixTimeMilliseconds(dto.CreatedAt).DateTime,
+    };
     image.CreatedAt = DateTime.UtcNow;
 
     // 成功后将实体写入数据库

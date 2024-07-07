@@ -4,7 +4,7 @@ using Admin.Domains.Core.Repositories;
 using Admin.Domains.Core.Services;
 using Admin.Infrastructure.Repository;
 using Admin.Infrastructure.IDL;
-using CanaRails.Transformer;
+using Admin.Domains.Core.Factories;
 
 namespace Admin.Apis;
 
@@ -12,20 +12,21 @@ public class AppControllerImpl(
   AppRepository appRepository,
   AuthService authService,
   GatewayService gatewayService,
+  DtoFactory dtoFactory,
   CanaRailsContext context
 ) : IAppController
 {
   public Task<ICollection<AppDTO>> ListAsync()
   {
     var records = context.Apps.ToList();
-    var datas = records.Select(record => record.ToDTO()).ToArray();
+    var datas = records.Select(dtoFactory.CreateAppDTO).ToArray();
 
     return Task.FromResult<ICollection<AppDTO>>(datas);
   }
 
   public Task<AppDTO> FindByIDAsync(int id)
   {
-    var dto = appRepository.FindById(id).ToDTO();
+    var dto = dtoFactory.CreateAppDTO(appRepository.FindById(id));
     return Task.FromResult(dto);
   }
 
@@ -35,7 +36,7 @@ public class AppControllerImpl(
 
     var record = appRepository.Create(body);
     gatewayService.Update();
-    return record.ToDTO();
+    return dtoFactory.CreateAppDTO(record);
   }
 
   public async Task CreateHostnameAsync(int id, Body body)

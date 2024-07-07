@@ -1,13 +1,14 @@
 using Admin.Domains.Auth.Constants;
 using Admin.Domains.Auth.Services;
+using Admin.Domains.Core.Factories;
 using Admin.Domains.Core.Repositories;
 using Admin.Infrastructure.IDL;
-using CanaRails.Transformer;
 
 namespace Admin.Apis;
 
 public class ImageControllerImpl(
   ImageRepository imageFactory,
+  DtoFactory dtoFactory,
   AuthService authService
 ) : IImageController
 {
@@ -20,19 +21,21 @@ public class ImageControllerImpl(
   {
     await authService.RequireRole(Roles.Administrator);
 
-    return imageFactory.Create(body).ToDTO();
+    return dtoFactory.CreateImageDTO(imageFactory.Create(body));
   }
 
   public Task<ImageDTO> FindByIdAsync(int id)
   {
-    return Task.FromResult(imageFactory.FindById(id).ToDTO());
+    return Task.FromResult(
+      dtoFactory.CreateImageDTO(imageFactory.FindById(id))
+    );
   }
 
   public Task<ICollection<ImageDTO>> ListAsync(int appID)
   {
     var images = imageFactory.ListImageByAppId(appID);
     return Task.FromResult<ICollection<ImageDTO>>(
-      images.Select(x => x.ToDTO()).ToArray()
+      images.Select(dtoFactory.CreateImageDTO).ToArray()
     );
   }
 }
