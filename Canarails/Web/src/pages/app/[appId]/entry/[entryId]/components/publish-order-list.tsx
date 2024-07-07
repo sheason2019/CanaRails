@@ -1,11 +1,11 @@
-import { Alert, AlertIcon, Flex, Heading, Stack } from "@chakra-ui/react";
+import { Alert, AlertIcon, Box, Flex, Heading, Stack } from "@chakra-ui/react";
 import PublishOrderCreateButton from "./publish-order-create-button";
 import usePublishOrderList from "../hook/use-publish-order-list";
 import PublishOrderListLoading from "./publish-order-list-loading";
 import { useMemo } from "react";
 import PublishOrderListItem from "./publish-order-list-item";
 
-export default function PublishOrderList() {
+export default function EntryVersionList() {
   const { data, isLoading } = usePublishOrderList();
 
   const contentRenderer = useMemo(() => {
@@ -14,7 +14,7 @@ export default function PublishOrderList() {
       return (
         <Alert status="warning">
           <AlertIcon />
-          暂无发布工单
+          <Box>当前流量入口无版本发布记录</Box>
         </Alert>
       );
     }
@@ -31,7 +31,7 @@ export default function PublishOrderList() {
     <>
       <Flex className="my-3" alignItems="center">
         <Heading size="md" className="grow">
-          发布工单
+          版本发布记录
         </Heading>
         <PublishOrderCreateButton />
       </Flex>

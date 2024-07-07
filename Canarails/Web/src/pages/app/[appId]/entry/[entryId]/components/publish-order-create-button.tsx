@@ -29,7 +29,7 @@ import { useFormik } from "formik";
 import { useState } from "react";
 import * as y from "yup";
 import { ApiException, ImageDTO } from "../../../../../../../api-client";
-import { publishOrderClient } from "../../../../../../api";
+import { entryVersionClient } from "../../../../../../api";
 import { useParams } from "react-router-dom";
 import usePublishOrderList from "../hook/use-publish-order-list";
 
@@ -60,13 +60,12 @@ export default function PublishOrderCreateButton() {
     }),
     async onSubmit(values) {
       try {
-        await publishOrderClient.create({
+        await entryVersionClient.create({
           id: 0,
           imageId: image!.id,
           entryId: Number(entryId),
           port: values.port,
           replica: values.replica,
-          status: "",
         });
         onClose();
         mutate();
