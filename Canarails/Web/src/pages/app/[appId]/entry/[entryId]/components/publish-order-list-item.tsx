@@ -1,8 +1,8 @@
 import { Card, CardBody, Flex, Skeleton } from "@chakra-ui/react";
-import { PublishOrderDTO } from "../../../../../../../api-client";
+import { EntryVersionDTO } from "../../../../../../../api-client";
 
 interface Props {
-  publishOrder: PublishOrderDTO;
+  publishOrder: EntryVersionDTO;
   isLoaded: boolean;
 }
 
