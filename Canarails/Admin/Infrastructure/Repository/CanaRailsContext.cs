@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
 using Admin.Infrastructure.Constants;
 using Admin.Domains.Core.Models.Entities;
+using Admin.Domains.Auth.Models.Entities;
 
 namespace Admin.Infrastructure.Repository;
 
@@ -15,6 +16,7 @@ public class CanaRailsContext : IdentityDbContext<IdentityUser>, IDataProtection
   public DbSet<Entry> Entries { get; set; }
   public DbSet<EntryVersion> EntryVersions { get; set; }
   public DbSet<Image> Images { get; set; }
+  public DbSet<UserAccessSecret> UserAccessSecrets { get; set; }
 
   public DbSet<DataProtectionKey> DataProtectionKeys { get; set; }
 

@@ -32,7 +32,7 @@ public static class Setup
 
     services.AddScoped<AuthService>();
     services.AddScoped<LoginServie>();
-    services.AddScoped<CurrentUser>();
+    services.AddScoped<CurrentUserAccessor>();
     services.AddScoped<SetupAdmin>();
     services.AddScoped<SetupRole>();
     services.AddScoped<IAuthController, AuthControllerImpl>();

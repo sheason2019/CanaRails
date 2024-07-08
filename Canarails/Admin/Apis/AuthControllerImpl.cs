@@ -6,7 +6,7 @@ using Admin.Infrastructure.IDL;
 namespace Admin.Apis;
 
 public class AuthControllerImpl(
-  CurrentUser currentUser,
+  CurrentUserAccessor currentUser,
   LoginServie loginService
 ) : IAuthController
 {

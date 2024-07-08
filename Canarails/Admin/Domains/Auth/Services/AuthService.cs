@@ -6,7 +6,7 @@ namespace Admin.Domains.Auth.Services;
 
 public class AuthService(
   UserManager<IdentityUser> userManager,
-  CurrentUser currentUser
+  CurrentUserAccessor currentUser
 )
 {
   public async Task RequireRole(string role)
