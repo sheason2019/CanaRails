@@ -10,6 +10,7 @@ import NewEntryPage from "./pages/app/[appId]/entry/new";
 import EntryDetailPage from "./pages/app/[appId]/entry/[entryId]";
 import AppImagePage from "./pages/app/[appId]/image";
 import LoginPage from "./pages/login";
+import UserAccessSecretPage from "./pages/user-access-secret";
 
 export const router = createBrowserRouter([
   {
@@ -60,6 +61,10 @@ export const router = createBrowserRouter([
           {
             path: "/login",
             element: <LoginPage />,
+          },
+          {
+            path: "/user-access-secret",
+            element: <UserAccessSecretPage />,
           },
         ],
       },

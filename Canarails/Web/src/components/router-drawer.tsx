@@ -29,6 +29,10 @@ const drawerRouters: IDrawerRotuer[] = [
     label: "App",
     to: "/app",
   },
+  {
+    label: "UserAccessSecret",
+    to: "/user-access-secret",
+  },
 ];
 
 export default function RouterDrawer() {
